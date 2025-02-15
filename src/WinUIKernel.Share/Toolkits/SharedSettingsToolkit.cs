@@ -24,8 +24,8 @@ public class SharedSettingsToolkit : ISettingsToolkit
             if (defaultValue is Enum)
             {
                 var tempValue = settingContainer.Values[settingName].ToString();
-                _ = Enum.TryParse(typeof(T), tempValue, out var result);
-                return (T)result!;
+                var isParsed = Enum.TryParse(typeof(T), tempValue, out var result);
+                return !isParsed ? defaultValue : (T)result!;
             }
             else
             {
