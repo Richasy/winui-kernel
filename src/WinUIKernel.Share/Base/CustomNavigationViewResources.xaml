@@ -84,6 +84,7 @@
     <x:Double x:Key="MainNavViewPaneLength">72</x:Double>
     <x:Double x:Key="MainNavViewPaneHeaderRowMinHeight">0</x:Double>
     <x:Double x:Key="MainNavViewItemOnLeftMinHeight">58</x:Double>
+    <x:Double x:Key="MainNavViewItemWidth">74</x:Double>
 
     <animations:ImplicitAnimationSet x:Key="MainNavIconImplicitOffsetAnimation">
         <animations:OffsetAnimation Duration="0:0:0.4" />
@@ -476,6 +477,7 @@
         <Setter Property="UseSystemFocusVisuals" Value="True" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="TabNavigation" Value="Once" />
+        <Setter Property="Width" Value="{StaticResource MainNavViewItemWidth}" />
         <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}" />
         <Setter Property="Template">
             <Setter.Value>
