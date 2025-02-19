@@ -27,6 +27,12 @@ public sealed partial class ChatModelItemViewModel : ViewModelBase<ChatModel>
     [ObservableProperty]
     public partial bool IsSelected { get; set; }
 
+    [ObservableProperty]
+    public partial bool IsToolSupport { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsVisionSupport { get; set; }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ChatModelItemViewModel"/> class.
     /// </summary>
@@ -35,6 +41,8 @@ public sealed partial class ChatModelItemViewModel : ViewModelBase<ChatModel>
     {
         Name = model.Name!;
         Id = model.Id!;
+        IsToolSupport = model.ToolSupport;
+        IsVisionSupport = model.VisionSupport;
         _deleteAction = deleteAction;
     }
 
@@ -47,6 +55,8 @@ public sealed partial class ChatModelItemViewModel : ViewModelBase<ChatModel>
         {
             Name = dialog.Model.Name ?? string.Empty;
             Id = dialog.Model.Id ?? string.Empty;
+            IsToolSupport = dialog.Model.ToolSupport;
+            IsVisionSupport = dialog.Model.VisionSupport;
         }
     }
 
@@ -67,6 +77,22 @@ public sealed partial class ChatModelItemViewModel : ViewModelBase<ChatModel>
         if (Data.Id != value)
         {
             Data.Id = value;
+        }
+    }
+
+    partial void OnIsToolSupportChanged(bool value)
+    {
+        if (Data.ToolSupport != value)
+        {
+            Data.ToolSupport = value;
+        }
+    }
+
+    partial void OnIsVisionSupportChanged(bool value)
+    {
+        if (Data.VisionSupport != value)
+        {
+            Data.VisionSupport = value;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Richasy. All rights reserved.
 // Licensed under the MIT License.
 
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Richasy.WinUIKernel.AI.ViewModels;
 using Richasy.WinUIKernel.Share.Base;
@@ -13,6 +14,7 @@ namespace Richasy.WinUIKernel.AI;
 public sealed partial class ChatModelCard : LayoutControlBase<ChatModelItemViewModel>
 {
     private Button _moreButton;
+    private FrameworkElement? _featurePanel;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ChatModelCard"/> class.
@@ -26,6 +28,12 @@ public sealed partial class ChatModelCard : LayoutControlBase<ChatModelItemViewM
         if (_moreButton is not null)
         {
             _moreButton.Flyout = CreateMoreFlyout();
+        }
+
+        _featurePanel = GetTemplateChild("FeaturePanel") as FrameworkElement;
+        if (_featurePanel is not null)
+        {
+            _featurePanel.Visibility = WinUIKernelAIExtensions.EnableModelFeature ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 

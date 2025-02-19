@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ext="using:Richasy.WinUIKernel.AI.Extensions"
+    xmlns:ic="using:FluentIcons.WinUI"
     xmlns:local="using:Richasy.WinUIKernel.AI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Richasy.WinUIKernel.AI.ViewModels"
@@ -23,13 +24,45 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock
-                                x:Name="NameBlock"
-                                VerticalAlignment="Center"
-                                Style="{StaticResource BodyStrongTextBlockStyle}"
-                                Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ViewModel.Name}"
-                                TextTrimming="CharacterEllipsis"
-                                TextWrapping="NoWrap" />
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    x:Name="NameBlock"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"
+                                    Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ViewModel.Name}"
+                                    TextTrimming="CharacterEllipsis"
+                                    TextWrapping="NoWrap" />
+                                <StackPanel
+                                    Grid.Column="1"
+                                    Margin="0,0,-8,0"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <Grid
+                                        Width="24"
+                                        Height="24"
+                                        Margin="0,0,8,0"
+                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                        CornerRadius="{StaticResource ControlCornerRadius}"
+                                        ToolTipService.ToolTip="{ext:Locale Name=SupportTool}"
+                                        Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ViewModel.IsToolSupport}">
+                                        <ic:SymbolIcon FontSize="12" Symbol="WrenchScrewdriver" />
+                                    </Grid>
+                                    <Grid
+                                        Width="24"
+                                        Height="24"
+                                        Margin="0,0,8,0"
+                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                        CornerRadius="{StaticResource ControlCornerRadius}"
+                                        ToolTipService.ToolTip="{ext:Locale Name=SupportVision}"
+                                        Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ViewModel.IsVisionSupport}">
+                                        <ic:SymbolIcon FontSize="12" Symbol="EyeTracking" />
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
 
                             <TextBlock
                                 x:Name="IdBlock"

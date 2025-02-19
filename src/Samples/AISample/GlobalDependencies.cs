@@ -6,6 +6,7 @@ using Richasy.AgentKernel;
 using Richasy.WinUIKernel.AI;
 using Richasy.WinUIKernel.Share;
 using Richasy.WinUIKernel.Share.Toolkits;
+using Richasy.WinUIKernel.Share.ViewModels;
 using RichasyKernel;
 using System.Diagnostics.CodeAnalysis;
 
@@ -75,6 +76,7 @@ internal static class GlobalDependencies
             .AddSingleton<IFileToolkit, SharedFileToolkit>()
             .AddSingleton<IResourceToolkit, SharedResourceToolkit>()
             .AddSingleton<IXamlRootProvider, XamlRootProvider>()
+            .AddSingleton<INotificationViewModel, NotificationViewModel>()
             .AddSingleton<SettingsViewModel>()
             .Build();
 

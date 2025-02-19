@@ -43,6 +43,8 @@
     <None Remove="Chat\OpenAIDrawSettingControl.xaml" />
     <None Remove="CustomChatModelDialog.xaml" />
     <None Remove="CustomChatModelSection.xaml" />
+    <None Remove="CustomDrawModelDialog.xaml" />
+    <None Remove="CustomDrawModelSection.xaml" />
     <None Remove="DrawModelCard\DrawModelCard.xaml" />
     <None Remove="Draw\AzureOpenAIDrawSettingControl.xaml" />
     <None Remove="Draw\ErnieDrawSettingControl.xaml" />
@@ -60,7 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-  	<None Include="Assets\**\*" Pack="true" CopyToOutputDirectory="CopyAlways"/>
+  	<None Include="Assets\**\*" Pack="true" CopyToOutputDirectory="CopyAlways" />
   </ItemGroup>
 
   <ItemGroup>
@@ -99,6 +101,18 @@
   
   <ItemGroup>
     <ProjectReference Include="..\WinUIKernel.Share\WinUIKernel.Share.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="CustomDrawModelSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="CustomDrawModelDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   
   <ItemGroup>

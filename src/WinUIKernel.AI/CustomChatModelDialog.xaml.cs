@@ -20,6 +20,7 @@ public sealed partial class CustomChatModelDialog : AppDialog
     {
         InitializeComponent();
         Title = WinUIKernelAIExtensions.ResourceToolkit.GetLocalizedString("CreateCustomModel");
+        FeaturePanel.Visibility = WinUIKernelAIExtensions.EnableModelFeature ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
     }
 
     /// <summary>
@@ -50,6 +51,13 @@ public sealed partial class CustomChatModelDialog : AppDialog
             return;
         }
 
-        Model = new ChatModel(modelId, modelName);
+        var model = new ChatModel(modelId, modelName);
+        if (WinUIKernelAIExtensions.EnableModelFeature)
+        {
+            model.ToolSupport = ToolButton.IsChecked ?? false;
+            model.VisionSupport = VisionButton.IsChecked ?? false;
+        }
+
+        Model = model;
     }
 }

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:AppDialog
+    x:Class="Richasy.WinUIKernel.AI.CustomDrawModelDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:base="using:Richasy.WinUIKernel.Share.Base"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ext="using:Richasy.WinUIKernel.AI.Extensions"
+    xmlns:ic="using:FluentIcons.WinUI"
+    xmlns:local="using:Richasy.WinUIKernel.AI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Richasy.AgentKernel.Models"
+    CloseButtonText="{ext:Locale Name=Cancel}"
+    DefaultButton="Primary"
+    PrimaryButtonClick="OnPrimaryButtonClick"
+    PrimaryButtonText="{ext:Locale Name=Confirm}"
+    Style="{StaticResource DefaultContentDialogStyle}"
+    mc:Ignorable="d">
+
+    <ContentDialog.Resources>
+        <Style
+            x:Key="MiniIconButtonStyle"
+            BasedOn="{StaticResource DefaultButtonStyle}"
+            TargetType="Button">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <DataTemplate x:Key="InputHeaderTemplate">
+            <TextBlock
+                HorizontalAlignment="Left"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{Binding}" />
+        </DataTemplate>
+    </ContentDialog.Resources>
+
+    <StackPanel Spacing="8">
+        <TextBox
+            x:Name="ModelNameBox"
+            HorizontalAlignment="Stretch"
+            PlaceholderText="{ext:Locale Name=DrawModelNamePlaceholder}">
+            <TextBox.Header>
+                <base:TipHeader Title="{ext:Locale Name=ModelName}" Comment="{ext:Locale Name=ModelNameDescription}" />
+            </TextBox.Header>
+        </TextBox>
+        <TextBox
+            x:Name="ModelIdBox"
+            HorizontalAlignment="Stretch"
+            PlaceholderText="{ext:Locale Name=DrawModelIdPlaceholder}">
+            <TextBox.Header>
+                <base:TipHeader Title="{ext:Locale Name=ModelId}" Comment="{ext:Locale Name=ModelIdDescription}" />
+            </TextBox.Header>
+        </TextBox>
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{ext:Locale Name=SupportSizes}" />
+            <Button
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                AutomationProperties.Name="{ext:Locale Name=AddSize}"
+                Style="{StaticResource MiniIconButtonStyle}"
+                ToolTipService.ToolTip="{ext:Locale Name=AddSize}">
+                <ic:SymbolIcon FontSize="12" Symbol="Add" />
+                <Button.Flyout>
+                    <Flyout x:Name="NewSizeFlyout" Placement="Bottom">
+                        <Flyout.FlyoutPresenterStyle>
+                            <Style BasedOn="{StaticResource DefaultFlyoutPresenterStyle}" TargetType="FlyoutPresenter">
+                                <Setter Property="Padding" Value="12" />
+                            </Style>
+                        </Flyout.FlyoutPresenterStyle>
+                        <Grid Width="200" RowSpacing="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid ColumnSpacing="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <NumberBox
+                                    x:Name="WidthBox"
+                                    HorizontalAlignment="Stretch"
+                                    Header="{ext:Locale Name=Width}"
+                                    HeaderTemplate="{StaticResource InputHeaderTemplate}"
+                                    LargeChange="10"
+                                    Minimum="256"
+                                    SmallChange="1"
+                                    SpinButtonPlacementMode="Hidden"
+                                    ValueChanged="OnWidthChanged" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Margin="0,0,0,10"
+                                    VerticalAlignment="Bottom"
+                                    Text="x" />
+                                <NumberBox
+                                    x:Name="HeightBox"
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    Header="{ext:Locale Name=Height}"
+                                    HeaderTemplate="{StaticResource InputHeaderTemplate}"
+                                    LargeChange="10"
+                                    Minimum="256"
+                                    SmallChange="1"
+                                    SpinButtonPlacementMode="Hidden"
+                                    ValueChanged="OnHeightChanged" />
+                            </Grid>
+                            <Button
+                                x:Name="AddSizeButton"
+                                Grid.Row="1"
+                                HorizontalAlignment="Stretch"
+                                Click="OnAddSizeButtonClick"
+                                Content="{ext:Locale Name=AddSize}"
+                                IsEnabled="False"
+                                Style="{StaticResource AccentButtonStyle}" />
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+        </Grid>
+        <Grid>
+            <Grid
+                x:Name="NoSizeContainer"
+                Padding="12,8"
+                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{StaticResource ControlCornerRadius}">
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorDisabledBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{ext:Locale Name=CreateNewSize}" />
+            </Grid>
+            <ItemsRepeater x:Name="SizesRepeater" ItemsSource="{x:Bind Sizes}">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="models:DrawSize">
+                        <base:CardControl
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            DataContext="{x:Bind}"
+                            IsRightTapEnabled="True"
+                            RightTapped="OnSizeRightTapped"
+                            ToolTipService.ToolTip="{ext:Locale Name=RightClickDelete}">
+                            <Grid Padding="8,4">
+                                <TextBlock Style="{StaticResource CaptionTextBlockStyle}">
+                                    <Run Text="{x:Bind Width}" />
+                                    <Run Text="x" />
+                                    <Run Text="{x:Bind Height}" />
+                                </TextBlock>
+                            </Grid>
+                        </base:CardControl>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout
+                        ItemsStretch="Fill"
+                        MinColumnSpacing="4"
+                        MinItemHeight="32"
+                        MinItemWidth="120"
+                        MinRowSpacing="4" />
+                </ItemsRepeater.Layout>
+            </ItemsRepeater>
+        </Grid>
+    </StackPanel>
+</base:AppDialog>

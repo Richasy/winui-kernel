@@ -63,6 +63,15 @@
                 </HyperlinkButton>
             </base:SettingsCard>
         </base:SettingsExpander.Items>
+        <base:SettingsExpander.ItemsFooter>
+            <Grid
+                Padding="58,8,44,12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="0,1,0,0">
+                <ai:CustomDrawModelSection ViewModel="{x:Bind ViewModel}" />
+            </Grid>
+        </base:SettingsExpander.ItemsFooter>
         <ic:SymbolIcon
             FontSize="14"
             Foreground="{ThemeResource SystemFillColorSuccessBrush}"

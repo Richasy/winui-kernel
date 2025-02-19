@@ -28,7 +28,15 @@ public sealed partial class DrawServiceItemViewModel
     public partial bool IsServerModelVisible { get; set; }
 
     [ObservableProperty]
+    public partial bool IsCustomModelsEmpty { get; set; }
+
+    [ObservableProperty]
     public partial bool IsSelected { get; set; }
+
+    /// <summary>
+    /// 自定义模型.
+    /// </summary>
+    public ObservableCollection<DrawModelItemViewModel> CustomModels { get; } = [];
 
     /// <summary>
     /// 服务模型.

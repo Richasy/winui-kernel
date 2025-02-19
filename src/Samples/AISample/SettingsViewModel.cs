@@ -76,7 +76,7 @@ public sealed partial class SettingsViewModel : AISettingsViewModelBase
     {
         await base.SaveChatServicesAsync();
         var configManager = this.Get<IChatConfigManager>();
-        var dict = ChatServices.ToDictionary(item => item.ProviderType, item => item.Config);
+        var dict = ChatServices.Where(p => p.Config != null).ToDictionary(item => item.ProviderType, item => item.Config!);
         await configManager.SaveChatConfigAsync(dict);
     }
 

@@ -37,7 +37,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
     <PackageReference Include="Microsoft.WindowsAppSDK" />
-    <PackageReference Include="Richasy.WinUIKernel.AI" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\WinUIKernel.AI\WinUIKernel.AI.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="$(UserProfile)\.nuget\packages\richasy.winuikernel.ai\*\contentFiles\any\net9.0-windows10.0.22621\Assets\**\*">

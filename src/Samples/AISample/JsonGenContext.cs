@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace AISample;
 
-[JsonSourceGenerationOptions(WriteIndented = true)]
+[JsonSourceGenerationOptions(WriteIndented = true, IncludeFields = true)]
 [JsonSerializable(typeof(ChatClientConfiguration))]
 [JsonSerializable(typeof(AudioClientConfiguration))]
 [JsonSerializable(typeof(DrawClientConfiguration))]

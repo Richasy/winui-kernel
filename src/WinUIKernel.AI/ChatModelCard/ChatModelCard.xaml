@@ -57,15 +57,49 @@
                             </Button>
                         </Grid>
 
-                        <TextBlock
-                            x:Name="IdBlock"
+                        <Grid
+                            x:Name="FeaturePanel"
                             Grid.Row="1"
-                            VerticalAlignment="Center"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Style="{StaticResource BodyTextBlockStyle}"
-                            Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ViewModel.Id}"
-                            TextTrimming="CharacterEllipsis"
-                            TextWrapping="NoWrap" />
+                            ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Name="IdBlock"
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ViewModel.Id}"
+                                TextTrimming="CharacterEllipsis"
+                                TextWrapping="NoWrap" />
+                            <StackPanel
+                                Grid.Column="1"
+                                Margin="0,0,-8,0"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <Grid
+                                    Width="24"
+                                    Height="24"
+                                    Margin="0,0,8,0"
+                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                    CornerRadius="{StaticResource ControlCornerRadius}"
+                                    ToolTipService.ToolTip="{ext:Locale Name=SupportTool}"
+                                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ViewModel.IsToolSupport}">
+                                    <ic:SymbolIcon FontSize="12" Symbol="WrenchScrewdriver" />
+                                </Grid>
+                                <Grid
+                                    Width="24"
+                                    Height="24"
+                                    Margin="0,0,8,0"
+                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                    CornerRadius="{StaticResource ControlCornerRadius}"
+                                    ToolTipService.ToolTip="{ext:Locale Name=SupportVision}"
+                                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ViewModel.IsVisionSupport}">
+                                    <ic:SymbolIcon FontSize="12" Symbol="EyeTracking" />
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

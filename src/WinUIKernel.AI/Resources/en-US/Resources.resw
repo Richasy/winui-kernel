@@ -132,6 +132,9 @@
   <data name="AccessKeySecret" xml:space="preserve">
     <value>Access secret</value>
   </data>
+  <data name="AddSize" xml:space="preserve">
+    <value>Add a new size</value>
+  </data>
   <data name="AddYourCustomModel" xml:space="preserve">
     <value>Add a custom model</value>
   </data>
@@ -189,11 +192,26 @@
   <data name="CreateCustomModel" xml:space="preserve">
     <value>Create custom model</value>
   </data>
+  <data name="CreateNewSize" xml:space="preserve">
+    <value>Add a new size</value>
+  </data>
   <data name="CustomModel" xml:space="preserve">
     <value>Custom model</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="DrawModelIdPlaceholder" xml:space="preserve">
+    <value>Like "dall-e-3"</value>
+  </data>
+  <data name="DrawModelNamePlaceholder" xml:space="preserve">
+    <value>Like "DALL·E3"</value>
+  </data>
+  <data name="DrawSize" xml:space="preserve">
+    <value>Drawing size</value>
+  </data>
+  <data name="DrawSizeCanNotBeEmpty" xml:space="preserve">
+    <value>You must set an alternative drawing size</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
@@ -210,6 +228,9 @@
   <data name="ErnieSecretDescription" xml:space="preserve">
     <value>Get Secret Key from "Application Access" of Baidu Qianfan LLM Platform</value>
   </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
   <data name="HunyuanSecretIdDescription" xml:space="preserve">
     <value>Get SecretId in "API Key Management"</value>
   </data>
@@ -221,6 +242,9 @@
   </data>
   <data name="ModelAlreadyExist" xml:space="preserve">
     <value>Model already exists</value>
+  </data>
+  <data name="ModelFeature" xml:space="preserve">
+    <value>Model feature</value>
   </data>
   <data name="ModelId" xml:space="preserve">
     <value>Model ID</value>
@@ -261,6 +285,9 @@
   <data name="RegionPlaceholderText" xml:space="preserve">
     <value>Service location</value>
   </data>
+  <data name="RightClickDelete" xml:space="preserve">
+    <value>Right click to delete</value>
+  </data>
   <data name="SecretId" xml:space="preserve">
     <value>Secret ID</value>
   </data>
@@ -270,11 +297,23 @@
   <data name="SeeAllPredefinedModels" xml:space="preserve">
     <value>View all predefined models</value>
   </data>
+  <data name="SizeAlreadyExist" xml:space="preserve">
+    <value>This size already exists</value>
+  </data>
   <data name="SparkAppIdDescription" xml:space="preserve">
     <value>Register the application in iFlytek Open Platform and obtain App ID</value>
   </data>
   <data name="SparkSecretDescription" xml:space="preserve">
     <value>Register the application in iFlytek Open Platform and obtain Secret</value>
+  </data>
+  <data name="SupportSizes" xml:space="preserve">
+    <value>Supported sizes</value>
+  </data>
+  <data name="SupportTool" xml:space="preserve">
+    <value>Tool call support</value>
+  </data>
+  <data name="SupportVision" xml:space="preserve">
+    <value>Vision support</value>
   </data>
   <data name="TencentSecretIdDescription" xml:space="preserve">
     <value>Get SecretId in "API Key Management"</value>
@@ -293,6 +332,9 @@
   </data>
   <data name="VolcanoSecretKeyDescription" xml:space="preserve">
     <value>Get Secret Access Key in "API Access Key" of Volcano Engine</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width</value>
   </data>
   <data name="YoudaoAppIdDescription" xml:space="preserve">
     <value>Register and get App ID in Youdao Open Platform</value>
