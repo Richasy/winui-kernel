@@ -41,6 +41,8 @@ internal static class Utils
                         new GradientStop { Color = "#F0DCD6".ToColor(), Offset = 1 },
                     ]
                 };
+            case "google":
+                return new SolidColorBrush("#FFFFFF".ToColor());
             case "groq":
                 return new SolidColorBrush("#F55036".ToColor());
             case "hunyuan":
