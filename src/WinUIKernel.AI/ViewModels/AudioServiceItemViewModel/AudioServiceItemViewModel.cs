@@ -85,15 +85,5 @@ public sealed partial class AudioServiceItemViewModel : ViewModelBase
     }
 
     private string GetProviderName()
-    {
-        return ProviderType switch
-        {
-            AudioProviderType.OpenAI => "Open AI",
-            AudioProviderType.AzureOpenAI => "Azure Open AI",
-            AudioProviderType.Azure => "Azure Speech",
-            AudioProviderType.Edge => "Edge Speech",
-            AudioProviderType.Windows => "Windows Speech",
-            _ => throw new NotImplementedException(),
-        };
-    }
+        => WinUIKernelAIExtensions.ResourceToolkit.GetLocalizedString($"{ProviderType}Audio");
 }

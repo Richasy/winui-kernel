@@ -141,8 +141,14 @@
   <data name="AliAccessKeySecretDescription" xml:space="preserve">
     <value>Register in Alibaba Cloud and get the Secret</value>
   </data>
+  <data name="AliTranslate" xml:space="preserve">
+    <value>Alibaba cloud translate</value>
+  </data>
   <data name="AliTranslateAccessKeyDescription" xml:space="preserve">
     <value>Register in Alibaba Cloud and get the Key</value>
+  </data>
+  <data name="AnthropicChat" xml:space="preserve">
+    <value>Anthropic</value>
   </data>
   <data name="ApiKey" xml:space="preserve">
     <value>API key</value>
@@ -150,8 +156,23 @@
   <data name="AppId" xml:space="preserve">
     <value>App ID</value>
   </data>
+  <data name="AzureAIChat" xml:space="preserve">
+    <value>Azure AI Foundry</value>
+  </data>
+  <data name="AzureAudio" xml:space="preserve">
+    <value>Azure speech</value>
+  </data>
   <data name="AzureOpenAIAccessKeyDescription" xml:space="preserve">
     <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal. You can use KEY1 or KEY2</value>
+  </data>
+  <data name="AzureOpenAIAudio" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIChat" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIDraw" xml:space="preserve">
+    <value>Azure OpenAI</value>
   </data>
   <data name="AzureOpenAIEndpointDescription" xml:space="preserve">
     <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal</value>
@@ -162,11 +183,17 @@
   <data name="AzureSpeechAccessKeyDescription" xml:space="preserve">
     <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal. You can use KEY1 or KEY2</value>
   </data>
+  <data name="AzureTranslate" xml:space="preserve">
+    <value>Azure / Bing translate</value>
+  </data>
   <data name="AzureTranslateAccessKeyDescription" xml:space="preserve">
     <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal. You can use KEY1 or KEY2</value>
   </data>
   <data name="BaiduAppIdDescription" xml:space="preserve">
     <value>Register in Baidu Translate Open Platform and get the App ID</value>
+  </data>
+  <data name="BaiduTranslate" xml:space="preserve">
+    <value>Baidu translate</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -198,8 +225,14 @@
   <data name="CustomModel" xml:space="preserve">
     <value>Custom model</value>
   </data>
+  <data name="DeepSeekChat" xml:space="preserve">
+    <value>DeepSeek</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="DoubaoChat" xml:space="preserve">
+    <value>DouBao</value>
   </data>
   <data name="DrawModelIdPlaceholder" xml:space="preserve">
     <value>Like "dall-e-3"</value>
@@ -213,6 +246,9 @@
   <data name="DrawSizeCanNotBeEmpty" xml:space="preserve">
     <value>You must set an alternative drawing size</value>
   </data>
+  <data name="EdgeAudio" xml:space="preserve">
+    <value>Microsoft Edge speech</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
@@ -225,11 +261,32 @@
   <data name="EndpointPlaceholder" xml:space="preserve">
     <value>like https://api.openai.com/v1</value>
   </data>
+  <data name="ErnieChat" xml:space="preserve">
+    <value>Ernie</value>
+  </data>
+  <data name="ErnieDraw" xml:space="preserve">
+    <value>Ernie</value>
+  </data>
   <data name="ErnieSecretDescription" xml:space="preserve">
     <value>Get Secret Key from "Application Access" of Baidu Qianfan LLM Platform</value>
   </data>
+  <data name="GeminiChat" xml:space="preserve">
+    <value>Gemini</value>
+  </data>
+  <data name="GoogleTranslate" xml:space="preserve">
+    <value>Google translate</value>
+  </data>
+  <data name="GroqChat" xml:space="preserve">
+    <value>Groq</value>
+  </data>
   <data name="Height" xml:space="preserve">
     <value>Height</value>
+  </data>
+  <data name="HunyuanChat" xml:space="preserve">
+    <value>HunYuan</value>
+  </data>
+  <data name="HunyuanDraw" xml:space="preserve">
+    <value>Hunyuan</value>
   </data>
   <data name="HunyuanSecretIdDescription" xml:space="preserve">
     <value>Get SecretId in "API Key Management"</value>
@@ -239,6 +296,12 @@
   </data>
   <data name="KeyId" xml:space="preserve">
     <value>Key ID</value>
+  </data>
+  <data name="LingYiChat" xml:space="preserve">
+    <value>LingYi</value>
+  </data>
+  <data name="MistralChat" xml:space="preserve">
+    <value>Mistral AI</value>
   </data>
   <data name="ModelAlreadyExist" xml:space="preserve">
     <value>Model already exists</value>
@@ -264,8 +327,26 @@
   <data name="ModifyCustomModel" xml:space="preserve">
     <value>Edit custom model</value>
   </data>
+  <data name="MoonshotChat" xml:space="preserve">
+    <value>Moonshot</value>
+  </data>
   <data name="MoreOptions" xml:space="preserve">
     <value>More options</value>
+  </data>
+  <data name="OllamaChat" xml:space="preserve">
+    <value>Ollama</value>
+  </data>
+  <data name="OpenAIAudio" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenAIChat" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenAIDraw" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenRouterChat" xml:space="preserve">
+    <value>OpenRouter</value>
   </data>
   <data name="OptionalPlaceholder" xml:space="preserve">
     <value>If there is no, leave it blank</value>
@@ -273,11 +354,17 @@
   <data name="OrganizationOptional" xml:space="preserve">
     <value>Organization (optional)</value>
   </data>
+  <data name="PerplexityChat" xml:space="preserve">
+    <value>Perplexity</value>
+  </data>
   <data name="PredefinedModels" xml:space="preserve">
     <value>Predefined model</value>
   </data>
   <data name="PredefinedModelsDescription" xml:space="preserve">
     <value>View the list of built-in models of {0}</value>
+  </data>
+  <data name="QwenChat" xml:space="preserve">
+    <value>Qwen</value>
   </data>
   <data name="Region" xml:space="preserve">
     <value>Location/Region</value>
@@ -297,11 +384,20 @@
   <data name="SeeAllPredefinedModels" xml:space="preserve">
     <value>View all predefined models</value>
   </data>
+  <data name="SiliconFlowChat" xml:space="preserve">
+    <value>SiliconFlow</value>
+  </data>
   <data name="SizeAlreadyExist" xml:space="preserve">
     <value>This size already exists</value>
   </data>
   <data name="SparkAppIdDescription" xml:space="preserve">
     <value>Register the application in iFlytek Open Platform and obtain App ID</value>
+  </data>
+  <data name="SparkChat" xml:space="preserve">
+    <value>Spark</value>
+  </data>
+  <data name="SparkDraw" xml:space="preserve">
+    <value>Spark</value>
   </data>
   <data name="SparkSecretDescription" xml:space="preserve">
     <value>Register the application in iFlytek Open Platform and obtain Secret</value>
@@ -321,6 +417,12 @@
   <data name="TencentSecretKeyDescription" xml:space="preserve">
     <value>Get it when creating SecretKey in "API Key Management"</value>
   </data>
+  <data name="TencentTranslate" xml:space="preserve">
+    <value>Tencent cloud translate</value>
+  </data>
+  <data name="TogetherAIChat" xml:space="preserve">
+    <value>Together AI</value>
+  </data>
   <data name="UseCodestral" xml:space="preserve">
     <value>Use Codestral</value>
   </data>
@@ -333,10 +435,25 @@
   <data name="VolcanoSecretKeyDescription" xml:space="preserve">
     <value>Get Secret Access Key in "API Access Key" of Volcano Engine</value>
   </data>
+  <data name="VolcanoTranslate" xml:space="preserve">
+    <value>Volcano translate</value>
+  </data>
   <data name="Width" xml:space="preserve">
     <value>Width</value>
   </data>
+  <data name="WindowsAudio" xml:space="preserve">
+    <value>Windows speech</value>
+  </data>
+  <data name="XAIChat" xml:space="preserve">
+    <value>xAI</value>
+  </data>
   <data name="YoudaoAppIdDescription" xml:space="preserve">
     <value>Register and get App ID in Youdao Open Platform</value>
+  </data>
+  <data name="YoudaoTranslate" xml:space="preserve">
+    <value>Youdao translate</value>
+  </data>
+  <data name="ZhiPuChat" xml:space="preserve">
+    <value>ZhiPu</value>
   </data>
 </root>

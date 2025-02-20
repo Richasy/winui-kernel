@@ -154,15 +154,5 @@ public sealed partial class DrawServiceItemViewModel : ViewModelBase
         => IsCustomModelsEmpty = CustomModels.Count == 0;
 
     private string GetProviderName()
-    {
-        return ProviderType switch
-        {
-            DrawProviderType.OpenAI => "Open AI",
-            DrawProviderType.AzureOpenAI => "Azure Open AI",
-            DrawProviderType.Hunyuan => "混元生图",
-            DrawProviderType.Spark => "星火绘图",
-            DrawProviderType.Ernie => "文心生图",
-            _ => throw new NotImplementedException(),
-        };
-    }
+        => WinUIKernelAIExtensions.ResourceToolkit.GetLocalizedString($"{ProviderType}Draw");
 }

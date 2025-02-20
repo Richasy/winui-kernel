@@ -26,7 +26,7 @@ public sealed partial class TranslateServiceItemViewModel : ViewModelBase
     /// <summary>
     /// 获取设置控件.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>设置控件.</returns>
     /// <exception cref="NotImplementedException"></exception>
     public TranslateServiceConfigControlBase? GetSettingControl()
     {
@@ -69,17 +69,5 @@ public sealed partial class TranslateServiceItemViewModel : ViewModelBase
     }
 
     private string GetProviderName()
-    {
-        return ProviderType switch
-        {
-            TranslateProviderType.Tencent => "腾讯云翻译",
-            TranslateProviderType.Baidu => "百度翻译",
-            TranslateProviderType.Azure => "Azure / Bing Translate",
-            TranslateProviderType.Google => "Google Translate",
-            TranslateProviderType.Youdao => "有道翻译",
-            TranslateProviderType.Ali => "阿里云翻译",
-            TranslateProviderType.Volcano => "火山翻译",
-            _ => throw new NotImplementedException(),
-        };
-    }
+        => WinUIKernelAIExtensions.ResourceToolkit.GetLocalizedString($"{ProviderType}Translate");
 }

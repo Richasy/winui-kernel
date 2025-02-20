@@ -141,8 +141,14 @@
   <data name="AliAccessKeySecretDescription" xml:space="preserve">
     <value>在阿里云中注册并获取 Secret</value>
   </data>
+  <data name="AliTranslate" xml:space="preserve">
+    <value>阿里云翻译</value>
+  </data>
   <data name="AliTranslateAccessKeyDescription" xml:space="preserve">
     <value>在阿里云中注册并获取密钥</value>
+  </data>
+  <data name="AnthropicChat" xml:space="preserve">
+    <value>Anthropic</value>
   </data>
   <data name="ApiKey" xml:space="preserve">
     <value>API 密钥（API Key）</value>
@@ -150,8 +156,23 @@
   <data name="AppId" xml:space="preserve">
     <value>应用 ID</value>
   </data>
+  <data name="AzureAIChat" xml:space="preserve">
+    <value>Azure AI Foundry</value>
+  </data>
+  <data name="AzureAudio" xml:space="preserve">
+    <value>Azure 语音</value>
+  </data>
   <data name="AzureOpenAIAccessKeyDescription" xml:space="preserve">
     <value>在 Azure 门户相应资源的 "密钥与终结点" 中找到此值，可用 KEY1 或 KEY2</value>
+  </data>
+  <data name="AzureOpenAIAudio" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIChat" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIDraw" xml:space="preserve">
+    <value>Azure OpenAI</value>
   </data>
   <data name="AzureOpenAIEndpointDescription" xml:space="preserve">
     <value>在 Azure 门户相应资源的 "密钥与终结点" 中找到此值</value>
@@ -162,11 +183,17 @@
   <data name="AzureSpeechAccessKeyDescription" xml:space="preserve">
     <value>在 Azure 门户相应资源的 "密钥与终结点" 中找到此值，可用 KEY1 或 KEY2</value>
   </data>
+  <data name="AzureTranslate" xml:space="preserve">
+    <value>Azure / 必应翻译</value>
+  </data>
   <data name="AzureTranslateAccessKeyDescription" xml:space="preserve">
     <value>在 Azure 门户相应资源的 "密钥与终结点" 中找到此值，可用 KEY1 或 KEY2</value>
   </data>
   <data name="BaiduAppIdDescription" xml:space="preserve">
     <value>在百度翻译开放平台中注册并获取 App ID</value>
+  </data>
+  <data name="BaiduTranslate" xml:space="preserve">
+    <value>百度翻译</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>取消</value>
@@ -198,8 +225,14 @@
   <data name="CustomModel" xml:space="preserve">
     <value>自定义模型</value>
   </data>
+  <data name="DeepSeekChat" xml:space="preserve">
+    <value>DeepSeek</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
+  </data>
+  <data name="DoubaoChat" xml:space="preserve">
+    <value>字节豆包</value>
   </data>
   <data name="DrawModelIdPlaceholder" xml:space="preserve">
     <value>如 "dall-e-3"</value>
@@ -213,6 +246,9 @@
   <data name="DrawSizeCanNotBeEmpty" xml:space="preserve">
     <value>必须要设置备选的绘图尺寸</value>
   </data>
+  <data name="EdgeAudio" xml:space="preserve">
+    <value>Microsoft Edge 语音</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>编辑</value>
   </data>
@@ -225,11 +261,32 @@
   <data name="EndpointPlaceholder" xml:space="preserve">
     <value>如 https://api.openai.com/v1</value>
   </data>
+  <data name="ErnieChat" xml:space="preserve">
+    <value>文心一言</value>
+  </data>
+  <data name="ErnieDraw" xml:space="preserve">
+    <value>文心生图</value>
+  </data>
   <data name="ErnieSecretDescription" xml:space="preserve">
     <value>从百度千帆大模型平台的 "应用接入" 中获取 Secret Key</value>
   </data>
+  <data name="GeminiChat" xml:space="preserve">
+    <value>Gemini</value>
+  </data>
+  <data name="GoogleTranslate" xml:space="preserve">
+    <value>谷歌翻译</value>
+  </data>
+  <data name="GroqChat" xml:space="preserve">
+    <value>Groq</value>
+  </data>
   <data name="Height" xml:space="preserve">
     <value>高度</value>
+  </data>
+  <data name="HunyuanChat" xml:space="preserve">
+    <value>腾讯混元</value>
+  </data>
+  <data name="HunyuanDraw" xml:space="preserve">
+    <value>混元生图</value>
   </data>
   <data name="HunyuanSecretIdDescription" xml:space="preserve">
     <value>在 "API密钥管理" 中获取 SecretId</value>
@@ -239,6 +296,12 @@
   </data>
   <data name="KeyId" xml:space="preserve">
     <value>密钥 ID</value>
+  </data>
+  <data name="LingYiChat" xml:space="preserve">
+    <value>零一万物</value>
+  </data>
+  <data name="MistralChat" xml:space="preserve">
+    <value>Mistral AI</value>
   </data>
   <data name="ModelAlreadyExist" xml:space="preserve">
     <value>模型已存在</value>
@@ -264,8 +327,26 @@
   <data name="ModifyCustomModel" xml:space="preserve">
     <value>编辑自定义模型</value>
   </data>
+  <data name="MoonshotChat" xml:space="preserve">
+    <value>月之暗面</value>
+  </data>
   <data name="MoreOptions" xml:space="preserve">
     <value>更多选项</value>
+  </data>
+  <data name="OllamaChat" xml:space="preserve">
+    <value>Ollama</value>
+  </data>
+  <data name="OpenAIAudio" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenAIChat" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenAIDraw" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenRouterChat" xml:space="preserve">
+    <value>OpenRouter</value>
   </data>
   <data name="OptionalPlaceholder" xml:space="preserve">
     <value>如果没有则不填</value>
@@ -273,11 +354,17 @@
   <data name="OrganizationOptional" xml:space="preserve">
     <value>组织（可选）</value>
   </data>
+  <data name="PerplexityChat" xml:space="preserve">
+    <value>Perplexity</value>
+  </data>
   <data name="PredefinedModels" xml:space="preserve">
     <value>预定义模型</value>
   </data>
   <data name="PredefinedModelsDescription" xml:space="preserve">
     <value>查看 {0} 的内置模型列表</value>
+  </data>
+  <data name="QwenChat" xml:space="preserve">
+    <value>通义千问</value>
   </data>
   <data name="Region" xml:space="preserve">
     <value>位置/区域</value>
@@ -297,11 +384,20 @@
   <data name="SeeAllPredefinedModels" xml:space="preserve">
     <value>查看全部预定义模型</value>
   </data>
+  <data name="SiliconFlowChat" xml:space="preserve">
+    <value>硅基流动</value>
+  </data>
   <data name="SizeAlreadyExist" xml:space="preserve">
     <value>该尺寸已存在</value>
   </data>
   <data name="SparkAppIdDescription" xml:space="preserve">
     <value>在讯飞开放平台中注册应用并获取 App ID</value>
+  </data>
+  <data name="SparkChat" xml:space="preserve">
+    <value>讯飞星火</value>
+  </data>
+  <data name="SparkDraw" xml:space="preserve">
+    <value>星火绘图</value>
   </data>
   <data name="SparkSecretDescription" xml:space="preserve">
     <value>在讯飞开放平台中注册应用并获取 Secret</value>
@@ -321,6 +417,12 @@
   <data name="TencentSecretKeyDescription" xml:space="preserve">
     <value>在 "API密钥管理" 中创建 SecretKey 时获取</value>
   </data>
+  <data name="TencentTranslate" xml:space="preserve">
+    <value>腾讯云翻译</value>
+  </data>
+  <data name="TogetherAIChat" xml:space="preserve">
+    <value>Together AI</value>
+  </data>
   <data name="UseCodestral" xml:space="preserve">
     <value>使用 Codestral</value>
   </data>
@@ -333,10 +435,25 @@
   <data name="VolcanoSecretKeyDescription" xml:space="preserve">
     <value>在火山引擎的 "API访问密钥" 中获取 Secret Access Key</value>
   </data>
+  <data name="VolcanoTranslate" xml:space="preserve">
+    <value>火山翻译</value>
+  </data>
   <data name="Width" xml:space="preserve">
     <value>宽度</value>
   </data>
+  <data name="WindowsAudio" xml:space="preserve">
+    <value>本机语音</value>
+  </data>
+  <data name="XAIChat" xml:space="preserve">
+    <value>xAI</value>
+  </data>
   <data name="YoudaoAppIdDescription" xml:space="preserve">
     <value>在有道开放平台中注册并获取 App ID</value>
+  </data>
+  <data name="YoudaoTranslate" xml:space="preserve">
+    <value>有道翻译</value>
+  </data>
+  <data name="ZhiPuChat" xml:space="preserve">
+    <value>智谱清言</value>
   </data>
 </root>

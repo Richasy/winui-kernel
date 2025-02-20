@@ -41,8 +41,6 @@ internal static class Utils
                         new GradientStop { Color = "#F0DCD6".ToColor(), Offset = 1 },
                     ]
                 };
-            case "google":
-                return new SolidColorBrush("#FFFFFF".ToColor());
             case "groq":
                 return new SolidColorBrush("#F55036".ToColor());
             case "hunyuan":
@@ -134,6 +132,8 @@ internal static class Utils
             case "siliconflow":
                 return new SolidColorBrush("#7C3AED".ToColor());
             case "doubao":
+            case "windows":
+            case "google":
                 return new SolidColorBrush(Colors.White);
             default:
                 return new SolidColorBrush(Colors.Transparent);

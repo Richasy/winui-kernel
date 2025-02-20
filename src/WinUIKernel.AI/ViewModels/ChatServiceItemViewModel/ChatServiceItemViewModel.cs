@@ -171,32 +171,5 @@ public partial class ChatServiceItemViewModel : ViewModelBase
         => IsCustomModelsEmpty = CustomModels.Count == 0;
 
     private string GetProviderName()
-    {
-        return ProviderType switch
-        {
-            ChatProviderType.OpenAI => "Open AI",
-            ChatProviderType.AzureOpenAI => "Azure Open AI",
-            ChatProviderType.AzureAI => "Azure AI",
-            ChatProviderType.Gemini => "Gemini",
-            ChatProviderType.Anthropic => "Anthropic",
-            ChatProviderType.DeepSeek => "Deep Seek",
-            ChatProviderType.SiliconFlow => "硅基流动",
-            ChatProviderType.OpenRouter => "Open Router",
-            ChatProviderType.Moonshot => "月之暗面",
-            ChatProviderType.ZhiPu => "智谱 AI",
-            ChatProviderType.LingYi => "零一万物",
-            ChatProviderType.Qwen => "通义千问",
-            ChatProviderType.Ernie => "文心一言",
-            ChatProviderType.Hunyuan => "腾讯混元",
-            ChatProviderType.Spark => "讯飞星火",
-            ChatProviderType.TogetherAI => "Together AI",
-            ChatProviderType.Groq => "Groq",
-            ChatProviderType.Perplexity => "Perplexity",
-            ChatProviderType.Mistral => "Mistral AI",
-            ChatProviderType.Ollama => "Ollama",
-            ChatProviderType.Doubao => "字节豆包",
-            ChatProviderType.XAI => "xAI",
-            _ => throw new NotImplementedException(),
-        };
-    }
+        => WinUIKernelAIExtensions.ResourceToolkit.GetLocalizedString($"{ProviderType}Chat");
 }
