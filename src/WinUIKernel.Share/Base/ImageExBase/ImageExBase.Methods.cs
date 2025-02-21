@@ -30,10 +30,12 @@ public abstract partial class ImageExBase
         }
     }
 
-    private async Task RedrawAsync()
-    {
-        await TryLoadImageAsync(Source);
-    }
+    /// <summary>
+    /// 重绘.
+    /// </summary>
+    /// <returns><see cref="Task"/>.</returns>
+    protected async Task RedrawAsync()
+        => await TryLoadImageAsync(Source);
 
     private async Task TryLoadImageAsync(Uri uri)
     {

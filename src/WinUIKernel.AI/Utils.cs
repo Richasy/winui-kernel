@@ -82,7 +82,7 @@ internal static class Utils
                         new GradientStop { Color = "#23A4FB".ToColor(), Offset = 1 },
                     ]
                 };
-            case "sparkdesk":
+            case "spark":
                 return new SolidColorBrush("#0070f0".ToColor());
             case "togetherai":
                 return new SolidColorBrush("#0f6fff".ToColor());
