@@ -1,0 +1,187 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows10.0.22621.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+	<AssemblyName>Richasy.WinUIKernel.Share</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <UseWinUI>true</UseWinUI>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <Platforms>x64;x86;ARM64</Platforms>
+    <NoWarn>$(NoWarn);MVVMTK0045;MSB3030;IL2059</NoWarn>
+	<EnableMsixTooling>true</EnableMsixTooling>
+    <WebView2EnableCsWinRTProjectionExcludeCoreRef>true</WebView2EnableCsWinRTProjectionExcludeCoreRef>
+  </PropertyGroup>
+
+  <Import Project="$(RepoRoot)/src/nuget-package.props" />
+  
+  <PropertyGroup>
+  	<!-- NuGet Package Settings -->
+  	<Title>WinUI Kernel - Share</Title>
+  	<Description>多项目共享的基础 WinUI 实现</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+  	<None Include="bin/$(Configuration)/$(TargetFramework)/$(AssemblyName).pri" Pack="true" PackagePath="lib/$(TargetFramework.TrimEnd('.0'))/" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <None Remove="Base\AppTitleBar.xaml" />
+    <None Remove="Base\AppToggleCard\AppToggleCard.xaml" />
+    <None Remove="Base\CardControl\CardControl.xaml" />
+    <None Remove="Base\ColumnSplitter.xaml" />
+    <None Remove="Base\CustomNavigationViewResources.xaml" />
+    <None Remove="Base\DraggableCardControl\DraggableCardControl.xaml" />
+    <None Remove="Base\IconTextBlock.xaml" />
+    <None Remove="Base\ImageExBase\ImageExBase.xaml" />
+    <None Remove="Base\LoadingWidget.xaml" />
+    <None Remove="Base\SettingsControls\SettingsCard\SettingsCard.xaml" />
+    <None Remove="Base\SettingsControls\SettingsExpander\SettingsExpander.xaml" />
+    <None Remove="Base\Shimmer.xaml" />
+    <None Remove="Base\SideSplitButton.xaml" />
+    <None Remove="Base\StatusTip.xaml" />
+    <None Remove="Base\TipHeader.xaml" />
+    <None Remove="Base\TipPopup.xaml" />
+    <None Remove="Base\TrimTextBlock.xaml" />
+    <None Remove="Base\VisibilityToggleButton.xaml" />
+    <None Remove="EmptyHolder.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.HighPerformance" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="CommunityToolkit.WinUI.Animations" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" />
+    <PackageReference Include="CommunityToolkit.WinUI.Extensions" />
+    <PackageReference Include="CommunityToolkit.WinUI.Media" />
+    <PackageReference Include="CommunityToolkit.WinUI.Triggers" />
+    <PackageReference Include="FluentIcons.WinUI" />
+    <PackageReference Include="Microsoft.Windows.CsWinRT" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+    <PackageReference Include="Microsoft.Graphics.Win2D" />
+    <PackageReference Include="RichasyKernel.Abstractions" />
+    <PackageReference Include="System.Drawing.Common" />
+    <PackageReference Include="WinUIEx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\AppTitleBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Base\AppTitleBar\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\TipHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\DraggableCardControl\DraggableCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\CardControl\CardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\AppToggleCard\AppToggleCard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\LoadingWidget.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\VisibilityToggleButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\ColumnSplitter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="EmptyHolder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\IconTextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\TipPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\StatusTip.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\SideSplitButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\SettingsControls\SettingsExpander\SettingsExpander.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\SettingsControls\SettingsCard\SettingsCard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\Shimmer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\ImageExBase\ImageExBase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\TrimTextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\CustomNavigationViewResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

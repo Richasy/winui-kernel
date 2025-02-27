@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- StyleCop Analyzers configuration -->
+  <!-- This config may be incompatible with Jumpstart since it uses the same file.
+       If we opt for Jumpstart, this may need to be migrated. -->
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+	<NoWarn>$(NoWarn);NU1507</NoWarn>
+	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+	<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	<AnalysisLevel>latest</AnalysisLevel>
+	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<EditorConfigFilePath>$(MSBuildThisFileDirectory).editorconfig</EditorConfigFilePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+  	<AdditionalFiles Include="$(EditorConfigFilePath)" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+  	<RepoRoot>$([System.IO.Path]::GetDirectoryName($([MSBuild]::GetPathOfFileAbove('.gitignore', '$(MSBuildThisFileDirectory)'))))</RepoRoot>
+  </PropertyGroup>
+</Project>

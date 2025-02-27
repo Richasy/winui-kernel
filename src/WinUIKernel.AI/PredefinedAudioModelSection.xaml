@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<local:AudioServiceConfigControlBase
+    x:Class="Richasy.WinUIKernel.AI.PredefinedAudioModelSection"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ext="using:Richasy.WinUIKernel.AI.Extensions"
+    xmlns:local="using:Richasy.WinUIKernel.AI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Richasy.WinUIKernel.AI.ViewModels"
+    mc:Ignorable="d">
+
+    <StackPanel Spacing="4">
+        <TextBlock
+            HorizontalAlignment="Left"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            Style="{StaticResource CaptionTextBlockStyle}"
+            Text="{ext:Locale Name=PredefinedModels}" />
+        <ItemsRepeater Width="240" ItemsSource="{x:Bind ViewModel.ServerModels}">
+            <ItemsRepeater.ItemTemplate>
+                <DataTemplate x:DataType="vm:AudioModelItemViewModel">
+                    <local:AudioModelCard ViewModel="{x:Bind}" />
+                </DataTemplate>
+            </ItemsRepeater.ItemTemplate>
+            <ItemsRepeater.Layout>
+                <StackLayout Spacing="4" />
+            </ItemsRepeater.Layout>
+        </ItemsRepeater>
+    </StackPanel>
+</local:AudioServiceConfigControlBase>

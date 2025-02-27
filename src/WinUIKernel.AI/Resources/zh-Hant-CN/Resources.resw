@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccessKey" xml:space="preserve">
+    <value>訪問密鑰</value>
+  </data>
+  <data name="AccessKeyDescription" xml:space="preserve">
+    <value>填入來自 {0} 的 API 金鑰</value>
+  </data>
+  <data name="AccessKeyPlaceholder" xml:space="preserve">
+    <value>{0} API 金鑰</value>
+  </data>
+  <data name="AccessKeyPlaceholderText" xml:space="preserve">
+    <value>訪問服務的密鑰</value>
+  </data>
+  <data name="AccessKeySecret" xml:space="preserve">
+    <value>訪問密文（AccessKey Secret）</value>
+  </data>
+  <data name="AddSize" xml:space="preserve">
+    <value>新增尺寸</value>
+  </data>
+  <data name="AddYourCustomModel" xml:space="preserve">
+    <value>新增自訂模型</value>
+  </data>
+  <data name="AliAccessKeySecretDescription" xml:space="preserve">
+    <value>在阿里雲中註冊並獲取 Secret</value>
+  </data>
+  <data name="AliTranslate" xml:space="preserve">
+    <value>阿里雲翻譯</value>
+  </data>
+  <data name="AliTranslateAccessKeyDescription" xml:space="preserve">
+    <value>在阿里雲中註冊並獲取密鑰</value>
+  </data>
+  <data name="AnthropicChat" xml:space="preserve">
+    <value>Anthropic</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API 金鑰（API Key）</value>
+  </data>
+  <data name="AppId" xml:space="preserve">
+    <value>應用程式 ID</value>
+  </data>
+  <data name="AzureAIChat" xml:space="preserve">
+    <value>Azure AI Foundry</value>
+  </data>
+  <data name="AzureAudio" xml:space="preserve">
+    <value>Azure 語音</value>
+  </data>
+  <data name="AzureOpenAIAccessKeyDescription" xml:space="preserve">
+    <value>在 Azure 入口網站對應資源的 "金鑰與終結點" 中找到此值，可用 KEY1 或 KEY2</value>
+  </data>
+  <data name="AzureOpenAIAudio" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIChat" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIDraw" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIEndpointDescription" xml:space="preserve">
+    <value>在 Azure 入口網站對應資源的 "金鑰與終結點" 中找到此值</value>
+  </data>
+  <data name="AzureRegionDescription" xml:space="preserve">
+    <value>在 Azure 入口網站對應資源的 "金鑰與終結點" 中找到此值</value>
+  </data>
+  <data name="AzureSpeechAccessKeyDescription" xml:space="preserve">
+    <value>在 Azure 入口網站對應資源的 "金鑰與終結點" 中找到此值，可用 KEY1 或 KEY2</value>
+  </data>
+  <data name="AzureTranslate" xml:space="preserve">
+    <value>Azure / 必應翻譯</value>
+  </data>
+  <data name="AzureTranslateAccessKeyDescription" xml:space="preserve">
+    <value>在 Azure 入口網站對應資源的 "金鑰與終結點" 中找到此值，可用 KEY1 或 KEY2</value>
+  </data>
+  <data name="BaiduAppIdDescription" xml:space="preserve">
+    <value>在百度翻譯開放平台中註冊並取得 App ID</value>
+  </data>
+  <data name="BaiduTranslate" xml:space="preserve">
+    <value>百度翻譯</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ChatModelIdPlaceholder" xml:space="preserve">
+    <value>如 "gpt-4"</value>
+  </data>
+  <data name="ChatModelNamePlaceholder" xml:space="preserve">
+    <value>如 "ChatGPT 4"</value>
+  </data>
+  <data name="CodestralKey" xml:space="preserve">
+    <value>Codestral 密鑰</value>
+  </data>
+  <data name="CodestralKeyDescription" xml:space="preserve">
+    <value>輸入專屬於 Codestral 的金鑰</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>創建</value>
+  </data>
+  <data name="CreateCustomModel" xml:space="preserve">
+    <value>建立自訂模型</value>
+  </data>
+  <data name="CreateNewSize" xml:space="preserve">
+    <value>增加一個新的尺寸吧</value>
+  </data>
+  <data name="CustomModel" xml:space="preserve">
+    <value>自訂模型</value>
+  </data>
+  <data name="DeepSeekChat" xml:space="preserve">
+    <value>DeepSeek</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="DoubaoChat" xml:space="preserve">
+    <value>字節豆包</value>
+  </data>
+  <data name="DrawModelIdPlaceholder" xml:space="preserve">
+    <value>如 "dall-e-3"</value>
+  </data>
+  <data name="DrawModelNamePlaceholder" xml:space="preserve">
+    <value>如 "DALL·E3"</value>
+  </data>
+  <data name="DrawSize" xml:space="preserve">
+    <value>繪圖尺寸</value>
+  </data>
+  <data name="DrawSizeCanNotBeEmpty" xml:space="preserve">
+    <value>必須要設定備選的繪圖尺寸</value>
+  </data>
+  <data name="EdgeAudio" xml:space="preserve">
+    <value>Microsoft Edge 語音</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>編輯</value>
+  </data>
+  <data name="Endpoint" xml:space="preserve">
+    <value>終結點</value>
+  </data>
+  <data name="EndpointDescription" xml:space="preserve">
+    <value>必須包含 http(s)://</value>
+  </data>
+  <data name="EndpointPlaceholder" xml:space="preserve">
+    <value>如 https://api.openai.com/v1</value>
+  </data>
+  <data name="ErnieChat" xml:space="preserve">
+    <value>文心一言</value>
+  </data>
+  <data name="ErnieDraw" xml:space="preserve">
+    <value>文心生圖</value>
+  </data>
+  <data name="ErnieSecretDescription" xml:space="preserve">
+    <value>從百度千帆大模型平台的 "應用程式接入" 中取得 Secret Key</value>
+  </data>
+  <data name="GeminiChat" xml:space="preserve">
+    <value>Gemini</value>
+  </data>
+  <data name="GoogleTranslate" xml:space="preserve">
+    <value>谷歌翻譯</value>
+  </data>
+  <data name="GroqChat" xml:space="preserve">
+    <value>Groq</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="HunyuanChat" xml:space="preserve">
+    <value>騰訊混元</value>
+  </data>
+  <data name="HunyuanDraw" xml:space="preserve">
+    <value>混元生圖</value>
+  </data>
+  <data name="HunyuanSecretIdDescription" xml:space="preserve">
+    <value>在 "API金鑰管理" 中取得 SecretId</value>
+  </data>
+  <data name="HunyuanSecretKeyDescription" xml:space="preserve">
+    <value>在 "API金鑰管理" 中建立 SecretKey 時獲取</value>
+  </data>
+  <data name="KeyId" xml:space="preserve">
+    <value>密鑰 ID</value>
+  </data>
+  <data name="LingYiChat" xml:space="preserve">
+    <value>零一萬物</value>
+  </data>
+  <data name="MistralChat" xml:space="preserve">
+    <value>Mistral AI</value>
+  </data>
+  <data name="ModelAlreadyExist" xml:space="preserve">
+    <value>模型已存在</value>
+  </data>
+  <data name="ModelFeature" xml:space="preserve">
+    <value>模型功能</value>
+  </data>
+  <data name="ModelId" xml:space="preserve">
+    <value>模型 ID</value>
+  </data>
+  <data name="ModelIdDescription" xml:space="preserve">
+    <value>模型 ID 是該模型的真實識別名稱，AI 服務透過此標識確定模型</value>
+  </data>
+  <data name="ModelName" xml:space="preserve">
+    <value>模型名稱</value>
+  </data>
+  <data name="ModelNameDescription" xml:space="preserve">
+    <value>模型名稱是應用程式內部顯示在介面上的可讀名稱</value>
+  </data>
+  <data name="ModelNameOrIdCanNotBeEmpty" xml:space="preserve">
+    <value>模型名稱或ID不能為空</value>
+  </data>
+  <data name="ModifyCustomModel" xml:space="preserve">
+    <value>編輯自訂模型</value>
+  </data>
+  <data name="MoonshotChat" xml:space="preserve">
+    <value>月之暗面</value>
+  </data>
+  <data name="MoreOptions" xml:space="preserve">
+    <value>更多選項</value>
+  </data>
+  <data name="OllamaChat" xml:space="preserve">
+    <value>Ollama</value>
+  </data>
+  <data name="OpenAIAudio" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenAIChat" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenAIDraw" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenRouterChat" xml:space="preserve">
+    <value>OpenRouter</value>
+  </data>
+  <data name="OptionalPlaceholder" xml:space="preserve">
+    <value>如果沒有則不填</value>
+  </data>
+  <data name="OrganizationOptional" xml:space="preserve">
+    <value>組織（可選）</value>
+  </data>
+  <data name="PerplexityChat" xml:space="preserve">
+    <value>Perplexity</value>
+  </data>
+  <data name="PredefinedModels" xml:space="preserve">
+    <value>内建模型</value>
+  </data>
+  <data name="PredefinedModelsDescription" xml:space="preserve">
+    <value>查看 {0} 的內建模型列表</value>
+  </data>
+  <data name="QwenChat" xml:space="preserve">
+    <value>通義千問</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>位置/區域</value>
+  </data>
+  <data name="RegionPlaceholderText" xml:space="preserve">
+    <value>服務所在地區</value>
+  </data>
+  <data name="RightClickDelete" xml:space="preserve">
+    <value>右鍵單擊以刪除</value>
+  </data>
+  <data name="SecretId" xml:space="preserve">
+    <value>密文 ID（Secret ID）</value>
+  </data>
+  <data name="SecretKey" xml:space="preserve">
+    <value>密文金鑰（Secret Key）</value>
+  </data>
+  <data name="SeeAllPredefinedModels" xml:space="preserve">
+    <value>看全部内建模型</value>
+  </data>
+  <data name="SiliconFlowChat" xml:space="preserve">
+    <value>硅基流動</value>
+  </data>
+  <data name="SizeAlreadyExist" xml:space="preserve">
+    <value>該尺寸已存在</value>
+  </data>
+  <data name="SparkAppIdDescription" xml:space="preserve">
+    <value>在訊飛開放平台中註冊應用程式並取得 App ID</value>
+  </data>
+  <data name="SparkChat" xml:space="preserve">
+    <value>訊飛星火</value>
+  </data>
+  <data name="SparkDraw" xml:space="preserve">
+    <value>星火繪圖</value>
+  </data>
+  <data name="SparkSecretDescription" xml:space="preserve">
+    <value>在訊飛開放平台中註冊應用程式並取得 Secret</value>
+  </data>
+  <data name="SupportSizes" xml:space="preserve">
+    <value>支援的尺寸</value>
+  </data>
+  <data name="SupportTool" xml:space="preserve">
+    <value>支援工具調用</value>
+  </data>
+  <data name="SupportVision" xml:space="preserve">
+    <value>支援視覺識別</value>
+  </data>
+  <data name="TencentSecretIdDescription" xml:space="preserve">
+    <value>在 "API金鑰管理" 中取得 SecretId</value>
+  </data>
+  <data name="TencentSecretKeyDescription" xml:space="preserve">
+    <value>在 "API金鑰管理" 中建立 SecretKey 時獲取</value>
+  </data>
+  <data name="TencentTranslate" xml:space="preserve">
+    <value>騰訊雲翻譯</value>
+  </data>
+  <data name="TogetherAIChat" xml:space="preserve">
+    <value>Together AI</value>
+  </data>
+  <data name="UseCodestral" xml:space="preserve">
+    <value>使用 Codestral</value>
+  </data>
+  <data name="UseCodestralDescription" xml:space="preserve">
+    <value>使用 Codestral API 及其模型</value>
+  </data>
+  <data name="VolcanoKeyIdDescription" xml:space="preserve">
+    <value>在火山引擎的 "API訪問金鑰" 中取得 Access Key ID</value>
+  </data>
+  <data name="VolcanoSecretKeyDescription" xml:space="preserve">
+    <value>在火山引擎的 "API訪問金鑰" 中取得 Secret Access Key</value>
+  </data>
+  <data name="VolcanoTranslate" xml:space="preserve">
+    <value>火山翻譯</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>寬度</value>
+  </data>
+  <data name="WindowsAudio" xml:space="preserve">
+    <value>本機語音</value>
+  </data>
+  <data name="XAIChat" xml:space="preserve">
+    <value>xAI</value>
+  </data>
+  <data name="YoudaoAppIdDescription" xml:space="preserve">
+    <value>在有道開放平台中註冊並取得 App ID</value>
+  </data>
+  <data name="YoudaoTranslate" xml:space="preserve">
+    <value>有道翻譯</value>
+  </data>
+  <data name="ZhiPuChat" xml:space="preserve">
+    <value>智譜清言</value>
+  </data>
+</root>

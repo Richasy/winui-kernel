@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:LayoutPageBase
+    x:Class="AISample.TestPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ai="using:Richasy.WinUIKernel.AI"
+    xmlns:base="using:Richasy.WinUIKernel.Share.Base"
+    xmlns:chat="using:Richasy.WinUIKernel.AI.Chat"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:AISample"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer>
+        <StackPanel Padding="40" Spacing="20">
+            <StackPanel.ChildrenTransitions>
+                <RepositionThemeTransition IsStaggeringEnabled="False" />
+            </StackPanel.ChildrenTransitions>
+            <StackPanel x:Name="ChatContainer">
+                <StackPanel.ChildrenTransitions>
+                    <RepositionThemeTransition IsStaggeringEnabled="False" />
+                </StackPanel.ChildrenTransitions>
+            </StackPanel>
+            <StackPanel x:Name="AudioContainer">
+                <StackPanel.ChildrenTransitions>
+                    <RepositionThemeTransition IsStaggeringEnabled="False" />
+                </StackPanel.ChildrenTransitions>
+            </StackPanel>
+
+            <StackPanel x:Name="DrawContainer">
+                <StackPanel.ChildrenTransitions>
+                    <RepositionThemeTransition IsStaggeringEnabled="False" />
+                </StackPanel.ChildrenTransitions>
+            </StackPanel>
+
+            <StackPanel x:Name="TranslateContainer">
+                <StackPanel.ChildrenTransitions>
+                    <RepositionThemeTransition IsStaggeringEnabled="False" />
+                </StackPanel.ChildrenTransitions>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</base:LayoutPageBase>

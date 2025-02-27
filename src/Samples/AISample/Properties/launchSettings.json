@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AISample (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "AISample (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccessKey" xml:space="preserve">
+    <value>Access key</value>
+  </data>
+  <data name="AccessKeyDescription" xml:space="preserve">
+    <value>Fill in the API key from {0}</value>
+  </data>
+  <data name="AccessKeyPlaceholder" xml:space="preserve">
+    <value>{0} API key</value>
+  </data>
+  <data name="AccessKeyPlaceholderText" xml:space="preserve">
+    <value>Key for accessing the service</value>
+  </data>
+  <data name="AccessKeySecret" xml:space="preserve">
+    <value>Access secret</value>
+  </data>
+  <data name="AddSize" xml:space="preserve">
+    <value>Add a new size</value>
+  </data>
+  <data name="AddYourCustomModel" xml:space="preserve">
+    <value>Add a custom model</value>
+  </data>
+  <data name="AliAccessKeySecretDescription" xml:space="preserve">
+    <value>Register in Alibaba Cloud and get the Secret</value>
+  </data>
+  <data name="AliTranslate" xml:space="preserve">
+    <value>Alibaba cloud translate</value>
+  </data>
+  <data name="AliTranslateAccessKeyDescription" xml:space="preserve">
+    <value>Register in Alibaba Cloud and get the Key</value>
+  </data>
+  <data name="AnthropicChat" xml:space="preserve">
+    <value>Anthropic</value>
+  </data>
+  <data name="ApiKey" xml:space="preserve">
+    <value>API key</value>
+  </data>
+  <data name="AppId" xml:space="preserve">
+    <value>App ID</value>
+  </data>
+  <data name="AzureAIChat" xml:space="preserve">
+    <value>Azure AI Foundry</value>
+  </data>
+  <data name="AzureAudio" xml:space="preserve">
+    <value>Azure speech</value>
+  </data>
+  <data name="AzureOpenAIAccessKeyDescription" xml:space="preserve">
+    <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal. You can use KEY1 or KEY2</value>
+  </data>
+  <data name="AzureOpenAIAudio" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIChat" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIDraw" xml:space="preserve">
+    <value>Azure OpenAI</value>
+  </data>
+  <data name="AzureOpenAIEndpointDescription" xml:space="preserve">
+    <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal</value>
+  </data>
+  <data name="AzureRegionDescription" xml:space="preserve">
+    <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal</value>
+  </data>
+  <data name="AzureSpeechAccessKeyDescription" xml:space="preserve">
+    <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal. You can use KEY1 or KEY2</value>
+  </data>
+  <data name="AzureTranslate" xml:space="preserve">
+    <value>Azure / Bing translate</value>
+  </data>
+  <data name="AzureTranslateAccessKeyDescription" xml:space="preserve">
+    <value>Find this value in "Keys and Endpoints" of the corresponding resource in the Azure portal. You can use KEY1 or KEY2</value>
+  </data>
+  <data name="BaiduAppIdDescription" xml:space="preserve">
+    <value>Register in Baidu Translate Open Platform and get the App ID</value>
+  </data>
+  <data name="BaiduTranslate" xml:space="preserve">
+    <value>Baidu translate</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ChatModelIdPlaceholder" xml:space="preserve">
+    <value>Such as "gpt-4"</value>
+  </data>
+  <data name="ChatModelNamePlaceholder" xml:space="preserve">
+    <value>Such as "ChatGPT 4"</value>
+  </data>
+  <data name="CodestralKey" xml:space="preserve">
+    <value>Codestral key</value>
+  </data>
+  <data name="CodestralKeyDescription" xml:space="preserve">
+    <value>Enter a unique key for Codestral</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateCustomModel" xml:space="preserve">
+    <value>Create custom model</value>
+  </data>
+  <data name="CreateNewSize" xml:space="preserve">
+    <value>Add a new size</value>
+  </data>
+  <data name="CustomModel" xml:space="preserve">
+    <value>Custom model</value>
+  </data>
+  <data name="DeepSeekChat" xml:space="preserve">
+    <value>DeepSeek</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DoubaoChat" xml:space="preserve">
+    <value>DouBao</value>
+  </data>
+  <data name="DrawModelIdPlaceholder" xml:space="preserve">
+    <value>Like "dall-e-3"</value>
+  </data>
+  <data name="DrawModelNamePlaceholder" xml:space="preserve">
+    <value>Like "DALL·E3"</value>
+  </data>
+  <data name="DrawSize" xml:space="preserve">
+    <value>Drawing size</value>
+  </data>
+  <data name="DrawSizeCanNotBeEmpty" xml:space="preserve">
+    <value>You must set an alternative drawing size</value>
+  </data>
+  <data name="EdgeAudio" xml:space="preserve">
+    <value>Microsoft Edge speech</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Endpoint" xml:space="preserve">
+    <value>Endpoint</value>
+  </data>
+  <data name="EndpointDescription" xml:space="preserve">
+    <value>Must include http(s)://</value>
+  </data>
+  <data name="EndpointPlaceholder" xml:space="preserve">
+    <value>like https://api.openai.com/v1</value>
+  </data>
+  <data name="ErnieChat" xml:space="preserve">
+    <value>Ernie</value>
+  </data>
+  <data name="ErnieDraw" xml:space="preserve">
+    <value>Ernie</value>
+  </data>
+  <data name="ErnieSecretDescription" xml:space="preserve">
+    <value>Get Secret Key from "Application Access" of Baidu Qianfan LLM Platform</value>
+  </data>
+  <data name="GeminiChat" xml:space="preserve">
+    <value>Gemini</value>
+  </data>
+  <data name="GoogleTranslate" xml:space="preserve">
+    <value>Google translate</value>
+  </data>
+  <data name="GroqChat" xml:space="preserve">
+    <value>Groq</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="HunyuanChat" xml:space="preserve">
+    <value>HunYuan</value>
+  </data>
+  <data name="HunyuanDraw" xml:space="preserve">
+    <value>Hunyuan</value>
+  </data>
+  <data name="HunyuanSecretIdDescription" xml:space="preserve">
+    <value>Get SecretId in "API Key Management"</value>
+  </data>
+  <data name="HunyuanSecretKeyDescription" xml:space="preserve">
+    <value>Get when creating SecretKey in "API Key Management"</value>
+  </data>
+  <data name="KeyId" xml:space="preserve">
+    <value>Key ID</value>
+  </data>
+  <data name="LingYiChat" xml:space="preserve">
+    <value>LingYi</value>
+  </data>
+  <data name="MistralChat" xml:space="preserve">
+    <value>Mistral AI</value>
+  </data>
+  <data name="ModelAlreadyExist" xml:space="preserve">
+    <value>Model already exists</value>
+  </data>
+  <data name="ModelFeature" xml:space="preserve">
+    <value>Model feature</value>
+  </data>
+  <data name="ModelId" xml:space="preserve">
+    <value>Model ID</value>
+  </data>
+  <data name="ModelIdDescription" xml:space="preserve">
+    <value>Model ID is the real identification name of the model, and AI service identifies the model through this identification</value>
+  </data>
+  <data name="ModelName" xml:space="preserve">
+    <value>Model name</value>
+  </data>
+  <data name="ModelNameDescription" xml:space="preserve">
+    <value>Model name is the readable name displayed on the UI</value>
+  </data>
+  <data name="ModelNameOrIdCanNotBeEmpty" xml:space="preserve">
+    <value>Model name or ID cannot be empty</value>
+  </data>
+  <data name="ModifyCustomModel" xml:space="preserve">
+    <value>Edit custom model</value>
+  </data>
+  <data name="MoonshotChat" xml:space="preserve">
+    <value>Moonshot</value>
+  </data>
+  <data name="MoreOptions" xml:space="preserve">
+    <value>More options</value>
+  </data>
+  <data name="OllamaChat" xml:space="preserve">
+    <value>Ollama</value>
+  </data>
+  <data name="OpenAIAudio" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenAIChat" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenAIDraw" xml:space="preserve">
+    <value>OpenAI</value>
+  </data>
+  <data name="OpenRouterChat" xml:space="preserve">
+    <value>OpenRouter</value>
+  </data>
+  <data name="OptionalPlaceholder" xml:space="preserve">
+    <value>If there is no, leave it blank</value>
+  </data>
+  <data name="OrganizationOptional" xml:space="preserve">
+    <value>Organization (optional)</value>
+  </data>
+  <data name="PerplexityChat" xml:space="preserve">
+    <value>Perplexity</value>
+  </data>
+  <data name="PredefinedModels" xml:space="preserve">
+    <value>Predefined model</value>
+  </data>
+  <data name="PredefinedModelsDescription" xml:space="preserve">
+    <value>View the list of built-in models of {0}</value>
+  </data>
+  <data name="QwenChat" xml:space="preserve">
+    <value>Qwen</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Location/Region</value>
+  </data>
+  <data name="RegionPlaceholderText" xml:space="preserve">
+    <value>Service location</value>
+  </data>
+  <data name="RightClickDelete" xml:space="preserve">
+    <value>Right click to delete</value>
+  </data>
+  <data name="SecretId" xml:space="preserve">
+    <value>Secret ID</value>
+  </data>
+  <data name="SecretKey" xml:space="preserve">
+    <value>Secret Key</value>
+  </data>
+  <data name="SeeAllPredefinedModels" xml:space="preserve">
+    <value>View all predefined models</value>
+  </data>
+  <data name="SiliconFlowChat" xml:space="preserve">
+    <value>SiliconFlow</value>
+  </data>
+  <data name="SizeAlreadyExist" xml:space="preserve">
+    <value>This size already exists</value>
+  </data>
+  <data name="SparkAppIdDescription" xml:space="preserve">
+    <value>Register the application in iFlytek Open Platform and obtain App ID</value>
+  </data>
+  <data name="SparkChat" xml:space="preserve">
+    <value>Spark</value>
+  </data>
+  <data name="SparkDraw" xml:space="preserve">
+    <value>Spark</value>
+  </data>
+  <data name="SparkSecretDescription" xml:space="preserve">
+    <value>Register the application in iFlytek Open Platform and obtain Secret</value>
+  </data>
+  <data name="SupportSizes" xml:space="preserve">
+    <value>Supported sizes</value>
+  </data>
+  <data name="SupportTool" xml:space="preserve">
+    <value>Tool call support</value>
+  </data>
+  <data name="SupportVision" xml:space="preserve">
+    <value>Vision support</value>
+  </data>
+  <data name="TencentSecretIdDescription" xml:space="preserve">
+    <value>Get SecretId in "API Key Management"</value>
+  </data>
+  <data name="TencentSecretKeyDescription" xml:space="preserve">
+    <value>Get it when creating SecretKey in "API Key Management"</value>
+  </data>
+  <data name="TencentTranslate" xml:space="preserve">
+    <value>Tencent cloud translate</value>
+  </data>
+  <data name="TogetherAIChat" xml:space="preserve">
+    <value>Together AI</value>
+  </data>
+  <data name="UseCodestral" xml:space="preserve">
+    <value>Use Codestral</value>
+  </data>
+  <data name="UseCodestralDescription" xml:space="preserve">
+    <value>Use Codestral API and its models</value>
+  </data>
+  <data name="VolcanoKeyIdDescription" xml:space="preserve">
+    <value>Get Access Key ID in "API Access Key" of Volcano Engine</value>
+  </data>
+  <data name="VolcanoSecretKeyDescription" xml:space="preserve">
+    <value>Get Secret Access Key in "API Access Key" of Volcano Engine</value>
+  </data>
+  <data name="VolcanoTranslate" xml:space="preserve">
+    <value>Volcano translate</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="WindowsAudio" xml:space="preserve">
+    <value>Windows speech</value>
+  </data>
+  <data name="XAIChat" xml:space="preserve">
+    <value>xAI</value>
+  </data>
+  <data name="YoudaoAppIdDescription" xml:space="preserve">
+    <value>Register and get App ID in Youdao Open Platform</value>
+  </data>
+  <data name="YoudaoTranslate" xml:space="preserve">
+    <value>Youdao translate</value>
+  </data>
+  <data name="ZhiPuChat" xml:space="preserve">
+    <value>ZhiPu</value>
+  </data>
+</root>
