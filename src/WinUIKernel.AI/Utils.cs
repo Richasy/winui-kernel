@@ -135,6 +135,7 @@ internal static class Utils
             case "windows":
             case "google":
             case "edge":
+            case "onnx":
                 return new SolidColorBrush(Colors.White);
             default:
                 return new SolidColorBrush(Colors.Transparent);

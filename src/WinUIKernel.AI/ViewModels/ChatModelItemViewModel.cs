@@ -36,7 +36,9 @@ public sealed partial class ChatModelItemViewModel : ViewModelBase<ChatModel>
     /// <summary>
     /// Initializes a new instance of the <see cref="ChatModelItemViewModel"/> class.
     /// </summary>
-    public ChatModelItemViewModel(ChatModel model, Action<ChatModelItemViewModel>? deleteAction = null)
+    public ChatModelItemViewModel(
+        ChatModel model,
+        Action<ChatModelItemViewModel>? deleteAction = null)
         : base(model)
     {
         Name = model.Name!;
@@ -49,7 +51,8 @@ public sealed partial class ChatModelItemViewModel : ViewModelBase<ChatModel>
     [RelayCommand]
     private async Task ModifyAsync()
     {
-        var dialog = new CustomChatModelDialog(Data);
+        var isFolderPath = !string.IsNullOrEmpty(Id) && Path.IsPathFullyQualified(Id);
+        var dialog = new CustomChatModelDialog(Data, isIdEnabled: !isFolderPath);
         var dialogResult = await dialog.ShowAsync();
         if (dialogResult == ContentDialogResult.Primary)
         {

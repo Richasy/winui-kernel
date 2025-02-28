@@ -31,6 +31,9 @@ public sealed partial class ChatServiceItemViewModel
     public partial bool IsCustomModelsEmpty { get; set; }
 
     [ObservableProperty]
+    public partial bool UseFolderAsModelId { get; set; }
+
+    [ObservableProperty]
     public partial bool IsSelected { get; set; }
 
     /// <summary>

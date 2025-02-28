@@ -309,6 +309,9 @@
   <data name="ModelFeature" xml:space="preserve">
     <value>Model feature</value>
   </data>
+  <data name="ModelFolder" xml:space="preserve">
+    <value>Model folder</value>
+  </data>
   <data name="ModelId" xml:space="preserve">
     <value>Model ID</value>
   </data>
@@ -333,8 +336,14 @@
   <data name="MoreOptions" xml:space="preserve">
     <value>More options</value>
   </data>
+  <data name="NoModelFolder" xml:space="preserve">
+    <value>Please select the model folder</value>
+  </data>
   <data name="OllamaChat" xml:space="preserve">
     <value>Ollama</value>
+  </data>
+  <data name="OnnxChat" xml:space="preserve">
+    <value>ONNX</value>
   </data>
   <data name="OpenAIAudio" xml:space="preserve">
     <value>OpenAI</value>
@@ -356,6 +365,9 @@
   </data>
   <data name="PerplexityChat" xml:space="preserve">
     <value>Perplexity</value>
+  </data>
+  <data name="PickFolder" xml:space="preserve">
+    <value>Select folder</value>
   </data>
   <data name="PredefinedModels" xml:space="preserve">
     <value>Predefined model</value>

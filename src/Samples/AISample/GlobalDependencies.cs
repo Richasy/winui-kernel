@@ -46,6 +46,7 @@ internal static class GlobalDependencies
             .AddOllamaChatService()
             .AddMistralChatService()
             .AddPerplexityChatService()
+            .AddOnnxChatService()
 
             .AddOpenAIAudioService()
             .AddAzureOpenAIAudioService()
@@ -76,6 +77,7 @@ internal static class GlobalDependencies
             .AddSingleton<IFileToolkit, SharedFileToolkit>()
             .AddSingleton<IResourceToolkit, SharedResourceToolkit>()
             .AddSingleton<IXamlRootProvider, XamlRootProvider>()
+            .AddSingleton<ICurrentWindowProvider, CurrentWindowProvider>()
             .AddSingleton<INotificationViewModel, NotificationViewModel>()
             .AddSingleton<SettingsViewModel>()
             .Build();

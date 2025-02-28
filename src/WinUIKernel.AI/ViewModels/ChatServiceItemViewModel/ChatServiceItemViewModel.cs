@@ -34,6 +34,7 @@ public partial class ChatServiceItemViewModel : ViewModelBase
         ServerModels.Clear();
         serverModels.ToList().ForEach(p => ServerModels.Add(new ChatModelItemViewModel(p)));
         IsServerModelVisible = ServerModels.Count > 0;
+        UseFolderAsModelId = providerType == ChatProviderType.Onnx;
         CheckCustomModelsCount();
     }
 
@@ -106,6 +107,7 @@ public partial class ChatServiceItemViewModel : ViewModelBase
             ChatProviderType.AzureOpenAI => new AzureOpenAIChatSettingControl { ViewModel = this },
             ChatProviderType.OpenAI => new OpenAIChatSettingControl { ViewModel = this },
             ChatProviderType.Ernie => new ErnieChatSettingControl { ViewModel = this },
+            ChatProviderType.Onnx => new OnnxChatSettingControl { ViewModel = this },
             _ => throw new NotImplementedException(),
         };
     }
@@ -117,7 +119,7 @@ public partial class ChatServiceItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task CreateCustomModelAsync()
     {
-        var dialog = new CustomChatModelDialog();
+        var dialog = new CustomChatModelDialog(UseFolderAsModelId);
         var dialogResult = await dialog.ShowAsync();
         if (dialogResult == ContentDialogResult.Primary)
         {

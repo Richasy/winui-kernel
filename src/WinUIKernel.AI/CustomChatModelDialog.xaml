@@ -16,6 +16,20 @@
     Style="{StaticResource DefaultContentDialogStyle}"
     mc:Ignorable="d">
 
+    <base:AppDialog.Resources>
+        <Style
+            x:Key="SmallIconButtonStyle"
+            BasedOn="{StaticResource DefaultButtonStyle}"
+            TargetType="Button">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+    </base:AppDialog.Resources>
+
     <StackPanel>
         <TextBox
             x:Name="ModelNameBox"
@@ -34,6 +48,47 @@
                 <base:TipHeader Title="{ext:Locale Name=ModelId}" Comment="{ext:Locale Name=ModelIdDescription}" />
             </TextBox.Header>
         </TextBox>
+        <StackPanel
+            x:Name="FolderPickerContainer"
+            Spacing="4"
+            Visibility="Collapsed">
+            <TextBlock
+                HorizontalAlignment="Left"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{ext:Locale Name=ModelFolder}" />
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <base:TrimTextBlock
+                        x:Name="FolderPathBlock"
+                        MaxWidth="300"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        MaxLines="1"
+                        Visibility="Collapsed" />
+                    <base:TrimTextBlock
+                        x:Name="FolderTipBlock"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                        MaxLines="1"
+                        Text="{ext:Locale Name=NoModelFolder}" />
+                </Grid>
+
+                <Button
+                    x:Name="PickFolderButton"
+                    Grid.Column="1"
+                    AutomationProperties.Name="{ext:Locale Name=PickFolder}"
+                    Click="OnPickFolderButtonClickAsync"
+                    Style="{StaticResource SmallIconButtonStyle}"
+                    ToolTipService.ToolTip="{ext:Locale Name=PickFolder}">
+                    <ic:SymbolIcon FontSize="12" Symbol="FolderOpen" />
+                </Button>
+            </Grid>
+        </StackPanel>
         <StackPanel
             x:Name="FeaturePanel"
             Margin="0,8,0,0"

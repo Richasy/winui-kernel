@@ -3,7 +3,9 @@
 
 using Microsoft.UI.Xaml.Controls;
 using Richasy.AgentKernel.Models;
+using Richasy.WinUIKernel.Share;
 using Richasy.WinUIKernel.Share.Base;
+using Richasy.WinUIKernel.Share.Toolkits;
 using Richasy.WinUIKernel.Share.ViewModels;
 
 namespace Richasy.WinUIKernel.AI;
@@ -16,11 +18,16 @@ public sealed partial class CustomChatModelDialog : AppDialog
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomChatModelDialog"/> class.
     /// </summary>
-    public CustomChatModelDialog()
+    public CustomChatModelDialog(bool useFolderAsModelId = false)
     {
         InitializeComponent();
         Title = WinUIKernelAIExtensions.ResourceToolkit.GetLocalizedString("CreateCustomModel");
         FeaturePanel.Visibility = WinUIKernelAIExtensions.EnableModelFeature ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+        if (useFolderAsModelId)
+        {
+            ModelIdBox.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            FolderPickerContainer.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+        }
     }
 
     /// <summary>
@@ -36,14 +43,16 @@ public sealed partial class CustomChatModelDialog : AppDialog
     }
 
     /// <summary>
-    /// 获取或设置模型.
+    /// Model.
     /// </summary>
     public ChatModel Model { get; private set; }
 
     private void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
         var modelName = ModelNameBox.Text?.Trim() ?? string.Empty;
-        var modelId = ModelIdBox.Text?.Trim() ?? string.Empty;
+        var modelId = FolderPickerContainer.Visibility == Microsoft.UI.Xaml.Visibility.Visible
+            ? FolderPathBlock.Text?.Trim() ?? string.Empty
+            : ModelIdBox.Text?.Trim() ?? string.Empty;
         if (string.IsNullOrEmpty(modelName) || string.IsNullOrEmpty(modelId))
         {
             args.Cancel = true;
@@ -59,5 +68,16 @@ public sealed partial class CustomChatModelDialog : AppDialog
         }
 
         Model = model;
+    }
+
+    private async void OnPickFolderButtonClickAsync(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        var folder = await this.Get<IFileToolkit>().PickFolderAsync(this.Get<ICurrentWindowProvider>().CurrentWindow);
+        if (folder != null)
+        {
+            FolderPathBlock.Text = folder.Path;
+            FolderPathBlock.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            FolderTipBlock.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+        }
     }
 }

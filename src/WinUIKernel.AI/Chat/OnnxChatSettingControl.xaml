@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ai:ChatServiceConfigControlBase
+    x:Class="Richasy.WinUIKernel.AI.Chat.OnnxChatSettingControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ai="using:Richasy.WinUIKernel.AI"
+    xmlns:base="using:Richasy.WinUIKernel.Share.Base"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ext="using:Richasy.WinUIKernel.AI.Extensions"
+    xmlns:ic="using:FluentIcons.WinUI"
+    xmlns:local="using:Richasy.WinUIKernel.AI.Chat"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <base:SettingsExpander AutomationProperties.Name="{x:Bind ViewModel.Name, Mode=OneWay}">
+        <base:SettingsExpander.Header>
+            <ai:AILogo
+                x:Name="Logo"
+                Height="22"
+                Provider="Onnx" />
+        </base:SettingsExpander.Header>
+        <base:SettingsExpander.ItemsFooter>
+            <Grid
+                Padding="58,8,44,12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="0,1,0,0">
+                <ai:CustomChatModelSection ViewModel="{x:Bind ViewModel}" />
+            </Grid>
+        </base:SettingsExpander.ItemsFooter>
+        <ic:SymbolIcon
+            FontSize="14"
+            Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+            IconVariant="Filled"
+            Symbol="CheckmarkCircle"
+            Visibility="{x:Bind ViewModel.IsCompleted, Mode=OneWay}" />
+    </base:SettingsExpander>
+</ai:ChatServiceConfigControlBase>

@@ -14,6 +14,7 @@ using Richasy.AgentKernel.Connectors.LingYi.Models;
 using Richasy.AgentKernel.Connectors.Mistral.Models;
 using Richasy.AgentKernel.Connectors.Moonshot.Models;
 using Richasy.AgentKernel.Connectors.Ollama.Models;
+using Richasy.AgentKernel.Connectors.Onnx.Models;
 using Richasy.AgentKernel.Connectors.OpenAI.Models;
 using Richasy.AgentKernel.Connectors.OpenRouter.Models;
 using Richasy.AgentKernel.Connectors.SiliconFlow.Models;
@@ -60,6 +61,7 @@ public sealed class ChatConfigManager : ChatConfigManagerBase
             GroqChatConfig groqConfig => groqConfig.ToAIServiceConfig<GroqServiceConfig>(),
             MistralChatConfig mistralConfig => mistralConfig.ToAIServiceConfig(),
             OllamaChatConfig ollamaConfig => ollamaConfig.ToAIServiceConfig(),
+            OnnxChatConfig onnxConfig => onnxConfig.ToAIServiceConfig(),
             _ => default,
         };
     }
@@ -129,5 +131,12 @@ internal static partial class ConfigExtensions
         return config is null || string.IsNullOrWhiteSpace(config.Key)
             ? throw new ArgumentException("The configuration is not valid.", nameof(config))
             : new MistralServiceConfig(config.UseCodestral ? config.CodestralKey! : config.Key!, string.Empty, config.UseCodestral);
+    }
+
+    public static AIServiceConfig? ToAIServiceConfig(this OnnxChatConfig? config)
+    {
+        return config is null || !config.IsCustomModelNotEmpty()
+            ? throw new ArgumentException("The configuration is not valid.", nameof(config))
+            : new OnnxServiceConfig(string.Empty);
     }
 }
