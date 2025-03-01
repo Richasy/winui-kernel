@@ -456,6 +456,9 @@
   <data name="WindowsAudio" xml:space="preserve">
     <value>Windows speech</value>
   </data>
+  <data name="WindowsChat" xml:space="preserve">
+    <value>Windows Chat</value>
+  </data>
   <data name="XAIChat" xml:space="preserve">
     <value>xAI</value>
   </data>

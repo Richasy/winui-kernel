@@ -456,6 +456,9 @@
   <data name="WindowsAudio" xml:space="preserve">
     <value>本机语音</value>
   </data>
+  <data name="WindowsChat" xml:space="preserve">
+    <value>本机对话</value>
+  </data>
   <data name="XAIChat" xml:space="preserve">
     <value>xAI</value>
   </data>

@@ -42,6 +42,7 @@
     <None Remove="Chat\OnnxChatSettingControl.xaml" />
     <None Remove="Chat\OpenAIChatSettingControl.xaml" />
     <None Remove="Chat\OpenAIDrawSettingControl.xaml" />
+    <None Remove="Chat\WindowsChatSettingControl.xaml" />
     <None Remove="CustomChatModelDialog.xaml" />
     <None Remove="CustomChatModelSection.xaml" />
     <None Remove="CustomDrawModelDialog.xaml" />
@@ -103,6 +104,12 @@
   
   <ItemGroup>
     <ProjectReference Include="..\WinUIKernel.Share\WinUIKernel.Share.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="Chat\WindowsChatSettingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   
   <ItemGroup>

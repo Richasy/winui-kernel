@@ -47,6 +47,7 @@ internal static class GlobalDependencies
             .AddMistralChatService()
             .AddPerplexityChatService()
             .AddOnnxChatService()
+            .AddWindowsChatService()
 
             .AddOpenAIAudioService()
             .AddAzureOpenAIAudioService()

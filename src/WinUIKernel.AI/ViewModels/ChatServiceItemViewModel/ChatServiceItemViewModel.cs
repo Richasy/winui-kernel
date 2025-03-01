@@ -9,6 +9,7 @@ using Richasy.AgentKernel.Models;
 using Richasy.WinUIKernel.AI.Chat;
 using Richasy.WinUIKernel.Share.Base;
 using Richasy.WinUIKernel.Share.ViewModels;
+using System.Runtime.InteropServices;
 using WinRT;
 
 namespace Richasy.WinUIKernel.AI.ViewModels;
@@ -48,7 +49,33 @@ public partial class ChatServiceItemViewModel : ViewModelBase
     /// 检查当前配置是否有效.
     /// </summary>
     public void CheckCurrentConfig()
-        => IsCompleted = Config?.IsValid() ?? false;
+    {
+        if (ProviderType == ChatProviderType.Windows)
+        {
+            if (IsCompleted)
+            {
+                return;
+            }
+
+            // 确保 Windows 系统版本在 26120 以上，并且系统架构为 ARM64，且具备 NPU。
+            var osVersionInfo = new SystemChecker.OSVERSIONINFOEX
+            {
+                dwOSVersionInfoSize = Marshal.SizeOf<SystemChecker.OSVERSIONINFOEX>(),
+            };
+            var isSpecificVersion = false;
+            if (SystemChecker.GetVersionEx(ref osVersionInfo))
+            {
+                isSpecificVersion = osVersionInfo.dwBuildNumber >= 26120;
+            }
+
+            var isArm64 = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
+            IsCompleted = isSpecificVersion && isArm64;
+        }
+        else
+        {
+            IsCompleted = Config?.IsValid() ?? false;
+        }
+    }
 
     /// <summary>
     /// 模型是否已存在于列表之中.
@@ -108,6 +135,7 @@ public partial class ChatServiceItemViewModel : ViewModelBase
             ChatProviderType.OpenAI => new OpenAIChatSettingControl { ViewModel = this },
             ChatProviderType.Ernie => new ErnieChatSettingControl { ViewModel = this },
             ChatProviderType.Onnx => new OnnxChatSettingControl { ViewModel = this },
+            ChatProviderType.Windows => new WindowsChatSettingControl { ViewModel = this },
             _ => throw new NotImplementedException(),
         };
     }
@@ -170,11 +198,37 @@ public partial class ChatServiceItemViewModel : ViewModelBase
     private void DeleteCustomModel(ChatModelItemViewModel model)
     {
         CustomModels.Remove(model);
-        Config.CustomModels?.Remove(model.Data);
+        Config?.CustomModels?.Remove(model.Data);
         CheckCustomModelsCount();
         CheckCurrentConfig();
     }
 
     private void CheckCustomModelsCount()
         => IsCustomModelsEmpty = CustomModels.Count == 0;
+
+    internal sealed class SystemChecker
+    {
+        // 导入 Windows API 函数来获取系统信息
+        [DllImport("kernel32.dll", SetLastError = true)]
+#pragma warning disable CA5392 // 对 P/Invoke 使用 DefaultDllImportSearchPaths 属性
+        internal static extern bool GetVersionEx(ref OSVERSIONINFOEX osVersionInfo);
+#pragma warning restore CA5392 // 对 P/Invoke 使用 DefaultDllImportSearchPaths 属性
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct OSVERSIONINFOEX
+        {
+            public int dwOSVersionInfoSize;
+            public int dwMajorVersion;
+            public int dwMinorVersion;
+            public int dwBuildNumber;
+            public int dwPlatformId;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+            public string szCSDVersion;
+            public ushort wServicePackMajor;
+            public ushort wServicePackMinor;
+            public ushort wSuiteMask;
+            public byte wProductType;
+            public byte wReserved;
+        }
+    }
 }
