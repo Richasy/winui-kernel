@@ -20,7 +20,10 @@
                 Provider="Onnx" />
         </base:SettingsExpander.Header>
         <base:SettingsExpander.Items>
-            <base:SettingsCard Description="{ext:Locale Name=UseCudaDescription}" Header="{ext:Locale Name=UseCuda}">
+            <base:SettingsCard
+                Description="{ext:Locale Name=UseCudaDescription}"
+                Header="{ext:Locale Name=UseCuda}"
+                Visibility="{x:Bind ShowCudaOption, Mode=OneWay}">
                 <ToggleSwitch x:Name="CudaSwitch" Toggled="OnCudaSwitchToggled" />
             </base:SettingsCard>
         </base:SettingsExpander.Items>

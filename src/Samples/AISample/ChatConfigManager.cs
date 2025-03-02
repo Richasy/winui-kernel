@@ -137,6 +137,6 @@ internal static partial class ConfigExtensions
     {
         return config is null || !config.IsCustomModelNotEmpty()
             ? throw new ArgumentException("The configuration is not valid.", nameof(config))
-            : new OnnxServiceConfig(string.Empty, config.UseCuda);
+            : new OnnxServiceConfig(string.Empty);
     }
 }
