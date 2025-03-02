@@ -50,13 +50,20 @@
         </TextBox>
         <StackPanel
             x:Name="FolderPickerContainer"
-            Spacing="4"
+            Margin="0,8,0,0"
+            Spacing="8"
             Visibility="Collapsed">
             <TextBlock
                 HorizontalAlignment="Left"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                 Style="{StaticResource CaptionTextBlockStyle}"
                 Text="{ext:Locale Name=ModelFolder}" />
-            <Grid ColumnSpacing="8">
+            <Grid
+                Padding="8,4,4,4"
+                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                ColumnSpacing="8"
+                CornerRadius="{StaticResource ControlCornerRadius}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
