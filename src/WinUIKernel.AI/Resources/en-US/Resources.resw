@@ -441,6 +441,12 @@
   <data name="UseCodestralDescription" xml:space="preserve">
     <value>Use Codestral API and its models</value>
   </data>
+  <data name="UseCuda" xml:space="preserve">
+    <value>Accelerating inference with CUDA (NVIDIA only)</value>
+  </data>
+  <data name="UseCudaDescription" xml:space="preserve">
+    <value>CPU inference will be used when not enabled</value>
+  </data>
   <data name="VolcanoKeyIdDescription" xml:space="preserve">
     <value>Get Access Key ID in "API Access Key" of Volcano Engine</value>
   </data>

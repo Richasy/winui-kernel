@@ -19,6 +19,17 @@ public sealed partial class OnnxChatSettingControl : ChatServiceConfigControlBas
     protected override void OnControlLoaded()
     {
         ViewModel.Config ??= new OnnxChatConfig();
+        CudaSwitch.IsOn = ((OnnxChatConfig)ViewModel.Config).UseCuda;
         ViewModel.CheckCurrentConfig();
+    }
+
+    private void OnCudaSwitchToggled(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (!IsLoaded)
+        {
+            return;
+        }
+
+        ((OnnxChatConfig)ViewModel.Config).UseCuda = CudaSwitch.IsOn;
     }
 }

@@ -441,6 +441,12 @@
   <data name="UseCodestralDescription" xml:space="preserve">
     <value>使用 Codestral API 及其模型</value>
   </data>
+  <data name="UseCuda" xml:space="preserve">
+    <value>使用 CUDA 加速推理（NVIDIA 顯示卡）</value>
+  </data>
+  <data name="UseCudaDescription" xml:space="preserve">
+    <value>在不啟用時將使用 CPU 推理</value>
+  </data>
   <data name="VolcanoKeyIdDescription" xml:space="preserve">
     <value>在火山引擎的 "API訪問金鑰" 中取得 Access Key ID</value>
   </data>

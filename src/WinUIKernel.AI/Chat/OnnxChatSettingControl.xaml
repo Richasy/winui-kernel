@@ -19,6 +19,11 @@
                 Height="22"
                 Provider="Onnx" />
         </base:SettingsExpander.Header>
+        <base:SettingsExpander.Items>
+            <base:SettingsCard Description="{ext:Locale Name=UseCudaDescription}" Header="{ext:Locale Name=UseCuda}">
+                <ToggleSwitch x:Name="CudaSwitch" Toggled="OnCudaSwitchToggled" />
+            </base:SettingsCard>
+        </base:SettingsExpander.Items>
         <base:SettingsExpander.ItemsFooter>
             <Grid
                 Padding="58,8,44,12"
