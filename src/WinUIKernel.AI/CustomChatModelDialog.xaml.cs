@@ -40,6 +40,8 @@ public sealed partial class CustomChatModelDialog : AppDialog
         ModelNameBox.Text = model.Name;
         ModelIdBox.Text = model.Id;
         ModelIdBox.IsEnabled = isIdEnabled;
+        ToolButton.IsChecked = model.ToolSupport;
+        VisionButton.IsChecked = model.VisionSupport;
     }
 
     /// <summary>
