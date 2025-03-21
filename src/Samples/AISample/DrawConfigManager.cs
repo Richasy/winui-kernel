@@ -7,6 +7,8 @@ using Richasy.AgentKernel.Connectors.Baidu.Models;
 using Richasy.AgentKernel.Connectors.IFlyTek.Models;
 using Richasy.AgentKernel.Connectors.OpenAI.Models;
 using Richasy.AgentKernel.Connectors.Tencent.Models;
+using Richasy.AgentKernel.Connectors.XAI.Models;
+using Richasy.AgentKernel.Connectors.ZhiPu.Models;
 using Richasy.AgentKernel.Models;
 using Richasy.WinUIKernel.Share.Toolkits;
 using Windows.Storage;
@@ -28,6 +30,8 @@ public sealed class DrawConfigManager : DrawConfigManagerBase
             ErnieDrawConfig ernieConfig => ernieConfig.ToAIServiceConfig(),
             HunyuanDrawConfig hunyuanConfig => hunyuanConfig.ToAIServiceConfig(),
             SparkDrawConfig sparkConfig => sparkConfig.ToAIServiceConfig(),
+            XAIDrawConfig xaiConfig => xaiConfig.ToAIServiceConfig(),
+            ZhiPuDrawConfig zhipuConfig => zhipuConfig.ToAIServiceConfig(),
             _ => null,
         };
     }
@@ -88,5 +92,19 @@ internal static partial class ConfigExtensions
         return config is null || string.IsNullOrWhiteSpace(config.Key) || string.IsNullOrWhiteSpace(config.Secret)
             ? throw new ArgumentException("The configuration is not valid.", nameof(config))
             : new SparkDrawServiceConfig(config.Key, config.Secret, config.AppId, string.Empty);
+    }
+
+    public static AIServiceConfig ToAIServiceConfig(this XAIDrawConfig? config)
+    {
+        return config is null || string.IsNullOrWhiteSpace(config.Key)
+            ? throw new ArgumentException("The configuration is not valid.", nameof(config))
+            : new XAIServiceConfig(config.Key, string.Empty);
+    }
+
+    public static AIServiceConfig ToAIServiceConfig(this ZhiPuDrawConfig? config)
+    {
+        return config is null || string.IsNullOrWhiteSpace(config.Key)
+            ? throw new ArgumentException("The configuration is not valid.", nameof(config))
+            : new ZhiPuServiceConfig(config.Key, string.Empty);
     }
 }

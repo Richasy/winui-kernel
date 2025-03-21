@@ -61,8 +61,8 @@
 	<PackageReference Include="Richasy.AgentKernel.Connectors.Youdao" />
 	<PackageReference Include="Richasy.AgentKernel.Connectors.ZhiPu" />
 	<PackageReference Include="Richasy.AgentKernel.Connectors.Onnx" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" VersionOverride="1.7.250127003-experimental3" />
-    <PackageReference Include="Richasy.AgentKernel.Connectors.Windows.Preview" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <!--<PackageReference Include="Richasy.AgentKernel.Connectors.Windows.Preview" />-->
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\WinUIKernel.AI\WinUIKernel.AI.csproj" />

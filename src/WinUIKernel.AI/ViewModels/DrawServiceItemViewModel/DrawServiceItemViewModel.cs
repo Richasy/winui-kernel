@@ -57,6 +57,8 @@ public sealed partial class DrawServiceItemViewModel : ViewModelBase
             DrawProviderType.Ernie => new ErnieDrawSettingControl { ViewModel = this },
             DrawProviderType.Hunyuan => new HunyuanDrawSettingControl { ViewModel = this },
             DrawProviderType.Spark => new SparkDrawSettingControl { ViewModel = this },
+            DrawProviderType.XAI => new BasicDrawSettingControl { ViewModel = this },
+            DrawProviderType.ZhiPu => new BasicDrawSettingControl { ViewModel = this },
             _ => default,
         };
     }

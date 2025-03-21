@@ -468,6 +468,9 @@
   <data name="XAIChat" xml:space="preserve">
     <value>xAI</value>
   </data>
+  <data name="XAIDraw" xml:space="preserve">
+    <value>xAI image generation</value>
+  </data>
   <data name="YoudaoAppIdDescription" xml:space="preserve">
     <value>Register and get App ID in Youdao Open Platform</value>
   </data>
@@ -476,5 +479,8 @@
   </data>
   <data name="ZhiPuChat" xml:space="preserve">
     <value>ZhiPu</value>
+  </data>
+  <data name="ZhiPuDraw" xml:space="preserve">
+    <value>ZhiPu image generation</value>
   </data>
 </root>

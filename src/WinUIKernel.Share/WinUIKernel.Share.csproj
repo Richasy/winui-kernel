@@ -10,7 +10,7 @@
     <Nullable>enable</Nullable>
     <IsAotCompatible>true</IsAotCompatible>
     <Platforms>x64;x86;ARM64</Platforms>
-    <NoWarn>$(NoWarn);MVVMTK0045;MSB3030;IL2059</NoWarn>
+    <NoWarn>$(NoWarn);MVVMTK0045;MSB3030;IL2059;WMC1510</NoWarn>
 	<EnableMsixTooling>true</EnableMsixTooling>
     <WebView2EnableCsWinRTProjectionExcludeCoreRef>true</WebView2EnableCsWinRTProjectionExcludeCoreRef>
   </PropertyGroup>

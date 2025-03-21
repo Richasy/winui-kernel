@@ -468,6 +468,9 @@
   <data name="XAIChat" xml:space="preserve">
     <value>xAI</value>
   </data>
+  <data name="XAIDraw" xml:space="preserve">
+    <value>xAI 图像生成</value>
+  </data>
   <data name="YoudaoAppIdDescription" xml:space="preserve">
     <value>在有道开放平台中注册并获取 App ID</value>
   </data>
@@ -476,5 +479,8 @@
   </data>
   <data name="ZhiPuChat" xml:space="preserve">
     <value>智谱清言</value>
+  </data>
+  <data name="ZhiPuDraw" xml:space="preserve">
+    <value>智谱图像生成</value>
   </data>
 </root>

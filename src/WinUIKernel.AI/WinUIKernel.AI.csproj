@@ -10,7 +10,7 @@
     <Nullable>enable</Nullable>
     <IsAotCompatible>true</IsAotCompatible>
     <Platforms>x64;x86;ARM64</Platforms>
-    <NoWarn>$(NoWarn);MVVMTK0045;MVVMTK0046;MSB3030;IL2059</NoWarn>
+    <NoWarn>$(NoWarn);MVVMTK0045;MVVMTK0046;MSB3030;IL2059;WMC1510</NoWarn>
 	<EnableMsixTooling>true</EnableMsixTooling>
 	<EnablePriGenTooling>true</EnablePriGenTooling>
     <WebView2EnableCsWinRTProjectionExcludeCoreRef>true</WebView2EnableCsWinRTProjectionExcludeCoreRef>
@@ -49,6 +49,7 @@
     <None Remove="CustomDrawModelSection.xaml" />
     <None Remove="DrawModelCard\DrawModelCard.xaml" />
     <None Remove="Draw\AzureOpenAIDrawSettingControl.xaml" />
+    <None Remove="Draw\BasicDrawSettingControl.xaml" />
     <None Remove="Draw\ErnieDrawSettingControl.xaml" />
     <None Remove="Draw\HunyuanDrawSettingControl.xaml" />
     <None Remove="Draw\SparkDrawSettingControl.xaml" />
@@ -80,6 +81,12 @@
   
   <ItemGroup>
     <ProjectReference Include="..\WinUIKernel.Share\WinUIKernel.Share.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="Draw\BasicDrawSettingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   
   <ItemGroup>

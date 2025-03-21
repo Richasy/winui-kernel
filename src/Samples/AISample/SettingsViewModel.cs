@@ -20,7 +20,7 @@ public sealed partial class SettingsViewModel : AISettingsViewModelBase
             return;
         }
 
-        foreach (var provider in Enum.GetValues<ChatProviderType>())
+        foreach (var provider in Enum.GetValues<ChatProviderType>().Where(p => p is not ChatProviderType.Windows))
         {
             ChatServices.Add(new ChatServiceItemViewModel(provider));
         }
