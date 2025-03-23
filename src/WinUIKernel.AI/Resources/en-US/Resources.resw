@@ -121,10 +121,10 @@
     <value>Access key</value>
   </data>
   <data name="AccessKeyDescription" xml:space="preserve">
-    <value>Fill in the API key from {0}</value>
+    <value>Fill in the access key from {0}</value>
   </data>
   <data name="AccessKeyPlaceholder" xml:space="preserve">
-    <value>{0} API key</value>
+    <value>{0} access key</value>
   </data>
   <data name="AccessKeyPlaceholderText" xml:space="preserve">
     <value>Key for accessing the service</value>
@@ -268,7 +268,7 @@
     <value>Ernie</value>
   </data>
   <data name="ErnieSecretDescription" xml:space="preserve">
-    <value>Get Secret Key from "Application Access" of Baidu Qianfan LLM Platform</value>
+    <value>Get Secret Key from "Access Key" of Baidu LLM Platform</value>
   </data>
   <data name="GeminiChat" xml:space="preserve">
     <value>Gemini</value>

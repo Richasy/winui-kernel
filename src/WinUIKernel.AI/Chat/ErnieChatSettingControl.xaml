@@ -17,11 +17,11 @@
             <ai:AILogo x:Name="Logo" Height="22" />
         </base:SettingsExpander.Header>
         <base:SettingsExpander.Items>
-            <base:SettingsCard x:Name="KeyCard" Header="{ext:Locale Name=ApiKey}">
+            <base:SettingsCard x:Name="KeyCard" Header="{ext:Locale Name=AccessKey}">
                 <PasswordBox
                     x:Name="KeyBox"
                     Width="200"
-                    AutomationProperties.Name="{ext:Locale Name=ApiKey}"
+                    AutomationProperties.Name="{ext:Locale Name=AccessKey}"
                     Loaded="OnKeyBoxLoaded"
                     PasswordChanged="OnKeyBoxPasswordChanged" />
             </base:SettingsCard>

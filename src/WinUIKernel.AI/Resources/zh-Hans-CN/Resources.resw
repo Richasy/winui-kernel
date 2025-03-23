@@ -121,10 +121,10 @@
     <value>访问密钥</value>
   </data>
   <data name="AccessKeyDescription" xml:space="preserve">
-    <value>填入来自 {0} 的 API 密钥</value>
+    <value>填入来自 {0} 的 访问密钥</value>
   </data>
   <data name="AccessKeyPlaceholder" xml:space="preserve">
-    <value>{0} API 密钥</value>
+    <value>{0} 访问密钥</value>
   </data>
   <data name="AccessKeyPlaceholderText" xml:space="preserve">
     <value>访问服务的密钥</value>
@@ -268,7 +268,7 @@
     <value>文心生图</value>
   </data>
   <data name="ErnieSecretDescription" xml:space="preserve">
-    <value>从百度千帆大模型平台的 "应用接入" 中获取 Secret Key</value>
+    <value>从百度千帆大模型平台的 "Access Key" 中获取 Secret Key</value>
   </data>
   <data name="GeminiChat" xml:space="preserve">
     <value>Gemini</value>
