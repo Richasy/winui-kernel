@@ -4,6 +4,8 @@
 using Richasy.AgentKernel;
 using Richasy.AgentKernel.Connectors.Azure.Models;
 using Richasy.AgentKernel.Connectors.OpenAI.Models;
+using Richasy.AgentKernel.Connectors.Tencent.Models;
+using Richasy.AgentKernel.Connectors.Volcano.Models;
 using Richasy.AgentKernel.Models;
 using Richasy.WinUIKernel.Share.Toolkits;
 using Windows.Storage;
@@ -23,6 +25,8 @@ public sealed class AudioConfigManager : AudioConfigManagerBase
             OpenAIAudioConfig openAIConfig => openAIConfig.ToAIServiceConfig(),
             AzureOpenAIAudioConfig azureOaiConfig => azureOaiConfig.ToAIServiceConfig(),
             AzureAudioConfig azureConfig => azureConfig.ToAIServiceConfig(),
+            VolcanoAudioConfig volcanoConfig => volcanoConfig.ToAIServiceConfig(),
+            TencentAudioConfig tencentConfig => tencentConfig.ToAIServiceConfig(),
             _ => null,
         };
     }
@@ -69,5 +73,19 @@ internal static partial class ConfigExtensions
         return config is null || string.IsNullOrWhiteSpace(config.Key) || string.IsNullOrEmpty(config.Region)
             ? throw new ArgumentException("The configuration is not valid.", nameof(config))
             : new AzureAudioServiceConfig(config.Key, config.Region);
+    }
+
+    public static AIServiceConfig ToAIServiceConfig(this VolcanoAudioConfig? config)
+    {
+        return config is null || string.IsNullOrWhiteSpace(config.Key) || string.IsNullOrEmpty(config.AppId)
+            ? throw new ArgumentException("The configuration is not valid.", nameof(config))
+            : new VolcanoAudioServiceConfig(config.Key, config.AppId, string.Empty);
+    }
+
+    public static AIServiceConfig ToAIServiceConfig(this TencentAudioConfig? config)
+    {
+        return config is null || string.IsNullOrWhiteSpace(config.Key) || string.IsNullOrEmpty(config.SecretId)
+            ? throw new ArgumentException("The configuration is not valid.", nameof(config))
+            : new TencentAudioServiceConfig(config.Key, config.SecretId, string.Empty);
     }
 }

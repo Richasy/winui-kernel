@@ -52,6 +52,8 @@ public sealed partial class AudioServiceItemViewModel : ViewModelBase
             AudioProviderType.OpenAI => new OpenAIAudioSettingControl { ViewModel = this },
             AudioProviderType.AzureOpenAI => new AzureOpenAIAudioSettingControl { ViewModel = this },
             AudioProviderType.Azure => new AzureAudioSettingControl { ViewModel = this },
+            AudioProviderType.Volcano => new VolcanoAudioSettingControl { ViewModel = this },
+            AudioProviderType.Tencent => new TencentAudioSettingControl { ViewModel = this },
             _ => default,
         };
     }

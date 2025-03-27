@@ -423,6 +423,9 @@
   <data name="SupportVision" xml:space="preserve">
     <value>Vision support</value>
   </data>
+  <data name="TencentAudio" xml:space="preserve">
+    <value>Tencent speech</value>
+  </data>
   <data name="TencentSecretIdDescription" xml:space="preserve">
     <value>Get SecretId in "API Key Management"</value>
   </data>
@@ -447,11 +450,20 @@
   <data name="UseCudaDescription" xml:space="preserve">
     <value>CPU inference will be used when not enabled</value>
   </data>
+  <data name="VolcanoAppIdDescription" xml:space="preserve">
+    <value>Register and get the APP ID in the Volcano platform</value>
+  </data>
+  <data name="VolcanoAudio" xml:space="preserve">
+    <value>Volcano speech</value>
+  </data>
   <data name="VolcanoKeyIdDescription" xml:space="preserve">
     <value>Get Access Key ID in "API Access Key" of Volcano Engine</value>
   </data>
   <data name="VolcanoSecretKeyDescription" xml:space="preserve">
     <value>Get Secret Access Key in "API Access Key" of Volcano Engine</value>
+  </data>
+  <data name="VolcanoSpeechAccessKeyDescription" xml:space="preserve">
+    <value>Get Access Token in voice technology module</value>
   </data>
   <data name="VolcanoTranslate" xml:space="preserve">
     <value>Volcano translate</value>

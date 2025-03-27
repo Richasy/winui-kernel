@@ -53,6 +53,8 @@ internal static class GlobalDependencies
             .AddAzureAudioService()
             .AddEdgeAudioService()
             .AddWindowsAudioService()
+            .AddTencentAudioService()
+            .AddVolcanoAudioService()
 
             .AddOpenAIDrawService()
             .AddAzureOpenAIDrawService()

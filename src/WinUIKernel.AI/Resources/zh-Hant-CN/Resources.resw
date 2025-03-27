@@ -423,6 +423,9 @@
   <data name="SupportVision" xml:space="preserve">
     <value>支援視覺識別</value>
   </data>
+  <data name="TencentAudio" xml:space="preserve">
+    <value>騰訊語音合成</value>
+  </data>
   <data name="TencentSecretIdDescription" xml:space="preserve">
     <value>在 "API金鑰管理" 中取得 SecretId</value>
   </data>
@@ -447,11 +450,20 @@
   <data name="UseCudaDescription" xml:space="preserve">
     <value>在不啟用時將使用 CPU 推理</value>
   </data>
+  <data name="VolcanoAppIdDescription" xml:space="preserve">
+    <value>在火山引擎平台中註冊並獲取 APP ID</value>
+  </data>
+  <data name="VolcanoAudio" xml:space="preserve">
+    <value>火山語音合成</value>
+  </data>
   <data name="VolcanoKeyIdDescription" xml:space="preserve">
     <value>在火山引擎的 "API訪問金鑰" 中取得 Access Key ID</value>
   </data>
   <data name="VolcanoSecretKeyDescription" xml:space="preserve">
     <value>在火山引擎的 "API訪問金鑰" 中取得 Secret Access Key</value>
+  </data>
+  <data name="VolcanoSpeechAccessKeyDescription" xml:space="preserve">
+    <value>在語音技術模塊中獲取 Access Token</value>
   </data>
   <data name="VolcanoTranslate" xml:space="preserve">
     <value>火山翻譯</value>
