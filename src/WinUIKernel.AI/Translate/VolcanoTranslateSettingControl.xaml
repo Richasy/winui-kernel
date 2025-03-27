@@ -14,7 +14,7 @@
 
     <base:SettingsExpander>
         <base:SettingsExpander.Header>
-            <ai:AILogo Height="20" Provider="Volcano" />
+            <ai:AILogo Height="20" Provider="VolcanoTranslate" />
         </base:SettingsExpander.Header>
         <base:SettingsExpander.Items>
             <base:SettingsCard

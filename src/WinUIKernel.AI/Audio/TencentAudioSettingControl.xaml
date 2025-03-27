@@ -14,7 +14,7 @@
 
     <base:SettingsExpander>
         <base:SettingsExpander.Header>
-            <ai:AILogo Height="24" Provider="Tencent" />
+            <ai:AILogo Height="20" Provider="Tencent" />
         </base:SettingsExpander.Header>
         <base:SettingsExpander.Items>
             <base:SettingsCard
