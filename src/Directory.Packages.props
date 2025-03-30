@@ -50,8 +50,8 @@
     <PackageVersion Include="Richasy.AgentKernel.Connectors.XAI" Version="0.0.7-preview1" />
     <PackageVersion Include="Richasy.AgentKernel.Connectors.Youdao" Version="0.0.7-preview1" />
     <PackageVersion Include="Richasy.AgentKernel.Connectors.ZhiPu" Version="0.0.7-preview1" />
-    <PackageVersion Include="Richasy.AgentKernel.Core" Version="0.0.7-preview2" />
-    <PackageVersion Include="Richasy.AgentKernel.Definitions" Version="0.0.7-preview2" />
+    <PackageVersion Include="Richasy.AgentKernel.Core" Version="0.0.7-preview3" />
+    <PackageVersion Include="Richasy.AgentKernel.Definitions" Version="0.0.7-preview3" />
     <PackageVersion Include="Richasy.WinUIKernel.AI" Version="0.0.1-preview1" />
     <PackageVersion Include="RichasyKernel.Abstractions" Version="0.0.1" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
