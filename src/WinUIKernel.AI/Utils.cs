@@ -15,8 +15,6 @@ internal static class Utils
         {
             case "anthropic":
                 return new SolidColorBrush("#FAF9F5".ToColor());
-            case "azureopenai" or "azureai" or "xai":
-                return new SolidColorBrush("#FFFFFF".ToColor());
             case "qwen":
                 return new LinearGradientBrush
                 {
@@ -63,8 +61,6 @@ internal static class Utils
                 };
             case "moonshot":
                 return new SolidColorBrush("#16191E".ToColor());
-            case "ollama":
-                return new SolidColorBrush(Colors.White);
             case "openai":
                 return new SolidColorBrush(Colors.Black);
             case "openrouter":
@@ -118,17 +114,6 @@ internal static class Utils
                 return new SolidColorBrush("#00A3FF".ToColor());
             case "youdao":
                 return new SolidColorBrush("#E10012".ToColor());
-            case "volcano":
-                return new LinearGradientBrush
-                {
-                    StartPoint = new(0, 0),
-                    EndPoint = new(1, 0),
-                    GradientStops =
-                    [
-                        new GradientStop { Color = "#00F3CE".ToColor(), Offset = 0 },
-                        new GradientStop { Color = "#3F30FF".ToColor(), Offset = 1 },
-                    ]
-                };
             case "siliconflow":
                 return new SolidColorBrush("#7C3AED".ToColor());
             case "doubao":
@@ -136,6 +121,11 @@ internal static class Utils
             case "google":
             case "edge":
             case "onnx":
+            case "volcano":
+            case "ollama":
+            case "azureopenai":
+            case "azureai":
+            case "xai":
                 return new SolidColorBrush(Colors.White);
             default:
                 return new SolidColorBrush(Colors.Transparent);
