@@ -5,12 +5,12 @@
   <ItemGroup>
     <PackageVersion Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Animations" Version="8.2.250129-preview2" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.250129-preview2" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Extensions" Version="8.2.250129-preview2" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Animations" Version="8.2.250402" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.250402" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Extensions" Version="8.2.250402" />
     <PackageVersion Include="CommunityToolkit.WinUI.Helpers" Version="8.1.240916" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Media" Version="8.2.250129-preview2" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Triggers" Version="8.2.250129-preview2" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Media" Version="8.2.250402" />
+    <PackageVersion Include="CommunityToolkit.WinUI.Triggers" Version="8.2.250402" />
     <PackageVersion Include="ComputeSharp.D2D1" Version="3.1.0-preview2" />
     <PackageVersion Include="ComputeSharp.D2D1.WinUI" Version="3.1.0-alpha.12101753322" />
     <PackageVersion Include="FluentIcons.WinUI" Version="1.1.292" />
@@ -58,7 +58,7 @@
     <PackageVersion Include="Microsoft.Bcl.TimeProvider" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.7.250310001" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.7.250401001" />
     <PackageVersion Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
     <PackageVersion Include="System.Drawing.Common" Version="9.0.2" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
