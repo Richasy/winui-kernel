@@ -27,7 +27,7 @@ public partial class SettingsExpander : Control
     public SettingsExpander()
     {
         DefaultStyleKey = typeof(SettingsExpander);
-        Items = [];
+        Items = new List<object>();
         Unloaded += OnUnloaded;
     }
 
