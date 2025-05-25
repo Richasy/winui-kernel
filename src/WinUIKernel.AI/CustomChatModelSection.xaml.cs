@@ -12,4 +12,8 @@ public sealed partial class CustomChatModelSection : ChatServiceConfigControlBas
     /// Initializes a new instance of the <see cref="CustomChatModelSection"/> class.
     /// </summary>
     public CustomChatModelSection() => InitializeComponent();
+
+    /// <inheritdoc/>
+    protected override void OnControlUnloaded()
+        => ModelRepeater.ItemsSource = null;
 }

@@ -27,6 +27,7 @@ public sealed partial class CustomDrawModelDialog : AppDialog
         HeightBox.Value = 0;
         CheckSize();
         CheckSizeCount();
+        Unloaded += OnUnloaded;
     }
 
     /// <summary>
@@ -53,6 +54,12 @@ public sealed partial class CustomDrawModelDialog : AppDialog
     public DrawModel Model { get; private set; }
 
     private ObservableCollection<DrawSize> Sizes { get; } = [];
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        SizesRepeater.ItemsSource = null;
+        Unloaded -= OnUnloaded;
+    }
 
     private void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {

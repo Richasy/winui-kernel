@@ -12,4 +12,8 @@ public sealed partial class PredefinedChatModelSection : ChatServiceConfigContro
     /// Initializes a new instance of the <see cref="PredefinedChatModelSection"/> class.
     /// </summary>
     public PredefinedChatModelSection() => InitializeComponent();
+
+    /// <inheritdoc/>
+    protected override void OnControlUnloaded()
+        => ModelRepeater.ItemsSource = null;
 }

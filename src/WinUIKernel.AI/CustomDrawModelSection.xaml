@@ -58,7 +58,10 @@
                 Text="{ext:Locale Name=AddYourCustomModel}"
                 TextAlignment="Center" />
         </Border>
-        <ItemsRepeater ItemsSource="{x:Bind ViewModel.CustomModels}" Visibility="{x:Bind ViewModel.IsCustomModelsEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}">
+        <ItemsRepeater
+            x:Name="ModelRepeater"
+            ItemsSource="{x:Bind ViewModel.CustomModels}"
+            Visibility="{x:Bind ViewModel.IsCustomModelsEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}">
             <ItemsRepeater.ItemTemplate>
                 <DataTemplate x:DataType="vm:DrawModelItemViewModel">
                     <local:DrawModelCard ViewModel="{x:Bind}" />

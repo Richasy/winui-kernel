@@ -12,4 +12,8 @@ public sealed partial class PredefinedAudioModelSection : AudioServiceConfigCont
     /// Initializes a new instance of the <see cref="PredefinedAudioModelSection"/> class.
     /// </summary>
     public PredefinedAudioModelSection() => InitializeComponent();
+
+    /// <inheritdoc/>
+    protected override void OnControlUnloaded()
+        => ModelRepeater.ItemsSource = null;
 }

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Richasy. All rights reserved.
 // Licensed under the MIT License.
 
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Automation.Peers;
 using Microsoft.UI.Xaml.Controls;
@@ -26,7 +27,8 @@ public partial class SettingsExpander : Control
     public SettingsExpander()
     {
         DefaultStyleKey = typeof(SettingsExpander);
-        Items = new List<object>();
+        Items = [];
+        Unloaded += OnUnloaded;
     }
 
     /// <inheritdoc />
@@ -49,6 +51,16 @@ public partial class SettingsExpander : Control
             // Update it's source based on our current items properties.
             OnItemsConnectedPropertyChanged(this, null!); // Can't get it to accept type here? (DependencyPropertyChangedEventArgs)EventArgs.Empty
         }
+    }
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        if (_itemsRepeater != null)
+        {
+            _itemsRepeater.ItemsSource = default;
+        }
+
+        Unloaded -= OnUnloaded;
     }
 
     private void SetAccessibleName()

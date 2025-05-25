@@ -12,4 +12,8 @@ public sealed partial class CustomDrawModelSection : DrawServiceConfigControlBas
     /// Initializes a new instance of the <see cref="CustomDrawModelSection"/> class.
     /// </summary>
     public CustomDrawModelSection() => InitializeComponent();
+
+    /// <inheritdoc/>
+    protected override void OnControlUnloaded()
+        => ModelRepeater.ItemsSource = null;
 }

@@ -12,4 +12,8 @@ public sealed partial class PredefinedDrawModelSection : DrawServiceConfigContro
     /// Initializes a new instance of the <see cref="PredefinedDrawModelSection"/> class.
     /// </summary>
     public PredefinedDrawModelSection() => InitializeComponent();
+
+    /// <inheritdoc/>
+    protected override void OnControlUnloaded()
+        => ModelRepeater.ItemsSource = null;
 }

@@ -16,7 +16,10 @@
             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
             Style="{StaticResource CaptionTextBlockStyle}"
             Text="{ext:Locale Name=PredefinedModels}" />
-        <ItemsRepeater Width="240" ItemsSource="{x:Bind ViewModel.ServerModels}">
+        <ItemsRepeater
+            x:Name="ModelRepeater"
+            Width="240"
+            ItemsSource="{x:Bind ViewModel.ServerModels}">
             <ItemsRepeater.ItemTemplate>
                 <DataTemplate x:DataType="vm:AudioModelItemViewModel">
                     <local:AudioModelCard ViewModel="{x:Bind}" />
