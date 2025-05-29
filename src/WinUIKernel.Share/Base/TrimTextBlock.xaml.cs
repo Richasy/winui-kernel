@@ -30,12 +30,15 @@ public sealed partial class TrimTextBlock : UserControl
         DependencyProperty.Register(nameof(IsTextSelectionEnabled), typeof(bool), typeof(TrimTextBlock), new PropertyMetadata(false));
 
     /// <summary>
+    /// <see cref="TextAlignment"/> 的依赖属性.
+    /// </summary>
+    public static readonly DependencyProperty TextAlignmentProperty =
+        DependencyProperty.Register(nameof(TextAlignment), typeof(TextAlignment), typeof(TrimTextBlock), new PropertyMetadata(TextAlignment.Start));
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="TrimTextBlock"/> class.
     /// </summary>
-    public TrimTextBlock()
-    {
-        InitializeComponent();
-    }
+    public TrimTextBlock() => InitializeComponent();
 
     /// <summary>
     /// 文本.
@@ -62,5 +65,14 @@ public sealed partial class TrimTextBlock : UserControl
     {
         get => (bool)GetValue(IsTextSelectionEnabledProperty);
         set => SetValue(IsTextSelectionEnabledProperty, value);
+    }
+
+    /// <summary>
+    /// 获取或设置文本对齐方式.
+    /// </summary>
+    public TextAlignment TextAlignment
+    {
+        get => (TextAlignment)GetValue(TextAlignmentProperty);
+        set => SetValue(TextAlignmentProperty, value);
     }
 }

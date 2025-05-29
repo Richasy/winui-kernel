@@ -16,6 +16,7 @@
             <StackPanel.ChildrenTransitions>
                 <RepositionThemeTransition IsStaggeringEnabled="False" />
             </StackPanel.ChildrenTransitions>
+            <base:CardControl Width="40" Height="60" />
             <StackPanel x:Name="ChatContainer">
                 <StackPanel.ChildrenTransitions>
                     <RepositionThemeTransition IsStaggeringEnabled="False" />

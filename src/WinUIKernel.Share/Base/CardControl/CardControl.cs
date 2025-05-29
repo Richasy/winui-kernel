@@ -28,7 +28,7 @@ public sealed partial class CardControl : Button
     private bool _loaded;
     private bool _templateApplied;
     private bool _shadowCreated;
-    private bool _shouldDestoryShadow;
+    private bool _shouldDestroyShadow;
     private long _pointerOverToken;
     private long _pressedToken;
 
@@ -114,7 +114,7 @@ public sealed partial class CardControl : Button
 
     private void ApplyShadowAnimation()
     {
-        if (!_templateApplied)
+        if (!_templateApplied || !WinUIKernelShareExtensions.IsCardAnimationEnabled)
         {
             return;
         }
@@ -128,8 +128,8 @@ public sealed partial class CardControl : Button
         var shadowRadius = GetShadowRadius();
         var shadowOffset = GetShadowOffset();
 
-        _shouldDestoryShadow = shadowOpacity <= 0;
-        if (!_shouldDestoryShadow)
+        _shouldDestroyShadow = shadowOpacity <= 0;
+        if (!_shouldDestroyShadow)
         {
             CreateShadow();
         }
@@ -144,7 +144,7 @@ public sealed partial class CardControl : Button
             shadowAnimationGroup.Add(_compositor.CreateScalarKeyFrameAnimation(nameof(DropShadow.Opacity), shadowOpacity, duration: duration));
             dropShadow.StartAnimationGroup(shadowAnimationGroup);
 
-            if (_shouldDestoryShadow)
+            if (_shouldDestroyShadow)
             {
                 DestroyShadow();
             }

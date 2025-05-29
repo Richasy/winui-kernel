@@ -1,6 +1,7 @@
 // Copyright (c) Richasy. All rights reserved.
 // Licensed under the MIT License.
 
+using Richasy.WinUIKernel.Share;
 using Richasy.WinUIKernel.Share.Base;
 
 namespace AISample;
@@ -18,6 +19,7 @@ public sealed partial class TestPage : LayoutPageBase
     public TestPage()
     {
         InitializeComponent();
+        WinUIKernelShareExtensions.IsCardAnimationEnabled = false;
         _settingsViewModel = GlobalDependencies.Kernel.GetRequiredService<SettingsViewModel>();
     }
 

@@ -16,6 +16,7 @@
         IsTextSelectionEnabled="{x:Bind IsTextSelectionEnabled, Mode=OneWay}"
         MaxLines="{x:Bind MaxLines, Mode=OneWay}"
         Text="{x:Bind Text, Mode=OneWay}"
+        TextAlignment="{x:Bind TextAlignment, Mode=OneWay}"
         TextTrimming="CharacterEllipsis"
         TextWrapping="Wrap">
         <ToolTipService.ToolTip>
