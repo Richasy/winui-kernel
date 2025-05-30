@@ -3,6 +3,7 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 
 namespace Richasy.WinUIKernel.Share.Base;
 
@@ -72,12 +73,6 @@ public sealed partial class AppTitleBar
         DependencyProperty.Register(nameof(TemplateSettings), typeof(AppTitleBarTemplateSettings), typeof(AppTitleBar), new PropertyMetadata(default));
 
     /// <summary>
-    /// <see cref="BackIcon"/> 的依赖属性.
-    /// </summary>
-    public static readonly DependencyProperty BackIconProperty =
-        DependencyProperty.Register(nameof(BackIcon), typeof(FluentIcons.Common.Symbol), typeof(AppTitleBar), new PropertyMetadata(FluentIcons.Common.Symbol.ArrowLeft));
-
-    /// <summary>
     /// <see cref="TitleMaxWidth"/> 的依赖属性.
     /// </summary>
     public static readonly DependencyProperty TitleMaxWidthProperty =
@@ -88,6 +83,12 @@ public sealed partial class AppTitleBar
     /// </summary>
     public static readonly DependencyProperty CenterContentProperty =
         DependencyProperty.Register(nameof(CenterContent), typeof(object), typeof(AppTitleBar), new PropertyMetadata(default, new PropertyChangedCallback(OnCenterContentChanged)));
+
+    /// <summary>
+    /// <see cref="TitleForeground"/> 的依赖属性.
+    /// </summary>
+    public static readonly DependencyProperty TitleForegroundProperty =
+        DependencyProperty.Register(nameof(TitleForeground), typeof(Brush), typeof(AppTitleBar), new PropertyMetadata(default));
 
     /// <summary>
     /// 头部内容.
@@ -189,20 +190,20 @@ public sealed partial class AppTitleBar
     }
 
     /// <summary>
-    /// 后退按钮图标.
-    /// </summary>
-    public FluentIcons.Common.Symbol BackIcon
-    {
-        get => (FluentIcons.Common.Symbol)GetValue(BackIconProperty);
-        set => SetValue(BackIconProperty, value);
-    }
-
-    /// <summary>
     /// 标题最大宽度.
     /// </summary>
     public double TitleMaxWidth
     {
         get => (double)GetValue(TitleMaxWidthProperty);
         set => SetValue(TitleMaxWidthProperty, value);
+    }
+
+    /// <summary>
+    /// 标题颜色.
+    /// </summary>
+    public Brush TitleForeground
+    {
+        get { return (Brush)GetValue(TitleForegroundProperty); }
+        set { SetValue(TitleForegroundProperty, value); }
     }
 }

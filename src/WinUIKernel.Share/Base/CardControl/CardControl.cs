@@ -3,6 +3,7 @@
 
 using CommunityToolkit.WinUI;
 using CommunityToolkit.WinUI.Animations;
+using CommunityToolkit.WinUI.Media;
 using Microsoft.UI.Composition;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -49,7 +50,14 @@ public sealed partial class CardControl : Button
         _shadowContainer = GetTemplateChild("ShadowContainer") as FrameworkElement;
         ElementCompositionPreview.SetIsTranslationEnabled(_shadowContainer, true);
 
-        _initialShadow = CommunityToolkit.WinUI.Effects.GetShadow(_shadowContainer);
+        _initialShadow = new AttachedCardShadow
+        {
+            BlurRadius = 8d,
+            CornerRadius = 8d,
+            InnerContentClipMode = InnerContentClipMode.CompositionMaskBrush,
+            Opacity = 0.02f
+        };
+        Effects.SetShadow(_shadowContainer, _initialShadow);
         _templateApplied = true;
         ApplyShadowAnimation();
     }
@@ -63,7 +71,6 @@ public sealed partial class CardControl : Button
         UnregisterPropertyChangedCallback(IsPressedProperty, _pressedToken);
         _loaded = false;
         _initialShadow = default;
-
         DestroyShadow();
     }
 

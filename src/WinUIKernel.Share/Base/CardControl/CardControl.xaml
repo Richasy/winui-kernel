@@ -7,18 +7,12 @@
     xmlns:media="using:CommunityToolkit.WinUI.Media"
     xmlns:ui="using:CommunityToolkit.WinUI">
 
-    <media:AttachedCardShadow
-        x:Key="CardShadow"
-        BlurRadius="4"
-        CornerRadius="8"
-        InnerContentClipMode="CompositionMaskBrush" />
-
     <Style x:Key="DefaultCardControlStyle" TargetType="local:CardControl">
         <Setter Property="Background" Value="{ThemeResource ButtonBackground}" />
         <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
         <Setter Property="Foreground" Value="{ThemeResource ButtonForeground}" />
-        <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}" />
-        <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
@@ -34,7 +28,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="local:CardControl">
                     <Grid>
-                        <Border x:Name="ShadowContainer" ui:Effects.Shadow="{StaticResource CardShadow}">
+                        <Border x:Name="ShadowContainer">
                             <Border
                                 x:Name="BackgroundBorder"
                                 Background="{TemplateBinding Background}"
