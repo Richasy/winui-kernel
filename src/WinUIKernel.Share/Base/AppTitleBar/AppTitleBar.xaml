@@ -37,6 +37,7 @@
 
     <Style x:Key="DefaultTitleBarStyle" TargetType="local:AppTitleBar">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="TitleForeground" Value="{ThemeResource TitleBarForegroundBrush}" />
         <Setter Property="BorderThickness" Value="{ThemeResource AppTitleBarBorderThickness}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -121,7 +122,7 @@
                                 VerticalAlignment="Center"
                                 x:Load="False"
                                 FontSize="12"
-                                Foreground="{ThemeResource TitleBarForegroundBrush}"
+                                Foreground="{TemplateBinding TitleForeground}"
                                 MaxLines="1"
                                 Text="{TemplateBinding Title}"
                                 Visibility="Collapsed" />

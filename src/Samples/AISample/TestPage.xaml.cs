@@ -19,7 +19,7 @@ public sealed partial class TestPage : LayoutPageBase
     public TestPage()
     {
         InitializeComponent();
-        WinUIKernelShareExtensions.IsCardAnimationEnabled = false;
+        WinUIKernelShareExtensions.IsCardAnimationEnabled = true;
         _settingsViewModel = GlobalDependencies.Kernel.GetRequiredService<SettingsViewModel>();
     }
 

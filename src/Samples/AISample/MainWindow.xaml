@@ -9,8 +9,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Frame
-        x:Name="MainFrame"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch" />
+    <Grid>
+        <Frame
+            x:Name="MainFrame"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch" />
+        <base:AppTitleBar
+            Title="Hello"
+            VerticalAlignment="Top"
+            TitleForeground="Red" />
+    </Grid>
+
 </base:WindowBase>
