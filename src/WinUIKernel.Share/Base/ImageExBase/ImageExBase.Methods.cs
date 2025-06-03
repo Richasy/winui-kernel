@@ -6,7 +6,6 @@ using CommunityToolkit.HighPerformance.Buffers;
 using Microsoft.Graphics.Canvas;
 using Microsoft.UI.Xaml;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace Richasy.WinUIKernel.Share.Base;
@@ -203,7 +202,7 @@ public abstract partial class ImageExBase
 
     private void CheckImageReferer()
     {
-        if (_lastUri is not null && _lastUri.Host.Contains("pximg.net"))
+        if (_lastUri?.Host.Contains("pximg.net") == true)
         {
             _httpClient.DefaultRequestHeaders.Referer = new("https://app-api.pixiv.net/");
         }
