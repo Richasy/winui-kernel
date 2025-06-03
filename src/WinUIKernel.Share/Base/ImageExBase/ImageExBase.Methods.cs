@@ -6,6 +6,7 @@ using CommunityToolkit.HighPerformance.Buffers;
 using Microsoft.Graphics.Canvas;
 using Microsoft.UI.Xaml;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace Richasy.WinUIKernel.Share.Base;
@@ -15,7 +16,7 @@ namespace Richasy.WinUIKernel.Share.Base;
 /// </summary>
 public abstract partial class ImageExBase
 {
-    private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static async void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var instance = d as ImageExBase;
         var uri = e.NewValue as Uri;
@@ -26,7 +27,7 @@ public abstract partial class ImageExBase
 
         if (uri != null && instance.IsLoaded)
         {
-            instance.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, async () => await instance.TryLoadImageAsync(uri));
+            await instance.RedrawAsync();
         }
     }
 
