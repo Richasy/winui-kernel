@@ -6,6 +6,7 @@ using CommunityToolkit.HighPerformance.Buffers;
 using Microsoft.Graphics.Canvas;
 using Microsoft.UI.Xaml;
 using System.Diagnostics;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Storage;
 
 namespace Richasy.WinUIKernel.Share.Base;
@@ -15,6 +16,8 @@ namespace Richasy.WinUIKernel.Share.Base;
 /// </summary>
 public abstract partial class ImageExBase
 {
+    private static readonly SemaphoreSlim _networkRequestSemaphore = new(20, 20);
+
     private static async void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var instance = d as ImageExBase;
@@ -159,7 +162,7 @@ public abstract partial class ImageExBase
         CanvasBitmap? canvasBitmap = default;
 
         // 区分本地链接和网络链接.
-        if (_lastUri.IsFile)
+        if (_lastUri!.IsFile)
         {
             try
             {
@@ -172,23 +175,74 @@ public abstract partial class ImageExBase
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
+        else if (EnableDiskCache)
+        {
+            var cacheFile = await GetCacheFilePathAsync(_lastUri.ToString());
+            if (cacheFile != null)
+            {
+                var file = await StorageFile.GetFileFromPathAsync(cacheFile);
+                using var stream = await file.OpenReadAsync();
+                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream).AsTask();
+            }
+            else
+            {
+                await _networkRequestSemaphore.WaitAsync();
+                try
+                {
+                    CheckImageHeaders();
+                    var response = await _httpClient.GetAsync(_lastUri);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsBufferAsync();
+                        if (content.Length > 0)
+                        {
+                            var bytes = content.ToArray();
+                            await WriteCacheAsync(_lastUri.ToString(), bytes);
+                            await using var memoryStream = new MemoryStream(bytes);
+                            using var randomStream = memoryStream.AsRandomAccessStream();
+                            canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Image content is empty.");
+                        }
+                    }
+                    else
+                    {
+                        throw new HttpRequestException($"Failed to fetch image from {_lastUri}. Status code: {response.StatusCode}");
+                    }
+                }
+                finally
+                {
+                    _networkRequestSemaphore.Release();
+                }
+            }
+        }
         else
         {
-            var initialCapacity = 32 * 1024;
-            CheckImageReferer();
-            using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-            using var imageStream = await _httpClient.GetInputStreamAsync(_lastUri);
-            using var streamForRead = imageStream.AsStreamForRead();
-            using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
-            await streamForRead.CopyToAsync(streamForWrite);
-            if (_lastUri != requestUri)
+            try
             {
-                return default;
-            }
+                CheckImageHeaders();
+                var initialCapacity = 32 * 1024;
+                using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
+                using var imageStream = await _httpClient.GetInputStreamAsync(_lastUri);
+                await using var streamForRead = imageStream.AsStreamForRead();
+                await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
-            using var memoryStream = bufferWriter.WrittenMemory.AsStream();
-            using var randomStream = memoryStream.AsRandomAccessStream();
-            canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
+                await streamForRead.CopyToAsync(streamForWrite);
+                if (_lastUri != requestUri)
+                {
+                    return default;
+                }
+
+                await using var memoryStream = bufferWriter.WrittenMemory.AsStream();
+                using var randomStream = memoryStream.AsRandomAccessStream();
+                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
+            }
+            finally
+            {
+                _networkRequestSemaphore.Release();
+            }
         }
 
         if (_lastUri != requestUri)
@@ -200,8 +254,21 @@ public abstract partial class ImageExBase
         return canvasBitmap;
     }
 
-    private void CheckImageReferer()
+    private void CheckImageHeaders()
     {
+        if (GetHeaders().Count > 0)
+        {
+            foreach (var header in GetHeaders())
+            {
+                if (_httpClient.DefaultRequestHeaders.ContainsKey(header.Key))
+                {
+                    _httpClient.DefaultRequestHeaders.Remove(header.Key);
+                }
+
+                _httpClient.DefaultRequestHeaders.TryAppendWithoutValidation(header.Key, header.Value);
+            }
+        }
+
         if (_lastUri?.Host.Contains("pximg.net") == true)
         {
             _httpClient.DefaultRequestHeaders.Referer = new("https://app-api.pixiv.net/");

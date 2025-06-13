@@ -16,7 +16,14 @@
             <StackPanel.ChildrenTransitions>
                 <RepositionThemeTransition IsStaggeringEnabled="False" />
             </StackPanel.ChildrenTransitions>
-            <base:CardControl Width="40" Height="60" />
+            <base:CardControl>
+                <local:TestImage
+                    Width="300"
+                    Height="186"
+                    DecodeHeight="206"
+                    DecodeWidth="365"
+                    Source="https://i2.hdslb.com/bfs/archive/db048480a486f65a45c8157a77eab93708ae092c.jpg@672w_378h_1c_!web-home-common-cover" />
+            </base:CardControl>
             <StackPanel x:Name="ChatContainer">
                 <StackPanel.ChildrenTransitions>
                     <RepositionThemeTransition IsStaggeringEnabled="False" />

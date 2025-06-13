@@ -56,6 +56,12 @@ public abstract partial class ImageExBase
         DependencyProperty.Register(nameof(HolderImage), typeof(Uri), typeof(ImageExBase), new PropertyMetadata(default));
 
     /// <summary>
+    /// <see cref="EnableDiskCache"/> 的依赖属性.
+    /// </summary>
+    public static readonly DependencyProperty EnableDiskCacheProperty =
+        DependencyProperty.Register(nameof(EnableDiskCache), typeof(bool), typeof(ImageExBase), new PropertyMetadata(true));
+
+    /// <summary>
     /// 图片源.
     /// </summary>
     public Uri Source
@@ -122,6 +128,15 @@ public abstract partial class ImageExBase
     {
         get => (Uri)GetValue(HolderImageProperty);
         set => SetValue(HolderImageProperty, value);
+    }
+
+    /// <summary>
+    /// 是否启用磁盘缓存.
+    /// </summary>
+    public bool EnableDiskCache
+    {
+        get => (bool)GetValue(EnableDiskCacheProperty);
+        set => SetValue(EnableDiskCacheProperty, value);
     }
 
     /// <summary>

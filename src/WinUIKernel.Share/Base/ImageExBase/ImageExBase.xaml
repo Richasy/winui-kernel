@@ -24,7 +24,7 @@
                             VerticalAlignment="Stretch"
                             CornerRadius="{TemplateBinding CornerRadius}"
                             IsActive="{TemplateBinding IsImageLoading}"
-                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsImageLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsImageLoading, Mode=OneWay, Converter={StaticResource ImageBoolToVisibilityConverter}}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

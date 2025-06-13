@@ -112,6 +112,12 @@ public abstract partial class ImageExBase : LayoutControlBase
     {
     }
 
+    /// <summary>
+    /// 获取请求头信息.
+    /// </summary>
+    /// <returns></returns>
+    protected virtual Dictionary<string, string> GetHeaders() => [];
+
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
     {
