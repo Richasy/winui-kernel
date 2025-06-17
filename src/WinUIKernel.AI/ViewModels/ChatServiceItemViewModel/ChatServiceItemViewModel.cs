@@ -49,33 +49,7 @@ public partial class ChatServiceItemViewModel : ViewModelBase
     /// 检查当前配置是否有效.
     /// </summary>
     public void CheckCurrentConfig()
-    {
-        if (ProviderType == ChatProviderType.Windows)
-        {
-            if (IsCompleted)
-            {
-                return;
-            }
-
-            // 确保 Windows 系统版本在 26120 以上，并且系统架构为 ARM64，且具备 NPU。
-            var osVersionInfo = new SystemChecker.OSVERSIONINFOEX
-            {
-                dwOSVersionInfoSize = Marshal.SizeOf<SystemChecker.OSVERSIONINFOEX>(),
-            };
-            var isSpecificVersion = false;
-            if (SystemChecker.GetVersionEx(ref osVersionInfo))
-            {
-                isSpecificVersion = osVersionInfo.dwBuildNumber >= 26120;
-            }
-
-            var isArm64 = RuntimeInformation.ProcessArchitecture == Architecture.Arm64;
-            IsCompleted = isSpecificVersion && isArm64;
-        }
-        else
-        {
-            IsCompleted = Config?.IsValid() ?? false;
-        }
-    }
+        => IsCompleted = Config?.IsValid() ?? false;
 
     /// <summary>
     /// 模型是否已存在于列表之中.
