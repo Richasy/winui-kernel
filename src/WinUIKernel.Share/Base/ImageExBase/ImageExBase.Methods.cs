@@ -190,14 +190,15 @@ public abstract partial class ImageExBase
                 try
                 {
                     CheckImageHeaders();
-                    var response = await _httpClient.GetAsync(_lastUri);
+                    var uri = _lastUri;
+                    var response = await _httpClient.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsBufferAsync();
                         if (content.Length > 0)
                         {
                             var bytes = content.ToArray();
-                            await WriteCacheAsync(_lastUri.ToString(), bytes);
+                            await WriteCacheAsync(uri.ToString(), bytes);
                             await using var memoryStream = new MemoryStream(bytes);
                             using var randomStream = memoryStream.AsRandomAccessStream();
                             canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
@@ -209,7 +210,7 @@ public abstract partial class ImageExBase
                     }
                     else
                     {
-                        throw new HttpRequestException($"Failed to fetch image from {_lastUri}. Status code: {response.StatusCode}");
+                        throw new HttpRequestException($"Failed to fetch image from {uri}. Status code: {response.StatusCode}");
                     }
                 }
                 finally

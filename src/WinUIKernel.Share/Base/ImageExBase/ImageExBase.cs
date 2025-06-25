@@ -113,6 +113,12 @@ public abstract partial class ImageExBase : LayoutControlBase
     }
 
     /// <summary>
+    /// 获取缓存子目录.
+    /// </summary>
+    /// <returns></returns>
+    protected virtual string GetCacheSubFolder() => string.Empty;
+
+    /// <summary>
     /// 获取请求头信息.
     /// </summary>
     /// <returns></returns>
