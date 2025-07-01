@@ -98,7 +98,7 @@ public sealed partial class AppTitleBar
     private void UpdateTheme()
     {
         var islandEnv = XamlRoot?.ContentIslandEnvironment;
-        if (islandEnv is not null)
+        if (islandEnv is not null && AutoUpdateTitleBarButtonColor)
         {
             var appWindowId = islandEnv.AppWindowId;
             var appWindow = AppWindow.GetFromWindowId(appWindowId);

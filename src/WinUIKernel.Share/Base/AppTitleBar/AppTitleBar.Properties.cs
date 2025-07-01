@@ -91,6 +91,12 @@ public sealed partial class AppTitleBar
         DependencyProperty.Register(nameof(TitleForeground), typeof(Brush), typeof(AppTitleBar), new PropertyMetadata(default));
 
     /// <summary>
+    /// <see cref="AutoUpdateTitleBarButtonColor"/> 的依赖属性.
+    /// </summary>
+    public static readonly DependencyProperty AutoUpdateTitleBarButtonColorProperty =
+        DependencyProperty.Register(nameof(AutoUpdateTitleBarButtonColor), typeof(bool), typeof(AppTitleBar), new PropertyMetadata(true));
+
+    /// <summary>
     /// 头部内容.
     /// </summary>
     public object Header
@@ -205,5 +211,14 @@ public sealed partial class AppTitleBar
     {
         get { return (Brush)GetValue(TitleForegroundProperty); }
         set { SetValue(TitleForegroundProperty, value); }
+    }
+
+    /// <summary>
+    /// 应用标题栏是否自动更新标题栏按钮颜色.
+    /// </summary>
+    public bool AutoUpdateTitleBarButtonColor
+    {
+        get => (bool)GetValue(AutoUpdateTitleBarButtonColorProperty);
+        set => SetValue(AutoUpdateTitleBarButtonColorProperty, value);
     }
 }
