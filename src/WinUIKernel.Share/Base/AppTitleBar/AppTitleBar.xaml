@@ -75,10 +75,6 @@
                                 <ColumnDefinition Width="20" />
                             </Grid.ColumnDefinitions>
 
-                            <Grid.ChildrenTransitions>
-                                <RepositionThemeTransition IsStaggeringEnabled="False" />
-                            </Grid.ChildrenTransitions>
-
                             <Button
                                 x:Name="PART_BackButton"
                                 Grid.Column="0"

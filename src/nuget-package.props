@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <!-- Central version prefix - applies to all nuget packages. -->
-    <PackageVersion>0.0.8-preview9</PackageVersion>
+    <PackageVersion>0.0.8-preview10</PackageVersion>
     <Configurations>Debug;Release</Configurations>
     <IsPackable>true</IsPackable>
 
