@@ -22,6 +22,7 @@ public sealed partial class AppTitleBar
     private const string FooterContentPresenterPartName = "PART_FooterContentPresenter";
     private const string CenterContentPresenterGridPartName = "PART_CenterPresenterGrid";
     private const string CenterContentPresenterPartName = "PART_CenterPresenter";
+    private const string LeftEdgeContentPresenterPartName = "PART_LeftEdgeContentPresenter";
 
     private const string CompactVisualStateName = "Compact";
     private const string ExpandedVisualStateName = "Expanded";
@@ -53,6 +54,9 @@ public sealed partial class AppTitleBar
     private const string FooterDeactivatedVisualStateName = "FooterDeactivated";
     private const string CenterContentVisibleVisualStateName = "CenterContentVisible";
     private const string CenterContentCollapsedVisualStateName = "CenterContentCollapsed";
+    private const string LeftEdgeVisibleVisualStateName = "LeftEdgeVisible";
+    private const string LeftEdgeCollapsedVisualStateName = "LeftEdgeCollapsed";
+    private const string LeftEdgeDeactivatedVisualStateName = "LeftEdgeDeactivated";
 
     private readonly List<FrameworkElement> _interactableElementList = new();
     private InputActivationListener _inputActivationListener;
@@ -67,6 +71,7 @@ public sealed partial class AppTitleBar
     private FrameworkElement _contentArea;
     private FrameworkElement _centerArea;
     private FrameworkElement _footerArea;
+    private FrameworkElement _leftEdgeArea;
 
     private double _compactModeThresholdWidth;
 }

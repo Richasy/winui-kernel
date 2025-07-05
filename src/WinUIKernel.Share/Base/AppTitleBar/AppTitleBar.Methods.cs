@@ -70,7 +70,7 @@ public sealed partial class AppTitleBar
 
     private void UpdateHeight()
     {
-        var stateName = CenterContent is null && Content is null && Header is null && Footer is null ? CompactHeightVisualStateName : ExpandedHeightVisualStateName;
+        var stateName = CenterContent is null && Content is null && LeftEdgeElement is null && Header is null && Footer is null ? CompactHeightVisualStateName : ExpandedHeightVisualStateName;
         VisualStateManager.GoToState(this, stateName, false);
     }
 
@@ -158,6 +158,22 @@ public sealed partial class AppTitleBar
         {
             _headerArea ??= GetTemplateChild(HeaderContentPresenterPartName) as FrameworkElement;
             VisualStateManager.GoToState(this, HeaderVisibleVisualStateName, false);
+        }
+
+        UpdateHeight();
+        UpdateInteractableElementsList();
+    }
+
+    private void UpdateLeftEdge()
+    {
+        if (LeftEdgeElement is null)
+        {
+            VisualStateManager.GoToState(this, LeftEdgeCollapsedVisualStateName, false);
+        }
+        else
+        {
+            _leftEdgeArea ??= GetTemplateChild(LeftEdgeContentPresenterPartName) as FrameworkElement;
+            VisualStateManager.GoToState(this, LeftEdgeVisibleVisualStateName, false);
         }
 
         UpdateHeight();
@@ -279,6 +295,11 @@ public sealed partial class AppTitleBar
         if (Header is not null && _headerArea is not null)
         {
             _interactableElementList.Add(_headerArea);
+        }
+
+        if (LeftEdgeElement is not null && _leftEdgeArea is not null)
+        {
+            _interactableElementList.Add(_leftEdgeArea);
         }
 
         if (Content is not null && _contentArea is not null)

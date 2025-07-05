@@ -88,6 +88,12 @@
                                 </Button.KeyboardAccelerators>
                             </Button>
 
+                            <ContentPresenter
+                                x:Name="PART_LeftEdgeContentPresenter"
+                                Grid.Column="0"
+                                Content="{TemplateBinding LeftEdgeElement}"
+                                Visibility="Collapsed" />
+
                             <Button
                                 x:Name="PART_PaneToggleButton"
                                 Grid.Column="1"
@@ -204,6 +210,21 @@
                                     <VisualState.Setters>
                                         <Setter Target="PART_PaneToggleButton.Visibility" Value="Visible" />
                                         <Setter Target="PART_PaneToggleButton.Foreground" Value="{ThemeResource TitleBarDeactivatedForegroundBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+
+                            <VisualStateGroup x:Name="LeftEdgeGroup">
+                                <VisualState x:Name="LeftEdgeCollapsed" />
+                                <VisualState x:Name="LeftEdgeVisible">
+                                    <VisualState.Setters>
+                                        <Setter Target="PART_LeftEdgeContentPresenter.Visibility" Value="Visible" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="LeftEdgeDeactivated">
+                                    <VisualState.Setters>
+                                        <Setter Target="PART_LeftEdgeContentPresenter.Visibility" Value="Visible" />
+                                        <Setter Target="PART_LeftEdgeContentPresenter.Opacity" Value="{ThemeResource TitleBarDeactivatedOpacity}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>

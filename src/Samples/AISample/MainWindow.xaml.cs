@@ -26,6 +26,7 @@ public sealed partial class MainWindow : WindowBase
     {
         InitializeComponent();
         Instance = this;
+        AppWindow.TitleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Tall;
         MainFrame.Navigate(typeof(TestPage));
         Closed += OnClosed;
     }

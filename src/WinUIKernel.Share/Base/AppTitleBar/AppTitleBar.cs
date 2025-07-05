@@ -62,6 +62,7 @@ public sealed partial class AppTitleBar : LayoutControlBase
         UpdateTitle();
         UpdateSubtitle();
         UpdateHeader();
+        UpdateLeftEdge();
         UpdateContent();
         UpdateCenterContent();
         UpdateFooter();
@@ -141,6 +142,12 @@ public sealed partial class AppTitleBar : LayoutControlBase
         instance?.UpdateHeader();
     }
 
+    private static void OnLeftEdgeElementChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var instance = d as AppTitleBar;
+        instance?.UpdateLeftEdge();
+    }
+
     private static void OnContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var instance = d as AppTitleBar;
@@ -215,6 +222,11 @@ public sealed partial class AppTitleBar : LayoutControlBase
         if (Header is not null)
         {
             VisualStateManager.GoToState(this, isDeactivated ? HeaderDeactivatedVisualStateName : HeaderVisibleVisualStateName, false);
+        }
+
+        if (LeftEdgeElement is not null)
+        {
+            VisualStateManager.GoToState(this, isDeactivated ? LeftEdgeDeactivatedVisualStateName : LeftEdgeVisibleVisualStateName, false);
         }
 
         if (Content is not null)

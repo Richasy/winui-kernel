@@ -19,6 +19,12 @@ public sealed partial class AppTitleBar
         DependencyProperty.Register(nameof(Header), typeof(object), typeof(AppTitleBar), new PropertyMetadata(default, new PropertyChangedCallback(OnHeaderChanged)));
 
     /// <summary>
+    /// <see cref="LeftEdgeElement"/> 的依赖属性.
+    /// </summary>
+    public static readonly DependencyProperty LeftEdgeElementProperty =
+        DependencyProperty.Register(nameof(LeftEdgeElement), typeof(object), typeof(AppTitleBar), new PropertyMetadata(default, new PropertyChangedCallback(OnLeftEdgeElementChanged)));
+
+    /// <summary>
     /// <see cref="IconElement"/> 的依赖属性.
     /// </summary>
     public static readonly DependencyProperty IconElementProperty =
@@ -103,6 +109,15 @@ public sealed partial class AppTitleBar
     {
         get => (object)GetValue(HeaderProperty);
         set => SetValue(HeaderProperty, value);
+    }
+
+    /// <summary>
+    /// 左侧边界内容.
+    /// </summary>
+    public object LeftEdgeElement
+    {
+        get => (object)GetValue(LeftEdgeElementProperty);
+        set => SetValue(LeftEdgeElementProperty, value);
     }
 
     /// <summary>
