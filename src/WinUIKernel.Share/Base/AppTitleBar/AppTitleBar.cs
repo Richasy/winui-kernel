@@ -181,6 +181,7 @@ public sealed partial class AppTitleBar : LayoutControlBase
                 VisualStateManager.GoToState(this, ExpandedVisualStateName, false);
                 UpdateTitle();
                 UpdateSubtitle();
+                UpdatePadding();
             }
         }
 

@@ -224,7 +224,6 @@
                                 <VisualState x:Name="LeftEdgeDeactivated">
                                     <VisualState.Setters>
                                         <Setter Target="PART_LeftEdgeContentPresenter.Visibility" Value="Visible" />
-                                        <Setter Target="PART_LeftEdgeContentPresenter.Opacity" Value="{ThemeResource TitleBarDeactivatedOpacity}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -239,7 +238,6 @@
                                 <VisualState x:Name="HeaderDeactivated">
                                     <VisualState.Setters>
                                         <Setter Target="PART_HeaderContentPresenter.Visibility" Value="Visible" />
-                                        <Setter Target="PART_HeaderContentPresenter.Opacity" Value="{ThemeResource TitleBarDeactivatedOpacity}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -299,7 +297,6 @@
                                 <VisualState x:Name="ContentDeactivated">
                                     <VisualState.Setters>
                                         <Setter Target="PART_ContentPresenterGrid.Visibility" Value="Visible" />
-                                        <Setter Target="PART_ContentPresenterGrid.Opacity" Value="{ThemeResource TitleBarDeactivatedOpacity}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -314,7 +311,6 @@
                                 <VisualState x:Name="CenterContentDeactivated">
                                     <VisualState.Setters>
                                         <Setter Target="PART_CenterPresenterGrid.Visibility" Value="Visible" />
-                                        <Setter Target="PART_CenterPresenterGrid.Opacity" Value="{ThemeResource TitleBarDeactivatedOpacity}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -329,7 +325,6 @@
                                 <VisualState x:Name="FooterDeactivated">
                                     <VisualState.Setters>
                                         <Setter Target="PART_FooterContentPresenter.Visibility" Value="Visible" />
-                                        <Setter Target="PART_FooterContentPresenter.Opacity" Value="{ThemeResource TitleBarDeactivatedOpacity}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>

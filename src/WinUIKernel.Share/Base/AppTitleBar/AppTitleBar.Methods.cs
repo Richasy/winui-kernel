@@ -82,16 +82,9 @@ public sealed partial class AppTitleBar
             var appWindowId = islandEnv.AppWindowId;
             var appWindow = AppWindow.GetFromWindowId(appWindowId);
             var titleBar = appWindow.TitleBar;
-            var scale = XamlRoot.RasterizationScale;
-            if (_leftPaddingColumn is not null)
-            {
-                _leftPaddingColumn.Width = new GridLength(titleBar.LeftInset / scale, GridUnitType.Pixel);
-            }
-
-            if (_rightPaddingColumn is not null)
-            {
-                _rightPaddingColumn.Width = new GridLength(titleBar.RightInset / scale, GridUnitType.Pixel);
-            }
+            var scale = XamlRoot!.RasterizationScale;
+            _leftPaddingColumn?.Width = new GridLength(titleBar.LeftInset / scale, GridUnitType.Pixel);
+            _rightPaddingColumn?.Width = new GridLength(titleBar.RightInset / scale, GridUnitType.Pixel);
         }
     }
 
