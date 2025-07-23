@@ -74,7 +74,10 @@ public sealed partial class AppTitleBar
         VisualStateManager.GoToState(this, stateName, false);
     }
 
-    private void UpdatePadding()
+    /// <summary>
+    /// Updates the padding of the title bar based on the current app window's title bar insets.
+    /// </summary>
+    public void UpdatePadding()
     {
         var islandEnv = XamlRoot?.ContentIslandEnvironment;
         if (islandEnv is not null)
@@ -83,6 +86,7 @@ public sealed partial class AppTitleBar
             var appWindow = AppWindow.GetFromWindowId(appWindowId);
             var titleBar = appWindow.TitleBar;
             var scale = XamlRoot!.RasterizationScale;
+            System.Diagnostics.Debug.WriteLine($"TitleBar LeftInset: {titleBar.LeftInset}, RightInset: {titleBar.RightInset}, Scale: {scale}");
             _leftPaddingColumn?.Width = new GridLength(titleBar.LeftInset / scale, GridUnitType.Pixel);
             _rightPaddingColumn?.Width = new GridLength(titleBar.RightInset / scale, GridUnitType.Pixel);
         }

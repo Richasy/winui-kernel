@@ -7,12 +7,12 @@ using Richasy.WinUIKernel.Share.Base;
 namespace AISample;
 
 /// <summary>
-/// ÁÙÊ±±êÌâÀ¸£¬ÓÃÓÚ²âÊÔºÍÑÝÊ¾Ä¿µÄ£¬²»½¨ÒéÔÚÉú²ú»·¾³ÖÐÊ¹ÓÃ¡£
+/// ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½Ôºï¿½ï¿½ï¿½Ê¾Ä¿ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¡ï¿½
 /// </summary>
 public sealed partial class TempTitleBar : UserControl
 {
     /// <summary>
-    /// ³õÊ¼»¯ <see cref="TempTitleBar"/> ÀàµÄÐÂÊµÀý¡£
+    /// ï¿½ï¿½Ê¼ï¿½ï¿½ <see cref="TempTitleBar"/> ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public TempTitleBar()
     {
@@ -20,7 +20,15 @@ public sealed partial class TempTitleBar : UserControl
     }
 
     /// <summary>
-    /// »ñÈ¡Ó¦ÓÃ±êÌâÀ¸¿Ø¼þµÄÊµÀý¡£
+    /// ï¿½ï¿½È¡Ó¦ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public AppTitleBar T => TitleBar;
+
+    private async void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        MainWindow.Instance.AppWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen);
+        await Task.Delay(5000);
+        MainWindow.Instance.AppWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.Default);
+        TitleBar.UpdatePadding();
+    }
 }

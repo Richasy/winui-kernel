@@ -29,6 +29,7 @@ public sealed partial class MainWindow : WindowBase
         AppWindow.TitleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Tall;
         MainFrame.Navigate(typeof(TestPage));
         Closed += OnClosed;
+        AppWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen);
     }
 
     private async void OnClosed(object sender, WindowEventArgs args)

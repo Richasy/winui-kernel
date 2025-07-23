@@ -9,6 +9,7 @@
     xmlns:ic="using:FluentIcons.WinUI"
     xmlns:local="using:AISample"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="OnLoaded"
     mc:Ignorable="d">
 
     <base:AppTitleBar
@@ -21,5 +22,11 @@
                 <ic:SymbolIcon FontSize="14" Symbol="Backspace" />
             </Button>
         </base:AppTitleBar.LeftEdgeElement>
+        <base:AppTitleBar.Footer>
+            <Button
+                MinWidth="120"
+                Content="Test button"
+                Style="{StaticResource AccentButtonStyle}" />
+        </base:AppTitleBar.Footer>
     </base:AppTitleBar>
 </UserControl>
