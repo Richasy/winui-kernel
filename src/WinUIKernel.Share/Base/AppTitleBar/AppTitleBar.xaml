@@ -132,8 +132,6 @@
                             <TextBlock
                                 x:Name="PART_SubtitleText"
                                 Grid.Column="4"
-                                MinWidth="48"
-                                Margin="0,0,16,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 x:Load="False"
