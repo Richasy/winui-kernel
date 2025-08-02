@@ -247,12 +247,6 @@
                                         <Setter Target="PART_Icon.Visibility" Value="Visible" />
                                     </VisualState.Setters>
                                 </VisualState>
-                                <VisualState x:Name="IconDeactivated">
-                                    <VisualState.Setters>
-                                        <Setter Target="PART_Icon.Visibility" Value="Visible" />
-                                        <Setter Target="PART_Icon.Opacity" Value="{ThemeResource TitleBarDeactivatedOpacity}" />
-                                    </VisualState.Setters>
-                                </VisualState>
                             </VisualStateGroup>
 
                             <VisualStateGroup x:Name="TitleTextGroup">

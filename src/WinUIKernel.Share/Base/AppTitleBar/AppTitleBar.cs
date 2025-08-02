@@ -205,11 +205,6 @@ public sealed partial class AppTitleBar : LayoutControlBase
             VisualStateManager.GoToState(this, isDeactivated ? PaneToggleButtonDeactivatedVisualStateName : PaneToggleButtonVisibleVisualStateName, false);
         }
 
-        if (IconElement is not null)
-        {
-            VisualStateManager.GoToState(this, isDeactivated ? IconDeactivatedVisualStateName : IconVisibleVisualStateName, false);
-        }
-
         if (!string.IsNullOrEmpty(Title))
         {
             VisualStateManager.GoToState(this, isDeactivated ? TitleTextDeactivatedVisualStateName : TitleTextVisibleVisualStateName, false);

@@ -30,7 +30,6 @@ public sealed partial class AppTitleBar
     private const string ExpandedHeightVisualStateName = "ExpandedHeight";
     private const string IconVisibleVisualStateName = "IconVisible";
     private const string IconCollapsedVisualStateName = "IconCollapsed";
-    private const string IconDeactivatedVisualStateName = "IconDeactivated";
     private const string BackButtonVisibleVisualStateName = "BackButtonVisible";
     private const string BackButtonCollapsedVisualStateName = "BackButtonCollapsed";
     private const string BackButtonDeactivatedVisualStateName = "BackButtonDeactivated";
