@@ -55,7 +55,6 @@ public sealed partial class AppTitleBar
     private const string CenterContentCollapsedVisualStateName = "CenterContentCollapsed";
     private const string LeftEdgeVisibleVisualStateName = "LeftEdgeVisible";
     private const string LeftEdgeCollapsedVisualStateName = "LeftEdgeCollapsed";
-    private const string LeftEdgeDeactivatedVisualStateName = "LeftEdgeDeactivated";
 
     private readonly List<FrameworkElement> _interactableElementList = new();
     private InputActivationListener _inputActivationListener;

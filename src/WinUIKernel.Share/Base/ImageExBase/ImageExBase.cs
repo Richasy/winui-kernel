@@ -166,9 +166,13 @@ public abstract partial class ImageExBase : LayoutControlBase
     {
         // 创建 HttpBaseProtocolFilter 并处理 ServerCustomValidationRequested 事件
         var filter = new HttpBaseProtocolFilter();
-        filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.InvalidName);
-        filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.Untrusted);
-        filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.Expired);
+        foreach (var error in Enum.GetValues<Windows.Security.Cryptography.Certificates.ChainValidationResult>())
+        {
+            if (error is not Windows.Security.Cryptography.Certificates.ChainValidationResult.Success and not Windows.Security.Cryptography.Certificates.ChainValidationResult.Revoked)
+            {
+                filter.IgnorableServerCertificateErrors.Add(error);
+            }
+        }
 
         // 创建 HttpClient 实例
         return new Windows.Web.Http.HttpClient(filter);

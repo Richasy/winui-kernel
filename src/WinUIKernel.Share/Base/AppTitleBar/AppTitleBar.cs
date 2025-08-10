@@ -220,11 +220,6 @@ public sealed partial class AppTitleBar : LayoutControlBase
             VisualStateManager.GoToState(this, isDeactivated ? HeaderDeactivatedVisualStateName : HeaderVisibleVisualStateName, false);
         }
 
-        if (LeftEdgeElement is not null)
-        {
-            VisualStateManager.GoToState(this, isDeactivated ? LeftEdgeDeactivatedVisualStateName : LeftEdgeVisibleVisualStateName, false);
-        }
-
         if (Content is not null)
         {
             VisualStateManager.GoToState(this, isDeactivated ? ContentDeactivatedVisualStateName : ContentVisibleVisualStateName, false);
