@@ -194,12 +194,11 @@ public abstract partial class ImageExBase
                     var response = await _httpClient.GetAsync(uri);
                     if (response.IsSuccessStatusCode)
                     {
-                        var content = await response.Content.ReadAsBufferAsync();
+                        var content = await response.Content.ReadAsByteArrayAsync();
                         if (content.Length > 0)
                         {
-                            var bytes = content.ToArray();
-                            await WriteCacheAsync(uri.ToString(), bytes);
-                            await using var memoryStream = new MemoryStream(bytes);
+                            await WriteCacheAsync(uri.ToString(), content);
+                            await using var memoryStream = new MemoryStream(content);
                             using var randomStream = memoryStream.AsRandomAccessStream();
                             canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
                         }
@@ -226,8 +225,8 @@ public abstract partial class ImageExBase
                 CheckImageHeaders();
                 var initialCapacity = 32 * 1024;
                 using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-                using var imageStream = await _httpClient.GetInputStreamAsync(_lastUri);
-                await using var streamForRead = imageStream.AsStreamForRead();
+                using var imageStream = await _httpClient.GetStreamAsync(_lastUri);
+                await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
                 await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
                 await streamForRead.CopyToAsync(streamForWrite);
@@ -261,22 +260,22 @@ public abstract partial class ImageExBase
         {
             foreach (var header in GetHeaders())
             {
-                if (_httpClient.DefaultRequestHeaders.ContainsKey(header.Key))
+                if (_httpClient.DefaultRequestHeaders.Contains(header.Key))
                 {
                     _httpClient.DefaultRequestHeaders.Remove(header.Key);
                 }
 
-                _httpClient.DefaultRequestHeaders.TryAppendWithoutValidation(header.Key, header.Value);
+                _httpClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
             }
         }
 
         if (_lastUri?.Host.Contains("pximg.net") == true)
         {
-            _httpClient.DefaultRequestHeaders.Referer = new("https://app-api.pixiv.net/");
+            _httpClient.DefaultRequestHeaders.Referrer = new("https://app-api.pixiv.net/");
         }
         else
         {
-            _httpClient.DefaultRequestHeaders.Referer = default;
+            _httpClient.DefaultRequestHeaders.Referrer = default;
         }
     }
 }

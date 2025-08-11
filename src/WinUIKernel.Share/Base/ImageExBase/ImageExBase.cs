@@ -6,7 +6,6 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Windows.Foundation;
-using Windows.Web.Http.Filters;
 
 namespace Richasy.WinUIKernel.Share.Base;
 
@@ -15,7 +14,7 @@ namespace Richasy.WinUIKernel.Share.Base;
 /// </summary>
 public abstract partial class ImageExBase : LayoutControlBase
 {
-    private static readonly Windows.Web.Http.HttpClient _httpClient = CreateHttpClientIgnoringCertificateErrors();
+    private static readonly System.Net.Http.HttpClient _httpClient = CreateHttpClientIgnoringCertificateErrors();
     private Uri? _lastUri;
 
     // private int _retryCount;
@@ -162,20 +161,17 @@ public abstract partial class ImageExBase : LayoutControlBase
         }
     }
 
-    private static Windows.Web.Http.HttpClient CreateHttpClientIgnoringCertificateErrors()
+    private static System.Net.Http.HttpClient CreateHttpClientIgnoringCertificateErrors()
     {
-        // 创建 HttpBaseProtocolFilter 并处理 ServerCustomValidationRequested 事件
-        var filter = new HttpBaseProtocolFilter();
-        foreach (var error in Enum.GetValues<Windows.Security.Cryptography.Certificates.ChainValidationResult>())
+        var clientHandler = new System.Net.Http.HttpClientHandler
         {
-            if (error is not Windows.Security.Cryptography.Certificates.ChainValidationResult.Success and not Windows.Security.Cryptography.Certificates.ChainValidationResult.Revoked)
-            {
-                filter.IgnorableServerCertificateErrors.Add(error);
-            }
-        }
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+        };
 
-        // 创建 HttpClient 实例
-        return new Windows.Web.Http.HttpClient(filter);
+        return new System.Net.Http.HttpClient(clientHandler)
+        {
+            Timeout = TimeSpan.FromSeconds(30) // 设置超时时间
+        };
     }
 
     private async void OnActualThemeChangedAsync(FrameworkElement sender, object args)
