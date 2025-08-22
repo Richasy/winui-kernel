@@ -3,6 +3,7 @@
 
 using CommunityToolkit.HighPerformance;
 using CommunityToolkit.HighPerformance.Buffers;
+using Microsoft.Extensions.Logging;
 using Microsoft.Graphics.Canvas;
 using Microsoft.UI.Xaml;
 using System.Diagnostics;
@@ -79,6 +80,11 @@ public abstract partial class ImageExBase
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
+#pragma warning disable CA1848 // 使用 LoggerMessage 委托
+#pragma warning disable CA2254 // 模板应为静态表达式
+            WinUIKernelShareExtensions.Logger.LogError(ex, $"Failed to load image from {_lastUri}");
+#pragma warning restore CA2254 // 模板应为静态表达式
+#pragma warning restore CA1848 // 使用 LoggerMessage 委托
             if (HolderImage is not null)
             {
                 await TryLoadImageAsync(HolderImage);
@@ -105,6 +111,12 @@ public abstract partial class ImageExBase
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
+#pragma warning disable CA1848 // 使用 LoggerMessage 委托
+#pragma warning disable CA2254 // 模板应为静态表达式
+            WinUIKernelShareExtensions.Logger.LogError(ex, $"Failed to draw image with {_lastUri}");
+#pragma warning restore CA2254 // 模板应为静态表达式
+#pragma warning restore CA1848 // 使用 LoggerMessage 委托
+
             if (HolderImage is not null)
             {
                 await TryLoadImageAsync(HolderImage);

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Richasy. All rights reserved.
 // Licensed under the MIT License.
 
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Richasy.WinUIKernel.Share.Toolkits;
 using RichasyKernel;
 
@@ -20,9 +22,16 @@ public static class WinUIKernelShareExtensions
 
     internal static InternalResourceToolkit ResourceToolkit { get; } = new();
 
+    internal static ILogger Logger { get; set; }
+
     /// <summary>
     /// Initialize the Share kernel.
     /// </summary>
     /// <param name="kernel">Kernel.</param>
-    public static void InitializeShareKernel(this Kernel kernel) => Kernel = kernel;
+    /// <param name="logger">日志记录.</param>
+    public static void InitializeShareKernel(this Kernel kernel, ILogger? logger = null)
+    {
+        Kernel = kernel;
+        Logger = logger ?? NullLogger.Instance;
+    }
 }
