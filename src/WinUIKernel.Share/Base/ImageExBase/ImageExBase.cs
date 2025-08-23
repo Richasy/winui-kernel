@@ -165,12 +165,13 @@ public abstract partial class ImageExBase : LayoutControlBase
     {
         var clientHandler = new System.Net.Http.HttpClientHandler
         {
-            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
+            AllowAutoRedirect = true,
         };
 
         return new System.Net.Http.HttpClient(clientHandler)
         {
-            Timeout = TimeSpan.FromSeconds(30) // 设置超时时间
+            Timeout = TimeSpan.FromSeconds(30), // 设置超时时间
         };
     }
 
