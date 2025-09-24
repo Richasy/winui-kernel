@@ -9,6 +9,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:AISample"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:repeater="using:Richasy.WinUIKernel.Share.Base.Repeater"
     mc:Ignorable="d">
 
     <ScrollViewer>
@@ -46,6 +47,28 @@
                     <RepositionThemeTransition IsStaggeringEnabled="False" />
                 </StackPanel.ChildrenTransitions>
             </StackPanel>
+
+            <repeater:AppRepeater ItemsSource="{x:Bind TestCollection}">
+                <repeater:AppRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Button
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center">
+                            <TextBlock Text="{x:Bind}" />
+                        </Button>
+                    </DataTemplate>
+                </repeater:AppRepeater.ItemTemplate>
+                <repeater:AppRepeater.Layout>
+                    <UniformGridLayout
+                        ItemsStretch="Fill"
+                        MinColumnSpacing="8"
+                        MinItemHeight="100"
+                        MinItemWidth="100"
+                        MinRowSpacing="8" />
+                </repeater:AppRepeater.Layout>
+            </repeater:AppRepeater>
         </StackPanel>
     </ScrollViewer>
 </base:LayoutPageBase>

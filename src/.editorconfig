@@ -430,6 +430,15 @@ dotnet_diagnostic.CA1416.severity = none
 # CA1024: Use properties where appropriate
 dotnet_diagnostic.CA1024.severity = none
 
+# CA1848: Use the LoggerMessage delegates
+dotnet_diagnostic.CA1848.severity = none
+
+# CA2254: Template should be a static expression
+dotnet_diagnostic.CA2254.severity = none
+
+# CA1063: Implement IDisposable Correctly
+dotnet_diagnostic.CA1063.severity = none
+
 [*.{cs,vb}]
 dotnet_style_qualification_for_field = false:silent
 dotnet_style_qualification_for_property = false:silent

@@ -37,6 +37,7 @@
     <None Remove="Base\IconTextBlock.xaml" />
     <None Remove="Base\ImageExBase\ImageExBase.xaml" />
     <None Remove="Base\LoadingWidget.xaml" />
+    <None Remove="Base\Repeater\AppRepeater.xaml" />
     <None Remove="Base\SettingsControls\SettingsCard\SettingsCard.xaml" />
     <None Remove="Base\SettingsControls\SettingsExpander\SettingsExpander.xaml" />
     <None Remove="Base\Shimmer.xaml" />
@@ -50,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Diagnostics" />
     <PackageReference Include="CommunityToolkit.HighPerformance" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="CommunityToolkit.WinUI.Animations" />
@@ -75,6 +77,12 @@
 
   <ItemGroup>
     <Folder Include="Base\AppTitleBar\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Base\Repeater\AppRepeater.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

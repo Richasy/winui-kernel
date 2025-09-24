@@ -3,6 +3,7 @@
 
 using Richasy.WinUIKernel.Share;
 using Richasy.WinUIKernel.Share.Base;
+using System.Collections.ObjectModel;
 
 namespace AISample;
 
@@ -12,6 +13,7 @@ namespace AISample;
 public sealed partial class TestPage : LayoutPageBase
 {
     private readonly SettingsViewModel _settingsViewModel;
+    private readonly ObservableCollection<string> TestCollection = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TestPage"/> class.
@@ -21,6 +23,10 @@ public sealed partial class TestPage : LayoutPageBase
         InitializeComponent();
         WinUIKernelShareExtensions.IsCardAnimationEnabled = true;
         _settingsViewModel = GlobalDependencies.Kernel.GetRequiredService<SettingsViewModel>();
+        for (int i = 0; i < 100; i++)
+        {
+            TestCollection.Add(i.ToString());
+        }
     }
 
     /// <inheritdoc/>

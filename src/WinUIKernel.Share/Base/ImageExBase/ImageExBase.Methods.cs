@@ -39,7 +39,10 @@ public abstract partial class ImageExBase
     /// </summary>
     /// <returns><see cref="Task"/>.</returns>
     protected async Task RedrawAsync()
-        => await TryLoadImageAsync(Source);
+    {
+        _lastUri = null;
+        await TryLoadImageAsync(Source);
+    }
 
     private async Task TryLoadImageAsync(Uri uri)
     {
@@ -65,7 +68,7 @@ public abstract partial class ImageExBase
             _lastUri = HolderImage;
         }
 
-        if (!IsLoaded || _lastUri is null || !TryInitialize())
+        if (!IsLoaded || _lastUri is null || _cancellationTokenSource is not { IsCancellationRequested: false } || !TryInitialize() || _cancellationTokenSource is not { IsCancellationRequested: false })
         {
             IsImageLoading = false;
             return;
@@ -75,6 +78,7 @@ public abstract partial class ImageExBase
         CanvasBitmap? bitmap = default;
         try
         {
+            _cancellationTokenSource.Token.ThrowIfCancellationRequested();
             bitmap = await FetchImageAsync();
         }
         catch (Exception ex)
@@ -85,7 +89,7 @@ public abstract partial class ImageExBase
             WinUIKernelShareExtensions.Logger.LogError(ex, $"Failed to load image from {_lastUri}");
 #pragma warning restore CA2254 // 模板应为静态表达式
 #pragma warning restore CA1848 // 使用 LoggerMessage 委托
-            if (HolderImage is not null)
+            if (HolderImage is not null && _cancellationTokenSource is { IsCancellationRequested: false })
             {
                 await TryLoadImageAsync(HolderImage);
             }
@@ -103,10 +107,16 @@ public abstract partial class ImageExBase
         {
             if (CanvasImageSource is not null)
             {
+                _cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 DrawImage(bitmap);
                 _backgroundBrush.ImageSource = CanvasImageSource;
                 ImageLoaded?.Invoke(this, EventArgs.Empty);
             }
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignore the cancellation exception, as it is expected when the control is unloaded
+            // or when a new request is made before the previous one has completed.
         }
         catch (Exception ex)
         {
@@ -126,27 +136,53 @@ public abstract partial class ImageExBase
         }
         finally
         {
-            if (IsLoaded)
-            {
-                IsImageLoading = false;
-            }
-
+            IsImageLoading = false;
             bitmap?.Dispose();
         }
     }
 
     private bool TryInitialize()
     {
+        if (_compositionTargetSequenceNumber == CompositionTargetMonitor.SequenceNumber)
+        {
+            return true;
+        }
+
         try
         {
+            ResetCancellationTokenSource();
             var sharedDevice = CanvasDevice.GetSharedDevice();
+            sharedDevice.DeviceLost -= OnSharedDeviceLost;
+            sharedDevice.DeviceLost += OnSharedDeviceLost;
             CreateCanvasImageSource(sharedDevice);
+            _compositionTargetSequenceNumber = CompositionTargetMonitor.SequenceNumber;
             return true;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
             return false;
+        }
+    }
+
+    private async void OnSharedDeviceLost(CanvasDevice sender, object args)
+    {
+        if (Interlocked.CompareExchange(ref LostDevicesMap.GetOrCreateValue(sender).Value, 1, 0) == 0)
+        {
+            WinUIKernelShareExtensions.Logger.LogError($"Shared Win2D CanvasDevice instance was lost (HRESULT: 0x{sender.GetDeviceLostReason():X8}).");
+        }
+
+        sender.DeviceLost -= OnSharedDeviceLost;
+
+        var currentDeviceLostTime = DateTime.Now;
+        var lastLostTime = _lastDeviceLostTime;
+
+        _lastDeviceLostTime = currentDeviceLostTime;
+        _compositionTargetSequenceNumber = CompositionTargetMonitor.UninitializedValue;
+
+        if ((currentDeviceLostTime - lastLostTime) > TimeSpan.FromSeconds(3))
+        {
+            await RedrawAsync();
         }
     }
 
@@ -203,10 +239,10 @@ public abstract partial class ImageExBase
                 {
                     CheckImageHeaders();
                     var uri = _lastUri;
-                    var response = await _httpClient.GetAsync(uri);
+                    var response = await _httpClient.GetAsync(uri, _cancellationTokenSource.Token);
                     if (response.IsSuccessStatusCode)
                     {
-                        var content = await response.Content.ReadAsByteArrayAsync();
+                        var content = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token);
                         if (content.Length > 0)
                         {
                             await WriteCacheAsync(uri.ToString(), content);
@@ -237,11 +273,11 @@ public abstract partial class ImageExBase
                 CheckImageHeaders();
                 var initialCapacity = 32 * 1024;
                 using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-                using var imageStream = await _httpClient.GetStreamAsync(_lastUri);
+                using var imageStream = await _httpClient.GetStreamAsync(_lastUri, _cancellationTokenSource.Token);
                 await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
                 await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
-                await streamForRead.CopyToAsync(streamForWrite);
+                await streamForRead.CopyToAsync(streamForWrite, _cancellationTokenSource.Token);
                 if (_lastUri != requestUri)
                 {
                     return default;

@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="CommunityToolkit.Diagnostics" Version="8.4.0" />
     <PackageVersion Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="CommunityToolkit.WinUI.Animations" Version="8.2.250402" />
@@ -13,7 +14,7 @@
     <PackageVersion Include="CommunityToolkit.WinUI.Triggers" Version="8.2.250402" />
     <PackageVersion Include="ComputeSharp.D2D1" Version="3.1.0-preview2" />
     <PackageVersion Include="ComputeSharp.D2D1.WinUI" Version="3.1.0-alpha.12101753322" />
-    <PackageVersion Include="FluentIcons.WinUI" Version="1.1.309" />
+    <PackageVersion Include="FluentIcons.WinUI" Version="1.1.310" />
     <PackageVersion Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Bcl.Numerics" Version="8.0.0" />
@@ -23,7 +24,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.4.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Metrics" Version="3.3.4" />
     <PackageVersion Include="Microsoft.Graphics.Win2D" Version="1.3.2" />
-    <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.3065.39" />
+    <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.3485.44" />
     <PackageVersion Include="Microsoft.Windows.CsWinRT" Version="2.3.0-prerelease.250720.1" />
     <PackageVersion Include="Richasy.AgentKernel.Connectors.Ali" Version="0.0.7-preview1" />
     <PackageVersion Include="Richasy.AgentKernel.Connectors.Anthropic" Version="0.0.7-preview1" />
@@ -57,8 +58,8 @@
     <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
     <PackageVersion Include="Microsoft.Bcl.TimeProvider" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4948" />
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.8.250907003" />
+    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.6584" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.8.250916003" />
     <PackageVersion Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
     <PackageVersion Include="System.Drawing.Common" Version="9.0.2" />
     <PackageVersion Include="System.Linq.Async" Version="6.0.1" />

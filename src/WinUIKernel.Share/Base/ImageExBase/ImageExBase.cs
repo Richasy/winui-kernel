@@ -5,6 +5,7 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using System.Runtime.CompilerServices;
 using Windows.Foundation;
 
 namespace Richasy.WinUIKernel.Share.Base;
@@ -12,10 +13,14 @@ namespace Richasy.WinUIKernel.Share.Base;
 /// <summary>
 /// 图片扩展基类.
 /// </summary>
-public abstract partial class ImageExBase : LayoutControlBase
+public abstract partial class ImageExBase : LayoutControlBase, IDisposable
 {
     private static readonly System.Net.Http.HttpClient _httpClient = CreateHttpClientIgnoringCertificateErrors();
     private Uri? _lastUri;
+    private static readonly ConditionalWeakTable<CanvasDevice, StrongBox<int>> LostDevicesMap = [];
+    private DateTime _lastDeviceLostTime = DateTime.MinValue;
+    private int _compositionTargetSequenceNumber = CompositionTargetMonitor.UninitializedValue;
+    private CancellationTokenSource? _cancellationTokenSource = new();
 
     // private int _retryCount;
     private ImageBrush? _backgroundBrush;
@@ -141,7 +146,7 @@ public abstract partial class ImageExBase : LayoutControlBase
     /// <inheritdoc/>
     protected override async void OnControlLoaded()
     {
-        // 理论上这里要考虑 DeviceLost 的情况，但是这里暂时不处理。
+        CompositionTarget.SurfaceContentsLost += OnCompositionTargetSurfaceContentsLost;
         ActualThemeChanged += OnActualThemeChangedAsync;
         if (_backgroundBrush?.ImageSource is null)
         {
@@ -152,13 +157,21 @@ public abstract partial class ImageExBase : LayoutControlBase
     /// <inheritdoc/>
     protected override void OnControlUnloaded()
     {
+        CompositionTarget.SurfaceContentsLost -= OnCompositionTargetSurfaceContentsLost;
         ActualThemeChanged -= OnActualThemeChangedAsync;
         CanvasImageSource = default;
+        ResetCancellationTokenSource();
         if (_backgroundBrush is not null)
         {
             _backgroundBrush.ImageSource = default;
             _backgroundBrush = null;
         }
+    }
+
+    private async void OnCompositionTargetSurfaceContentsLost(object? sender, object e)
+    {
+        _compositionTargetSequenceNumber = CompositionTargetMonitor.UninitializedValue;
+        await RedrawAsync();
     }
 
     private static System.Net.Http.HttpClient CreateHttpClientIgnoringCertificateErrors()
@@ -167,6 +180,7 @@ public abstract partial class ImageExBase : LayoutControlBase
         {
             ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
             AllowAutoRedirect = true,
+            MaxAutomaticRedirections = 3,
         };
 
         return new System.Net.Http.HttpClient(clientHandler)
@@ -180,5 +194,22 @@ public abstract partial class ImageExBase : LayoutControlBase
         _lastUri = default;
         UpdateHolderImage();
         await RedrawAsync();
+    }
+
+    private void ResetCancellationTokenSource()
+    {
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource = new();
+    }
+
+    /// <inheritdoc/>
+#pragma warning disable CA1063 // Implement IDisposable Correctly
+#pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
+    public void Dispose()
+#pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
+#pragma warning restore CA1063 // Implement IDisposable Correctly
+    {
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
     }
 }
