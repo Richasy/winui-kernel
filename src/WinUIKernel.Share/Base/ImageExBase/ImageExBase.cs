@@ -117,6 +117,12 @@ public abstract partial class ImageExBase : LayoutControlBase, IDisposable
     }
 
     /// <summary>
+    /// 获取 <see cref="HttpClient"/> 实例.
+    /// </summary>
+    /// <returns></returns>
+    protected virtual HttpClient? GetCustomHttpClient() => default;
+
+    /// <summary>
     /// 获取缓存子目录.
     /// </summary>
     /// <returns></returns>
