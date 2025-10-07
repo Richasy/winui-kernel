@@ -20,6 +20,11 @@ public static class WinUIKernelShareExtensions
     /// </summary>
     public static bool IsCardAnimationEnabled { get; set; } = true;
 
+    /// <summary>
+    /// 是否启用卡片阴影。
+    /// </summary>
+    public static bool IsCardShadowEnabled { get; set; }
+
     internal static InternalResourceToolkit ResourceToolkit { get; } = new();
 
     internal static ILogger Logger { get; set; }
