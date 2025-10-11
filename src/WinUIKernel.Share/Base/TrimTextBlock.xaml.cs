@@ -21,7 +21,7 @@ public sealed partial class TrimTextBlock : UserControl
     /// <see cref="MaxLines"/> 的依赖属性.
     /// </summary>
     public static readonly DependencyProperty MaxLinesProperty =
-        DependencyProperty.Register(nameof(MaxLines), typeof(int), typeof(TrimTextBlock), new PropertyMetadata(99));
+        DependencyProperty.Register(nameof(MaxLines), typeof(int), typeof(TrimTextBlock), new PropertyMetadata(99, OnMaxLinesChanged));
 
     /// <summary>
     /// <see cref="IsTextSelectionEnabled"/> 的依赖属性.
@@ -74,5 +74,18 @@ public sealed partial class TrimTextBlock : UserControl
     {
         get => (TextAlignment)GetValue(TextAlignmentProperty);
         set => SetValue(TextAlignmentProperty, value);
+    }
+
+    private static void OnMaxLinesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is TrimTextBlock block && e.NewValue is int lines)
+        {
+            block.Block.TextWrapping = lines == 1 ? TextWrapping.NoWrap : TextWrapping.Wrap;
+        }
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        Block.TextWrapping = MaxLines == 1 ? TextWrapping.NoWrap : TextWrapping.Wrap;
     }
 }

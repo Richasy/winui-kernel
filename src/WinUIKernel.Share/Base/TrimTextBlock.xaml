@@ -6,6 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Richasy.WinUIKernel.Share.Base"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    HorizontalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
     IsTabStop="False"
     mc:Ignorable="d">
 
@@ -14,6 +16,7 @@
         FontFamily="{x:Bind FontFamily, Mode=OneWay}"
         FontSize="{x:Bind FontSize, Mode=OneWay}"
         IsTextSelectionEnabled="{x:Bind IsTextSelectionEnabled, Mode=OneWay}"
+        Loaded="OnLoaded"
         MaxLines="{x:Bind MaxLines, Mode=OneWay}"
         Text="{x:Bind Text, Mode=OneWay}"
         TextAlignment="{x:Bind TextAlignment, Mode=OneWay}"

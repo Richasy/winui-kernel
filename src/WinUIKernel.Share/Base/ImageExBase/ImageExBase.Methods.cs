@@ -242,13 +242,13 @@ public abstract partial class ImageExBase
                 {
                     CheckImageHeaders();
                     var uri = _lastUri;
-                    var response = await GetCustomHttpClient().GetAsync(uri, _cancellationTokenSource.Token);
+                    var response = await GetCustomHttpClient().GetAsync(uri, _cancellationTokenSource.Token).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
-                        var content = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token);
+                        var content = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
                         if (content.Length > 0)
                         {
-                            await WriteCacheAsync(uri.ToString(), content);
+                            await WriteCacheAsync(uri.ToString(), content).ConfigureAwait(false);
                             await using var memoryStream = new MemoryStream(content);
                             using var randomStream = memoryStream.AsRandomAccessStream();
                             canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
@@ -271,16 +271,17 @@ public abstract partial class ImageExBase
         }
         else
         {
+            await _networkRequestSemaphore.WaitAsync();
             try
             {
                 CheckImageHeaders();
                 var initialCapacity = 32 * 1024;
                 using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-                using var imageStream = await GetHttpClient().GetStreamAsync(_lastUri, _cancellationTokenSource.Token);
+                using var imageStream = await GetHttpClient().GetStreamAsync(_lastUri, _cancellationTokenSource.Token).ConfigureAwait(false);
                 await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
                 await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
-                await streamForRead.CopyToAsync(streamForWrite, _cancellationTokenSource.Token);
+                await streamForRead.CopyToAsync(streamForWrite, _cancellationTokenSource.Token).ConfigureAwait(false);
                 if (_lastUri != requestUri)
                 {
                     return default;
