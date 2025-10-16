@@ -215,16 +215,7 @@ public abstract partial class ImageExBase
         // 区分本地链接和网络链接.
         if (_lastUri!.IsFile)
         {
-            try
-            {
-                var file = await StorageFile.GetFileFromPathAsync(requestUri.LocalPath);
-                using var stream = await file.OpenReadAsync();
-                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream).AsTask();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
+            await LoadLocalFile();
         }
         else if (EnableDiskCache)
         {
@@ -242,25 +233,32 @@ public abstract partial class ImageExBase
                 {
                     CheckImageHeaders();
                     var uri = _lastUri;
-                    var response = await GetCustomHttpClient().GetAsync(uri, _cancellationTokenSource.Token).ConfigureAwait(false);
-                    if (response.IsSuccessStatusCode)
+                    if(_lastUri.IsFile)
                     {
-                        var content = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token).ConfigureAwait(false);
-                        if (content.Length > 0)
-                        {
-                            await WriteCacheAsync(uri.ToString(), content).ConfigureAwait(false);
-                            await using var memoryStream = new MemoryStream(content);
-                            using var randomStream = memoryStream.AsRandomAccessStream();
-                            canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("Image content is empty.");
-                        }
+                        await LoadLocalFile();
                     }
                     else
                     {
-                        throw new HttpRequestException($"Failed to fetch image from {uri}. Status code: {response.StatusCode}");
+                        var response = await GetCustomHttpClient().GetAsync(uri, _cancellationTokenSource.Token);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var content = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token);
+                            if (content.Length > 0)
+                            {
+                                await WriteCacheAsync(uri.ToString(), content);
+                                await using var memoryStream = new MemoryStream(content);
+                                using var randomStream = memoryStream.AsRandomAccessStream();
+                                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException("Image content is empty.");
+                            }
+                        }
+                        else
+                        {
+                            throw new HttpRequestException($"Failed to fetch image from {uri}. Status code: {response.StatusCode}");
+                        }
                     }
                 }
                 finally
@@ -277,11 +275,11 @@ public abstract partial class ImageExBase
                 CheckImageHeaders();
                 var initialCapacity = 32 * 1024;
                 using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-                using var imageStream = await GetHttpClient().GetStreamAsync(_lastUri, _cancellationTokenSource.Token).ConfigureAwait(false);
+                using var imageStream = await GetHttpClient().GetStreamAsync(_lastUri, _cancellationTokenSource.Token);
                 await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
                 await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
-                await streamForRead.CopyToAsync(streamForWrite, _cancellationTokenSource.Token).ConfigureAwait(false);
+                await streamForRead.CopyToAsync(streamForWrite, _cancellationTokenSource.Token);
                 if (_lastUri != requestUri)
                 {
                     return default;
@@ -304,6 +302,20 @@ public abstract partial class ImageExBase
         }
 
         return canvasBitmap;
+
+        async Task LoadLocalFile()
+        {
+            try
+            {
+                var file = await StorageFile.GetFileFromPathAsync(_lastUri.LocalPath);
+                using var stream = await file.OpenReadAsync();
+                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream).AsTask();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
     }
 
     private void CheckImageHeaders()
