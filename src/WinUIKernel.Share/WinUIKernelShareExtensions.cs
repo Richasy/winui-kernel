@@ -25,6 +25,11 @@ public static class WinUIKernelShareExtensions
     /// </summary>
     public static bool IsCardShadowEnabled { get; set; }
 
+    /// <summary>
+    /// 图片缓存时间。
+    /// </summary>
+    public static TimeSpan ImageCacheTime { get; set; } = TimeSpan.FromDays(7);
+
     internal static InternalResourceToolkit ResourceToolkit { get; } = new();
 
     internal static ILogger Logger { get; set; }

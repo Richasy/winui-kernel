@@ -57,7 +57,22 @@ public partial class ImageExBase
         var cacheFilePath = Path.Combine(cacheFolder.Path, cacheFileName);
         if (File.Exists(cacheFilePath))
         {
-            return cacheFilePath;
+            try
+            {
+                var fileInfo = new FileInfo(cacheFilePath);
+                var createTime = fileInfo.CreationTimeUtc;
+                if (DateTimeOffset.UtcNow - createTime > WinUIKernelShareExtensions.ImageCacheTime)
+                {
+                    File.Delete(cacheFilePath);
+                    return null;
+                }
+
+                return cacheFilePath;
+            }
+            catch
+            {
+                // Ignore any exceptions during deletion
+            }
         }
 
         return null;
