@@ -9,5 +9,5 @@ public interface IFontToolkit
     /// Get font families.
     /// </summary>
     /// <returns>Fonts.</returns>
-    Task<IReadOnlyList<string>> GetFontsAsync();
+    Task<IReadOnlyList<SystemFont>> GetFontsAsync(bool useWin2D = true);
 }
