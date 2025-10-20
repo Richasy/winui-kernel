@@ -1,10 +1,10 @@
-// Copyright (c) Richasy. All rights reserved.
+ï»¿// Copyright (c) Richasy. All rights reserved.
 // Licensed under the MIT License.
 
 namespace Richasy.WinUIKernel.AI;
 
 /// <summary>
-/// Ô¤¶¨ÒåÁÄÌìÄ£ĞÍ²¿·Ö.
+/// é¢„å®šä¹‰èŠå¤©æ¨¡å‹éƒ¨åˆ†.
 /// </summary>
 public sealed partial class PredefinedChatModelSection : ChatServiceConfigControlBase
 {
@@ -12,8 +12,4 @@ public sealed partial class PredefinedChatModelSection : ChatServiceConfigContro
     /// Initializes a new instance of the <see cref="PredefinedChatModelSection"/> class.
     /// </summary>
     public PredefinedChatModelSection() => InitializeComponent();
-
-    /// <inheritdoc/>
-    protected override void OnControlUnloaded()
-        => ModelRepeater.ItemsSource = null;
 }

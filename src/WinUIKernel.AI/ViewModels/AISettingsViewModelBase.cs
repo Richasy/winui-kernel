@@ -11,10 +11,14 @@ namespace Richasy.WinUIKernel.AI.ViewModels;
 /// </summary>
 public abstract partial class AISettingsViewModelBase : ViewModelBase
 {
-    private bool _shouldSaveChatServices;
-    private bool _shouldSaveTranslateServices;
-    private bool _shouldSaveAudioServices;
-    private bool _shouldSaveDrawServices;
+#pragma warning disable CA1051 // 不要声明可见实例字段
+#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
+    protected bool _shouldSaveChatServices;
+    protected bool _shouldSaveTranslateServices;
+    protected bool _shouldSaveAudioServices;
+    protected bool _shouldSaveDrawServices;
+#pragma warning restore CA1051 // 不要声明可见实例字段
+#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
     private TaskCompletionSource<bool> _saveTaskCompletionSource;
 
     /// <summary>
