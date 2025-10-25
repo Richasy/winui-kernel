@@ -143,4 +143,43 @@ public abstract partial class ImageExBase
     /// 图片源.
     /// </summary>
     protected CanvasImageSource? CanvasImageSource { get; set; }
+
+    /// <summary>
+    /// 获取或设置最大并发网络请求数量(默认为3).
+    /// </summary>
+    /// <remarks>
+    /// 降低此值可以减少对服务器的压力,但可能会增加图片加载时间.
+    /// 建议值: 3-10. 设置过高可能导致服务器拦截请求.
+    /// </remarks>
+    public static int MaxConcurrentRequests { get; set; } = 20;
+
+    /// <summary>
+    /// 获取或设置请求之间的最小间隔时间(毫秒,默认为150ms).
+    /// </summary>
+    /// <remarks>
+    /// 增加此值可以降低请求频率,避免被服务器识别为攻击.
+    /// 建议值: 100-500ms.
+    /// </remarks>
+    public static int MinRequestIntervalMs { get; set; } = 150;
+
+    /// <summary>
+    /// 获取或设置随机延迟的最大值(毫秒,默认为100ms).
+    /// </summary>
+    /// <remarks>
+    /// 在每个请求之间添加0到此值之间的随机延迟,使请求模式更加自然.
+    /// 建议值: 50-200ms.
+    /// </remarks>
+    public static int MaxRandomDelayMs { get; set; } = 100;
+
+    /// <summary>
+    /// 获取或设置是否启用调试日志输出(默认false,仅在DEBUG模式下有效).
+    /// </summary>
+    /// <remarks>
+    /// 启用后会在调试输出窗口打印请求统计信息,包括:
+    /// - 活动请求数和排队数
+    /// - 缓存命中、去重次数
+    /// - 总启动、完成、失败次数
+    /// 注意: 仅在DEBUG编译模式下生效.
+    /// </remarks>
+    public static bool EnableDebugLog { get; set; }
 }

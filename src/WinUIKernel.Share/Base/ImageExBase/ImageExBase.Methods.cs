@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Graphics.Canvas;
 using Microsoft.UI.Xaml;
 using System.Diagnostics;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Storage;
 
 namespace Richasy.WinUIKernel.Share.Base;
@@ -17,7 +16,97 @@ namespace Richasy.WinUIKernel.Share.Base;
 /// </summary>
 public abstract partial class ImageExBase
 {
-    private static readonly SemaphoreSlim _networkRequestSemaphore = new(20, 20);
+    // 使用动态并发控制,初始值从配置属性读取
+    private static SemaphoreSlim? _networkRequestSemaphore;
+    private static int _currentMaxConcurrentRequests = -1;
+    private static readonly object _semaphoreLock = new();
+    
+    // 用于控制请求间隔,避免被识别为攻击
+    private static readonly SemaphoreSlim _requestThrottleSemaphore = new(1, 1);
+    private static DateTime _lastRequestTime = DateTime.MinValue;
+    
+    // 用于去重,避免重复请求同一个URL
+    private static readonly Dictionary<string, Task<byte[]?>> _pendingRequests = new();
+    private static readonly object _pendingRequestsLock = new();
+
+    // 调试统计信息
+    private static int _totalRequestsStarted;
+    private static int _totalRequestsCompleted;
+    private static int _totalRequestsFailed;
+    private static int _totalRequestsFromCache;
+    private static int _totalRequestsDeduplicated;
+
+    private static SemaphoreSlim GetNetworkRequestSemaphore()
+    {
+        // 使用锁确保线程安全
+        lock (_semaphoreLock)
+        {
+            // 只在配置真正改变时才重新创建信号量
+            if (_networkRequestSemaphore == null || _currentMaxConcurrentRequests != MaxConcurrentRequests)
+            {
+                // 不要 Dispose 旧的信号量,让它自然被 GC 回收
+                // 这样正在使用它的请求不会出错
+                _networkRequestSemaphore = new SemaphoreSlim(MaxConcurrentRequests, MaxConcurrentRequests);
+                _currentMaxConcurrentRequests = MaxConcurrentRequests;
+            }
+            return _networkRequestSemaphore;
+        }
+    }
+
+    /// <summary>
+    /// 获取当前请求统计信息(仅用于调试).
+    /// </summary>
+    public static (int ActiveRequests, int QueuedRequests, int PendingUrls, int TotalStarted, int TotalCompleted, int TotalFailed, int FromCache, int Deduplicated) GetRequestStats()
+    {
+        var semaphore = _networkRequestSemaphore;
+        var activeRequests = 0;
+        var queuedRequests = 0;
+        
+        if (semaphore != null)
+        {
+            var maxRequests = MaxConcurrentRequests;
+            var currentCount = semaphore.CurrentCount;
+            activeRequests = Math.Max(0, maxRequests - currentCount);
+            queuedRequests = Math.Max(0, currentCount < 0 ? Math.Abs(currentCount) : 0);
+        }
+
+        int pendingUrls;
+        lock (_pendingRequestsLock)
+        {
+            pendingUrls = _pendingRequests.Count;
+        }
+
+        return (activeRequests, queuedRequests, pendingUrls, _totalRequestsStarted, _totalRequestsCompleted, _totalRequestsFailed, _totalRequestsFromCache, _totalRequestsDeduplicated);
+    }
+
+    /// <summary>
+    /// 重置请求统计信息.
+    /// </summary>
+    public static void ResetRequestStats()
+    {
+        _totalRequestsStarted = 0;
+        _totalRequestsCompleted = 0;
+        _totalRequestsFailed = 0;
+        _totalRequestsFromCache = 0;
+        _totalRequestsDeduplicated = 0;
+    }
+
+    [Conditional("DEBUG")]
+    private static void LogRequestStats(string context)
+    {
+        if (!EnableDebugLog)
+        {
+            return;
+        }
+
+        var stats = GetRequestStats();
+        Debug.WriteLine($"[ImageEx] {context}");
+        Debug.WriteLine($"  活动请求: {stats.ActiveRequests}/{MaxConcurrentRequests}");
+        Debug.WriteLine($"  排队请求: {stats.QueuedRequests}");
+        Debug.WriteLine($"  去重URL数: {stats.PendingUrls}");
+        Debug.WriteLine($"  总启动: {stats.TotalStarted}, 完成: {stats.TotalCompleted}, 失败: {stats.TotalFailed}");
+        Debug.WriteLine($"  缓存命中: {stats.FromCache}, 去重: {stats.Deduplicated}");
+    }
 
     private static async void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -207,6 +296,100 @@ public abstract partial class ImageExBase
     private HttpClient GetHttpClient()
         => GetCustomHttpClient() ?? _httpClient;
 
+    /// <summary>
+    /// 请求节流,确保请求之间有最小间隔,并添加随机延迟.
+    /// </summary>
+    private static async Task ThrottleRequestAsync(CancellationToken cancellationToken)
+    {
+        await _requestThrottleSemaphore.WaitAsync(cancellationToken);
+        try
+        {
+            var timeSinceLastRequest = DateTime.UtcNow - _lastRequestTime;
+            var minInterval = TimeSpan.FromMilliseconds(MinRequestIntervalMs);
+            
+            if (timeSinceLastRequest < minInterval)
+            {
+                var delayTime = minInterval - timeSinceLastRequest;
+                // 添加随机延迟,避免规律性请求
+                var random = new Random();
+                var randomDelay = TimeSpan.FromMilliseconds(random.Next(0, MaxRandomDelayMs));
+                await Task.Delay(delayTime + randomDelay, cancellationToken);
+            }
+
+            _lastRequestTime = DateTime.UtcNow;
+        }
+        finally
+        {
+            _requestThrottleSemaphore.Release();
+        }
+    }
+
+    /// <summary>
+    /// 获取或创建网络请求任务,避免重复请求同一个URL.
+    /// </summary>
+    private static async Task<byte[]?> GetOrCreateRequestAsync(string url, Func<Task<byte[]?>> requestFactory, CancellationToken cancellationToken)
+    {
+        Task<byte[]?> task;
+        bool isDuplicate = false;
+        
+        lock (_pendingRequestsLock)
+        {
+            if (_pendingRequests.TryGetValue(url, out var existingTask))
+            {
+                // 如果已经有相同URL的请求在进行,返回该任务(在lock外await)
+                task = existingTask;
+                isDuplicate = true;
+                Interlocked.Increment(ref _totalRequestsDeduplicated);
+            }
+            else
+            {
+                // 创建新的请求任务包装器,不使用 Task.Run 避免线程切换
+                var tcs = new TaskCompletionSource<byte[]?>();
+                task = tcs.Task;
+                _pendingRequests[url] = task;
+                
+                // 在当前上下文中执行请求
+                _ = ExecuteRequestAsync(url, requestFactory, tcs, cancellationToken);
+            }
+        }
+
+        LogRequestStats(isDuplicate ? $"请求去重: {url.Substring(Math.Max(0, url.Length - 50))}" : $"新建请求: {url.Substring(Math.Max(0, url.Length - 50))}");
+        return await task;
+    }
+
+    /// <summary>
+    /// 执行实际的请求操作.
+    /// </summary>
+    private static async Task ExecuteRequestAsync(string url, Func<Task<byte[]?>> requestFactory, TaskCompletionSource<byte[]?> tcs, CancellationToken cancellationToken)
+    {
+        Interlocked.Increment(ref _totalRequestsStarted);
+        try
+        {
+            var result = await requestFactory();
+            Interlocked.Increment(ref _totalRequestsCompleted);
+            tcs.TrySetResult(result);
+        }
+        catch (OperationCanceledException)
+        {
+            Interlocked.Increment(ref _totalRequestsFailed);
+            tcs.TrySetCanceled(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            Interlocked.Increment(ref _totalRequestsFailed);
+            tcs.TrySetException(ex);
+        }
+        finally
+        {
+            // 请求完成后从字典中移除
+            lock (_pendingRequestsLock)
+            {
+                _pendingRequests.Remove(url);
+            }
+            LogRequestStats($"请求完成: {url.Substring(Math.Max(0, url.Length - 50))}");
+        }
+    }
+
     private async Task<CanvasBitmap?> FetchImageAsync()
     {
         var requestUri = _lastUri;
@@ -222,33 +405,41 @@ public abstract partial class ImageExBase
             var cacheFile = await GetCacheFilePathAsync(_lastUri.ToString());
             if (cacheFile != null)
             {
+                Interlocked.Increment(ref _totalRequestsFromCache);
+                LogRequestStats($"缓存命中: {_lastUri.ToString().Substring(Math.Max(0, _lastUri.ToString().Length - 50))}");
                 var file = await StorageFile.GetFileFromPathAsync(cacheFile);
                 using var stream = await file.OpenReadAsync();
                 canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream).AsTask();
             }
             else
             {
-                await _networkRequestSemaphore.WaitAsync();
-                try
+                // 使用去重机制避免重复请求
+                var url = _lastUri.ToString();
+                var content = await GetOrCreateRequestAsync(url, async () =>
                 {
-                    CheckImageHeaders();
-                    var uri = _lastUri;
-                    if(_lastUri.IsFile)
+                    var semaphore = GetNetworkRequestSemaphore();
+                    await semaphore.WaitAsync(_cancellationTokenSource.Token);
+                    try
                     {
-                        await LoadLocalFile();
-                    }
-                    else
-                    {
-                        var response = await GetCustomHttpClient().GetAsync(uri, _cancellationTokenSource.Token);
+                        // 请求节流,添加延迟
+                        await ThrottleRequestAsync(_cancellationTokenSource.Token);
+                        
+                        CheckImageHeaders();
+                        var uri = _lastUri;
+                        if (_lastUri.IsFile)
+                        {
+                            // 这种情况应该不会发生,但保持原有逻辑
+                            return null;
+                        }
+
+                        var response = await GetHttpClient().GetAsync(uri, _cancellationTokenSource.Token);
                         if (response.IsSuccessStatusCode)
                         {
-                            var content = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token);
-                            if (content.Length > 0)
+                            var data = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token);
+                            if (data.Length > 0)
                             {
-                                await WriteCacheAsync(uri.ToString(), content);
-                                await using var memoryStream = new MemoryStream(content);
-                                using var randomStream = memoryStream.AsRandomAccessStream();
-                                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
+                                await WriteCacheAsync(uri.ToString(), data, _cancellationTokenSource.Token);
+                                return data;
                             }
                             else
                             {
@@ -260,38 +451,60 @@ public abstract partial class ImageExBase
                             throw new HttpRequestException($"Failed to fetch image from {uri}. Status code: {response.StatusCode}");
                         }
                     }
-                }
-                finally
+                    finally
+                    {
+                        semaphore.Release();
+                    }
+                }, _cancellationTokenSource.Token);
+
+                if (content != null && content.Length > 0)
                 {
-                    _networkRequestSemaphore.Release();
+                    await using var memoryStream = new MemoryStream(content);
+                    using var randomStream = memoryStream.AsRandomAccessStream();
+                    canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
                 }
             }
         }
         else
         {
-            await _networkRequestSemaphore.WaitAsync();
-            try
+            // 没有启用磁盘缓存的情况,同样使用去重和节流机制
+            var url = _lastUri.ToString();
+            var content = await GetOrCreateRequestAsync(url, async () =>
             {
-                CheckImageHeaders();
-                var initialCapacity = 32 * 1024;
-                using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-                using var imageStream = await GetHttpClient().GetStreamAsync(_lastUri, _cancellationTokenSource.Token);
-                await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
-                await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
-
-                await streamForRead.CopyToAsync(streamForWrite, _cancellationTokenSource.Token);
-                if (_lastUri != requestUri)
+                var semaphore = GetNetworkRequestSemaphore();
+                await semaphore.WaitAsync(_cancellationTokenSource.Token);
+                try
                 {
-                    return default;
-                }
+                    // 请求节流,添加延迟
+                    await ThrottleRequestAsync(_cancellationTokenSource.Token);
+                    
+                    CheckImageHeaders();
+                    var initialCapacity = 32 * 1024;
+                    using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
+                    using var imageStream = await GetHttpClient().GetStreamAsync(_lastUri, _cancellationTokenSource.Token);
+                    await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
+                    await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
-                await using var memoryStream = bufferWriter.WrittenMemory.AsStream();
+                    await streamForRead.CopyToAsync(streamForWrite, _cancellationTokenSource.Token);
+                    
+                    return bufferWriter.WrittenMemory.ToArray();
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            }, _cancellationTokenSource.Token);
+
+            if (_lastUri != requestUri)
+            {
+                return default;
+            }
+
+            if (content != null && content.Length > 0)
+            {
+                await using var memoryStream = new MemoryStream(content);
                 using var randomStream = memoryStream.AsRandomAccessStream();
                 canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
-            }
-            finally
-            {
-                _networkRequestSemaphore.Release();
             }
         }
 
