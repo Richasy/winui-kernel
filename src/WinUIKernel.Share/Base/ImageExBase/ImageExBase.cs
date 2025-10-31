@@ -107,6 +107,11 @@ public abstract partial class ImageExBase : LayoutControlBase, IDisposable
     /// <summary>
     /// 绘制图片.
     /// </summary>
+    /// <param name="canvasBitmap">要绘制的位图.</param>
+    /// <remarks>
+    /// 在启用后台解码时，此方法会在 UI 线程上调用（通过 DispatcherQueue 调度），
+    /// 因此可以安全地访问依赖属性（如 DecodeWidth, DecodeHeight 等）。
+    /// </remarks>
     protected abstract void DrawImage(CanvasBitmap canvasBitmap);
 
     /// <summary>

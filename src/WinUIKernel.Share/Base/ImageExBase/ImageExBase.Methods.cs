@@ -164,11 +164,31 @@ public abstract partial class ImageExBase
         }
 
         IsImageLoading = true;
+        
+        // ⚠️ 在进入后台线程之前，先捕获所有依赖属性和可能不安全的实例成员的值
+        // 因为依赖属性只能在 UI 线程访问，后台线程访问会触发 COM 线程错误
+        var enableDiskCache = EnableDiskCache;          // 依赖属性
+        var currentUri = _lastUri;                       // URI 引用
+        var headers = GetHeaders();                      // 虚方法可能访问依赖属性
+        var cacheSubFolder = GetCacheSubFolder();        // 虚方法可能访问依赖属性
+        
         CanvasBitmap? bitmap = default;
         try
         {
             _cancellationTokenSource.Token.ThrowIfCancellationRequested();
-            bitmap = await FetchImageAsync();
+            
+            // 根据配置决定是否在后台线程执行图片获取和解码
+            if (EnableBackgroundDecoding)
+            {
+                // 在后台线程执行图片获取和解码,避免阻塞 UI 线程
+                // 将捕获的依赖属性值传递给后台任务
+                bitmap = await Task.Run(async () => await FetchImageAsync(currentUri, enableDiskCache, headers, cacheSubFolder), _cancellationTokenSource.Token);
+            }
+            else
+            {
+                // 在 UI 线程执行(原有行为)
+                bitmap = await FetchImageAsync(currentUri, enableDiskCache, headers, cacheSubFolder);
+            }
         }
         catch (Exception ex)
         {
@@ -197,15 +217,58 @@ public abstract partial class ImageExBase
             if (CanvasImageSource is not null)
             {
                 _cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                DrawImage(bitmap);
-                _backgroundBrush.ImageSource = CanvasImageSource;
-                ImageLoaded?.Invoke(this, EventArgs.Empty);
+                
+                if (EnableBackgroundDecoding)
+                {
+                    // 解码在后台线程完成后，将绘制操作调度回 UI 线程
+                    // 这样派生类可以安全地访问依赖属性（如 DecodeWidth/DecodeHeight）
+                    DispatcherQueue.TryEnqueue(() =>
+                    {
+                        try
+                        {
+                            DrawImage(bitmap);
+                            _backgroundBrush.ImageSource = CanvasImageSource;
+                            ImageLoaded?.Invoke(this, EventArgs.Empty);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+#pragma warning disable CA1848 // 使用 LoggerMessage 委托
+#pragma warning disable CA2254 // 模板应为静态表达式
+                            WinUIKernelShareExtensions.Logger.LogError(ex, $"Failed to draw image with {_lastUri}");
+#pragma warning restore CA2254 // 模板应为静态表达式
+#pragma warning restore CA1848 // 使用 LoggerMessage 委托
+                            ImageFailed?.Invoke(this, EventArgs.Empty);
+                        }
+                        finally
+                        {
+                            // 绘制完成后才释放 bitmap
+                            bitmap?.Dispose();
+                        }
+                    });
+                }
+                else
+                {
+                    // 在 UI 线程执行绘制(原有行为)
+                    DrawImage(bitmap);
+                    _backgroundBrush.ImageSource = CanvasImageSource;
+                    ImageLoaded?.Invoke(this, EventArgs.Empty);
+                    
+                    // 立即释放 bitmap
+                    bitmap?.Dispose();
+                }
+            }
+            else
+            {
+                // 如果 CanvasImageSource 为 null，也要释放 bitmap
+                bitmap.Dispose();
             }
         }
         catch (OperationCanceledException)
         {
             // Ignore the cancellation exception, as it is expected when the control is unloaded
             // or when a new request is made before the previous one has completed.
+            bitmap?.Dispose();
         }
         catch (Exception ex)
         {
@@ -222,11 +285,12 @@ public abstract partial class ImageExBase
             }
 
             ImageFailed?.Invoke(this, EventArgs.Empty);
+            bitmap?.Dispose();
         }
         finally
         {
             IsImageLoading = false;
-            bitmap?.Dispose();
+            // 不在这里 Dispose bitmap，因为它可能在异步回调中使用
         }
     }
 
@@ -294,7 +358,12 @@ public abstract partial class ImageExBase
     }
 
     private HttpClient GetHttpClient()
-        => GetCustomHttpClient() ?? _httpClient;
+    {
+        // 不能标记为 static,因为调用了虚方法 GetCustomHttpClient()
+#pragma warning disable CA1822 // Mark members as static
+        return GetCustomHttpClient() ?? _httpClient;
+#pragma warning restore CA1822 // Mark members as static
+    }
 
     /// <summary>
     /// 请求节流,确保请求之间有最小间隔,并添加随机延迟.
@@ -390,31 +459,33 @@ public abstract partial class ImageExBase
         }
     }
 
-    private async Task<CanvasBitmap?> FetchImageAsync()
+    private async Task<CanvasBitmap?> FetchImageAsync(Uri uri, bool enableDiskCache, Dictionary<string, string> headers, string cacheSubFolder)
     {
-        var requestUri = _lastUri;
+        var requestUri = uri;
         CanvasBitmap? canvasBitmap = default;
 
         // 区分本地链接和网络链接.
-        if (_lastUri!.IsFile)
+        if (uri!.IsFile)
         {
             await LoadLocalFile();
         }
-        else if (EnableDiskCache)
+        else if (enableDiskCache)
         {
-            var cacheFile = await GetCacheFilePathAsync(_lastUri.ToString());
+            var cacheFile = await GetCacheFilePathAsync(uri.ToString(), cacheSubFolder);
             if (cacheFile != null)
             {
                 Interlocked.Increment(ref _totalRequestsFromCache);
-                LogRequestStats($"缓存命中: {_lastUri.ToString().Substring(Math.Max(0, _lastUri.ToString().Length - 50))}");
+                LogRequestStats($"缓存命中: {uri.ToString().Substring(Math.Max(0, uri.ToString().Length - 50))}");
                 var file = await StorageFile.GetFileFromPathAsync(cacheFile);
                 using var stream = await file.OpenReadAsync();
-                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream).AsTask();
+                
+                // 使用独立设备解码以避免竞争共享设备
+                canvasBitmap = await LoadBitmapAsync(stream);
             }
             else
             {
                 // 使用去重机制避免重复请求
-                var url = _lastUri.ToString();
+                var url = uri.ToString();
                 var content = await GetOrCreateRequestAsync(url, async () =>
                 {
                     var semaphore = GetNetworkRequestSemaphore();
@@ -424,9 +495,8 @@ public abstract partial class ImageExBase
                         // 请求节流,添加延迟
                         await ThrottleRequestAsync(_cancellationTokenSource.Token);
                         
-                        CheckImageHeaders();
-                        var uri = _lastUri;
-                        if (_lastUri.IsFile)
+                        CheckImageHeaders(uri, headers);
+                        if (uri.IsFile)
                         {
                             // 这种情况应该不会发生,但保持原有逻辑
                             return null;
@@ -438,7 +508,7 @@ public abstract partial class ImageExBase
                             var data = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token);
                             if (data.Length > 0)
                             {
-                                await WriteCacheAsync(uri.ToString(), data, _cancellationTokenSource.Token);
+                                await WriteCacheAsync(uri.ToString(), data, cacheSubFolder, _cancellationTokenSource.Token);
                                 return data;
                             }
                             else
@@ -461,14 +531,16 @@ public abstract partial class ImageExBase
                 {
                     await using var memoryStream = new MemoryStream(content);
                     using var randomStream = memoryStream.AsRandomAccessStream();
-                    canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
+                    
+                    // 使用独立设备解码以避免竞争共享设备
+                    canvasBitmap = await LoadBitmapAsync(randomStream);
                 }
             }
         }
         else
         {
             // 没有启用磁盘缓存的情况,同样使用去重和节流机制
-            var url = _lastUri.ToString();
+            var url = uri.ToString();
             var content = await GetOrCreateRequestAsync(url, async () =>
             {
                 var semaphore = GetNetworkRequestSemaphore();
@@ -478,10 +550,10 @@ public abstract partial class ImageExBase
                     // 请求节流,添加延迟
                     await ThrottleRequestAsync(_cancellationTokenSource.Token);
                     
-                    CheckImageHeaders();
+                    CheckImageHeaders(uri, headers);
                     var initialCapacity = 32 * 1024;
                     using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-                    using var imageStream = await GetHttpClient().GetStreamAsync(_lastUri, _cancellationTokenSource.Token);
+                    using var imageStream = await GetHttpClient().GetStreamAsync(uri, _cancellationTokenSource.Token);
                     await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
                     await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
@@ -495,7 +567,7 @@ public abstract partial class ImageExBase
                 }
             }, _cancellationTokenSource.Token);
 
-            if (_lastUri != requestUri)
+            if (uri != requestUri)
             {
                 return default;
             }
@@ -504,11 +576,13 @@ public abstract partial class ImageExBase
             {
                 await using var memoryStream = new MemoryStream(content);
                 using var randomStream = memoryStream.AsRandomAccessStream();
-                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), randomStream).AsTask();
+                
+                // 使用独立设备解码以避免竞争共享设备
+                canvasBitmap = await LoadBitmapAsync(randomStream);
             }
         }
 
-        if (_lastUri != requestUri)
+        if (uri != requestUri)
         {
             canvasBitmap?.Dispose();
             canvasBitmap = default;
@@ -520,9 +594,11 @@ public abstract partial class ImageExBase
         {
             try
             {
-                var file = await StorageFile.GetFileFromPathAsync(_lastUri.LocalPath);
+                var file = await StorageFile.GetFileFromPathAsync(uri.LocalPath);
                 using var stream = await file.OpenReadAsync();
-                canvasBitmap = await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream).AsTask();
+                
+                // 使用独立设备解码以避免竞争共享设备
+                canvasBitmap = await LoadBitmapAsync(stream);
             }
             catch (Exception ex)
             {
@@ -531,12 +607,62 @@ public abstract partial class ImageExBase
         }
     }
 
-    private void CheckImageHeaders()
+    /// <summary>
+    /// 使用独立的 CanvasDevice 加载位图，避免竞争共享设备.
+    /// </summary>
+    /// <remarks>
+    /// 在后台解码模式下，每个图片使用独立的临时设备进行解码，
+    /// 解码完成后将位图转移到共享设备，这样可以真正实现并行解码.
+    /// </remarks>
+    private async Task<CanvasBitmap?> LoadBitmapAsync(Windows.Storage.Streams.IRandomAccessStream stream)
+    {
+        if (!EnableBackgroundDecoding)
+        {
+            // 传统模式：直接使用共享设备（会串行化）
+            return await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream).AsTask();
+        }
+
+        // 并行模式：使用临时设备解码，然后转移到共享设备
+        CanvasBitmap? tempBitmap = null;
+        CanvasDevice? tempDevice = null;
+        
+        try
+        {
+            // 在后台线程创建临时设备并解码
+            // 这样多个图片可以在不同线程同时解码
+            (tempDevice, tempBitmap) = await Task.Run(async () =>
+            {
+                var device = new CanvasDevice();
+                var bitmap = await CanvasBitmap.LoadAsync(device, stream).AsTask();
+                return (device, bitmap);
+            }, _cancellationTokenSource.Token);
+
+            // 将解码后的位图数据复制到共享设备
+            // 这个操作很快，不会造成明显阻塞
+            var sharedDevice = CanvasDevice.GetSharedDevice();
+            var finalBitmap = CanvasBitmap.CreateFromBytes(
+                sharedDevice,
+                tempBitmap.GetPixelBytes(),
+                (int)tempBitmap.SizeInPixels.Width,
+                (int)tempBitmap.SizeInPixels.Height,
+                tempBitmap.Format);
+
+            return finalBitmap;
+        }
+        finally
+        {
+            // 清理临时资源
+            tempBitmap?.Dispose();
+            tempDevice?.Dispose();
+        }
+    }
+
+    private void CheckImageHeaders(Uri uri, Dictionary<string, string> headers)
     {
         var client = GetHttpClient();
-        if (GetHeaders().Count > 0)
+        if (headers.Count > 0)
         {
-            foreach (var header in GetHeaders())
+            foreach (var header in headers)
             {
                 if (client.DefaultRequestHeaders.Contains(header.Key))
                 {
@@ -547,7 +673,7 @@ public abstract partial class ImageExBase
             }
         }
 
-        if (_lastUri?.Host.Contains("pximg.net") == true)
+        if (uri?.Host.Contains("pximg.net") == true)
         {
             client.DefaultRequestHeaders.Referrer = new("https://app-api.pixiv.net/");
         }

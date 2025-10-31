@@ -182,4 +182,14 @@ public abstract partial class ImageExBase
     /// 注意: 仅在DEBUG编译模式下生效.
     /// </remarks>
     public static bool EnableDebugLog { get; set; }
+
+    /// <summary>
+    /// 获取或设置是否在后台线程解码图片(默认true).
+    /// </summary>
+    /// <remarks>
+    /// 启用后,图片解码和绘制操作会在后台线程执行,避免阻塞UI线程.
+    /// 这样可以让图片下载完成后立即渲染,而不是等待所有图片都下载完.
+    /// 注意: 某些DrawImage实现可能需要在UI线程执行,此时应设为false.
+    /// </remarks>
+    public static bool EnableBackgroundDecoding { get; set; } = true;
 }

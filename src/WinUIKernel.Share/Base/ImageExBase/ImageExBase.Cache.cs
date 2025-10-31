@@ -44,15 +44,16 @@ public partial class ImageExBase
     /// 获取缓存文件的路径.
     /// </summary>
     /// <param name="key">源地址.</param>
+    /// <param name="cacheSubFolder">缓存子文件夹名称（可选，用于线程安全传递）.</param>
     /// <returns></returns>
-    public async Task<string?> GetCacheFilePathAsync(string key)
+    public async Task<string?> GetCacheFilePathAsync(string key, string? cacheSubFolder = null)
     {
         if (string.IsNullOrEmpty(key))
         {
             return null;
         }
 
-        var cacheFolder = await GetCacheFolderAsync();
+        var cacheFolder = await GetCacheFolderAsync(cacheSubFolder);
         var cacheFileName = GetCacheFileName(key);
         var cacheFilePath = Path.Combine(cacheFolder.Path, cacheFileName);
         if (File.Exists(cacheFilePath))
@@ -83,16 +84,17 @@ public partial class ImageExBase
     /// </summary>
     /// <param name="key"></param>
     /// <param name="data"></param>
+    /// <param name="cacheSubFolder">缓存子文件夹名称（可选，用于线程安全传递）.</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task WriteCacheAsync(string key, byte[] data, CancellationToken cancellationToken = default)
+    public async Task WriteCacheAsync(string key, byte[] data, string? cacheSubFolder = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(key) || data == null || data.Length == 0)
         {
             return;
         }
 
-        var cacheFolder = await GetCacheFolderAsync();
+        var cacheFolder = await GetCacheFolderAsync(cacheSubFolder);
         var cacheFileName = GetCacheFileName(key);
         var cacheFilePath = Path.Combine(cacheFolder.Path, cacheFileName);
         // Write the data to the file
@@ -134,12 +136,15 @@ public partial class ImageExBase
         return key.ToLowerInvariant();
     }
 
-    private async Task<StorageFolder> GetCacheFolderAsync()
+    private async Task<StorageFolder> GetCacheFolderAsync(string? cacheSubFolder = null)
     {
         var cacheFolder = await Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalCacheFolder.CreateFolderAsync(CacheFolderName, CreationCollisionOption.OpenIfExists);
-        if (!string.IsNullOrEmpty(GetCacheSubFolder()))
+        
+        // 优先使用传入的参数，如果没有则调用虚方法（仅在 UI 线程安全）
+        var subFolder = cacheSubFolder ?? GetCacheSubFolder();
+        if (!string.IsNullOrEmpty(subFolder))
         {
-            cacheFolder = await cacheFolder.CreateFolderAsync(GetCacheSubFolder(), CreationCollisionOption.OpenIfExists);
+            cacheFolder = await cacheFolder.CreateFolderAsync(subFolder, CreationCollisionOption.OpenIfExists);
         }
 
         return cacheFolder;
