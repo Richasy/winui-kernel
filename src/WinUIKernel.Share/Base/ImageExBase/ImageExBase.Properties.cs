@@ -145,22 +145,23 @@ public abstract partial class ImageExBase
     protected CanvasImageSource? CanvasImageSource { get; set; }
 
     /// <summary>
-    /// 获取或设置最大并发网络请求数量(默认为3).
+    /// 获取或设置最大并发网络请求数量(默认为50).
     /// </summary>
     /// <remarks>
+    /// 仅控制网络请求的并发数,本地文件和缓存图片的加载不受此限制.
     /// 降低此值可以减少对服务器的压力,但可能会增加图片加载时间.
-    /// 建议值: 3-10. 设置过高可能导致服务器拦截请求.
+    /// 建议值: 20-100. 设置过高可能导致服务器拦截请求.
     /// </remarks>
-    public static int MaxConcurrentRequests { get; set; } = 20;
+    public static int MaxConcurrentRequests { get; set; } = 50;
 
     /// <summary>
-    /// 获取或设置请求之间的最小间隔时间(毫秒,默认为150ms).
+    /// 获取或设置请求之间的最小间隔时间(毫秒,默认为100ms).
     /// </summary>
     /// <remarks>
     /// 增加此值可以降低请求频率,避免被服务器识别为攻击.
     /// 建议值: 100-500ms.
     /// </remarks>
-    public static int MinRequestIntervalMs { get; set; } = 150;
+    public static int MinRequestIntervalMs { get; set; } = 100;
 
     /// <summary>
     /// 获取或设置随机延迟的最大值(毫秒,默认为100ms).
