@@ -125,6 +125,67 @@ public abstract partial class ImageExBase
         _totalLocalDecodes = 0;
     }
 
+    /// <summary>
+    /// 清空所有正在进行的网络请求和信号量.
+    /// </summary>
+    /// <remarks>
+    /// 此方法会：
+    /// 1. 清空所有正在排队和进行中的网络请求
+    /// 2. 重置网络请求和本地解码信号量（释放所有槽位）
+    /// 3. 重置请求统计信息
+    /// 
+    /// 适用场景：
+    /// - 用户切换配置（账号、图片源等）
+    /// - 应用进入后台需要释放资源
+    /// - 清理卡住的请求
+    /// 
+    /// 注意：此操作会导致所有正在加载的图片失败，请谨慎使用。
+    /// </remarks>
+    public static void ClearAllRequests()
+    {
+        // 1. 清空去重字典中的所有待处理请求
+        lock (_pendingRequestsLock)
+        {
+            // 尝试取消所有待处理的任务
+            foreach (var kvp in _pendingRequests)
+            {
+                // Task 已经在执行中，我们只是从字典中移除引用
+                // 实际的取消由各个控件的 CancellationTokenSource 控制
+            }
+            _pendingRequests.Clear();
+        }
+
+        // 2. 重置网络请求信号量（释放所有占用的槽位）
+        lock (_semaphoreLock)
+        {
+            if (_networkRequestSemaphore != null)
+            {
+                // 创建新的信号量替代旧的
+                // 旧的信号量让它自然被 GC 回收，避免影响正在使用它的请求
+                _networkRequestSemaphore = new SemaphoreSlim(MaxConcurrentRequests, MaxConcurrentRequests);
+                _currentMaxConcurrentRequests = MaxConcurrentRequests;
+            }
+        }
+
+        // 3. 重置本地解码信号量
+        lock (_localDecodeSemaphoreLock)
+        {
+            if (_localDecodeSemaphore != null)
+            {
+                _localDecodeSemaphore = new SemaphoreSlim(MaxConcurrentLocalDecodes, MaxConcurrentLocalDecodes);
+                _currentMaxLocalDecodes = MaxConcurrentLocalDecodes;
+            }
+        }
+
+        // 4. 重置请求节流时间
+        _lastRequestTime = DateTime.MinValue;
+
+        // 5. 重置统计信息
+        ResetRequestStats();
+
+        Debug.WriteLine("[ImageEx] 已清空所有请求和信号量");
+    }
+
     [Conditional("DEBUG")]
     private static void LogRequestStats(string context)
     {
@@ -542,19 +603,19 @@ public abstract partial class ImageExBase
                 var content = await GetOrCreateRequestAsync(url, async () =>
                 {
                     var semaphore = GetNetworkRequestSemaphore();
-                    
+
                     // 在等待信号量前先检查是否已取消，避免占用槽位
                     _cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    
+
                     await semaphore.WaitAsync(_cancellationTokenSource.Token);
-                    
+
                     // 进入临界区后再次检查取消状态，尽早释放信号量
                     if (_cancellationTokenSource.Token.IsCancellationRequested)
                     {
                         semaphore.Release();
                         _cancellationTokenSource.Token.ThrowIfCancellationRequested();
                     }
-                    
+
                     try
                     {
                         // 请求节流,添加延迟
@@ -567,7 +628,7 @@ public abstract partial class ImageExBase
                             return null;
                         }
 
-                        var response = await GetHttpClient().GetAsync(uri, _cancellationTokenSource.Token);
+                        var response = await GetHttpClient().GetAsync(uri, _cancellationTokenSource.Token).ConfigureAwait(false);
                         if (response.IsSuccessStatusCode)
                         {
                             var data = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token);
@@ -609,19 +670,19 @@ public abstract partial class ImageExBase
             var content = await GetOrCreateRequestAsync(url, async () =>
             {
                 var semaphore = GetNetworkRequestSemaphore();
-                
+
                 // 在等待信号量前先检查是否已取消，避免占用槽位
                 _cancellationTokenSource.Token.ThrowIfCancellationRequested();
-                
+
                 await semaphore.WaitAsync(_cancellationTokenSource.Token);
-                
+
                 // 进入临界区后再次检查取消状态，尽早释放信号量
                 if (_cancellationTokenSource.Token.IsCancellationRequested)
                 {
                     semaphore.Release();
                     _cancellationTokenSource.Token.ThrowIfCancellationRequested();
                 }
-                
+
                 try
                 {
                     // 请求节流,添加延迟
@@ -630,7 +691,7 @@ public abstract partial class ImageExBase
                     CheckImageHeaders(uri, headers);
                     var initialCapacity = 32 * 1024;
                     using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-                    using var imageStream = await GetHttpClient().GetStreamAsync(uri, _cancellationTokenSource.Token);
+                    using var imageStream = await GetHttpClient().GetStreamAsync(uri, _cancellationTokenSource.Token).ConfigureAwait(false);
                     await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
                     await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
@@ -723,7 +784,7 @@ public abstract partial class ImageExBase
             // 将解码后的位图数据复制到共享设备
             // 这个操作很快，不会造成明显阻塞
             var sharedDevice = CanvasDevice.GetSharedDevice();
-            
+
             // 优化：使用 using 确保像素数据尽快释放
             var pixelBytes = tempBitmap.GetPixelBytes();
             try
@@ -734,7 +795,7 @@ public abstract partial class ImageExBase
                     (int)tempBitmap.SizeInPixels.Width,
                     (int)tempBitmap.SizeInPixels.Height,
                     tempBitmap.Format);
-                
+
                 return finalBitmap;
             }
             finally
@@ -748,7 +809,7 @@ public abstract partial class ImageExBase
             // 清理临时资源
             tempBitmap?.Dispose();
             tempDevice?.Dispose();
-            
+
             // 释放信号量，允许其他解码任务继续
             semaphore.Release();
         }

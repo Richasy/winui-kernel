@@ -203,5 +203,5 @@ public abstract partial class ImageExBase
     /// 这样可以让图片下载完成后立即渲染,而不是等待所有图片都下载完.
     /// 注意: 某些DrawImage实现可能需要在UI线程执行,此时应设为false.
     /// </remarks>
-    public static bool EnableBackgroundDecoding { get; set; } = true;
+    public static bool EnableBackgroundDecoding { get; set; }
 }
