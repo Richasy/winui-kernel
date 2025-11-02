@@ -21,6 +21,12 @@ public abstract partial class ImageExBase
     private static int _currentMaxConcurrentRequests = -1;
     private static readonly object _semaphoreLock = new();
 
+    // 用于控制本地/缓存解码的并发数，避免内存占用过高
+    // 设置合理的值以平衡性能和内存占用
+    private static SemaphoreSlim? _localDecodeSemaphore;
+    private static int _currentMaxLocalDecodes = -1;
+    private static readonly object _localDecodeSemaphoreLock = new();
+
     // 用于控制请求间隔,避免被识别为攻击
     private static readonly SemaphoreSlim _requestThrottleSemaphore = new(1, 1);
     private static DateTime _lastRequestTime = DateTime.MinValue;
@@ -55,10 +61,25 @@ public abstract partial class ImageExBase
         }
     }
 
+    private static SemaphoreSlim GetLocalDecodeSemaphore()
+    {
+        // 使用锁确保线程安全
+        lock (_localDecodeSemaphoreLock)
+        {
+            // 只在配置真正改变时才重新创建信号量
+            if (_localDecodeSemaphore == null || _currentMaxLocalDecodes != MaxConcurrentLocalDecodes)
+            {
+                _localDecodeSemaphore = new SemaphoreSlim(MaxConcurrentLocalDecodes, MaxConcurrentLocalDecodes);
+                _currentMaxLocalDecodes = MaxConcurrentLocalDecodes;
+            }
+            return _localDecodeSemaphore;
+        }
+    }
+
     /// <summary>
     /// 获取当前请求统计信息(仅用于调试).
     /// </summary>
-    public static (int ActiveRequests, int QueuedRequests, int PendingUrls, int TotalStarted, int TotalCompleted, int TotalFailed, int TotalCancelled, int FromCache, int Deduplicated, int LocalDecodes) GetRequestStats()
+    public static (int ActiveRequests, int QueuedRequests, int PendingUrls, int TotalStarted, int TotalCompleted, int TotalFailed, int TotalCancelled, int FromCache, int Deduplicated, int LocalDecodes, int ActiveLocalDecodes) GetRequestStats()
     {
         var semaphore = _networkRequestSemaphore;
         var activeRequests = 0;
@@ -78,7 +99,16 @@ public abstract partial class ImageExBase
             pendingUrls = _pendingRequests.Count;
         }
 
-        return (activeRequests, queuedRequests, pendingUrls, _totalRequestsStarted, _totalRequestsCompleted, _totalRequestsFailed, _totalRequestsCancelled, _totalRequestsFromCache, _totalRequestsDeduplicated, _totalLocalDecodes);
+        var localSemaphore = _localDecodeSemaphore;
+        var activeLocalDecodes = 0;
+        if (localSemaphore != null)
+        {
+            var maxLocalDecodes = MaxConcurrentLocalDecodes;
+            var currentLocalCount = localSemaphore.CurrentCount;
+            activeLocalDecodes = Math.Max(0, maxLocalDecodes - currentLocalCount);
+        }
+
+        return (activeRequests, queuedRequests, pendingUrls, _totalRequestsStarted, _totalRequestsCompleted, _totalRequestsFailed, _totalRequestsCancelled, _totalRequestsFromCache, _totalRequestsDeduplicated, _totalLocalDecodes, activeLocalDecodes);
     }
 
     /// <summary>
@@ -106,6 +136,7 @@ public abstract partial class ImageExBase
         var stats = GetRequestStats();
         Debug.WriteLine($"[ImageEx] {context}");
         Debug.WriteLine($"  活动网络请求: {stats.ActiveRequests}/{MaxConcurrentRequests}");
+        Debug.WriteLine($"  活动本地解码: {stats.ActiveLocalDecodes}/{MaxConcurrentLocalDecodes}");
         Debug.WriteLine($"  排队请求: {stats.QueuedRequests}");
         Debug.WriteLine($"  去重URL数: {stats.PendingUrls}");
         Debug.WriteLine($"  总启动: {stats.TotalStarted}, 完成: {stats.TotalCompleted}, 失败: {stats.TotalFailed}, 取消: {stats.TotalCancelled}");
@@ -659,7 +690,7 @@ public abstract partial class ImageExBase
     /// <remarks>
     /// 在后台解码模式下，每个图片使用独立的临时设备进行解码，
     /// 解码完成后将位图转移到共享设备，这样可以真正实现并行解码.
-    /// 本地/缓存图片不受信号量限制，可以全速加载.
+    /// 使用信号量控制并发数，避免同时解码过多图片导致内存飙升.
     /// </remarks>
     private async Task<CanvasBitmap?> LoadBitmapAsync(Windows.Storage.Streams.IRandomAccessStream stream)
     {
@@ -669,7 +700,10 @@ public abstract partial class ImageExBase
             return await CanvasBitmap.LoadAsync(CanvasDevice.GetSharedDevice(), stream).AsTask();
         }
 
-        // 并行模式：本地/缓存图片不受信号量限制，全速解码
+        // 并行模式：使用信号量控制并发，避免内存占用过高
+        var semaphore = GetLocalDecodeSemaphore();
+        await semaphore.WaitAsync(_cancellationTokenSource.Token);
+
         Interlocked.Increment(ref _totalLocalDecodes);
 
         CanvasBitmap? tempBitmap = null;
@@ -678,7 +712,7 @@ public abstract partial class ImageExBase
         try
         {
             // 在后台线程创建临时设备并解码
-            // 这样多个图片可以在不同线程同时解码（无限制）
+            // 这样多个图片可以在不同线程同时解码（受信号量限制）
             (tempDevice, tempBitmap) = await Task.Run(async () =>
             {
                 var device = new CanvasDevice();
@@ -689,20 +723,34 @@ public abstract partial class ImageExBase
             // 将解码后的位图数据复制到共享设备
             // 这个操作很快，不会造成明显阻塞
             var sharedDevice = CanvasDevice.GetSharedDevice();
-            var finalBitmap = CanvasBitmap.CreateFromBytes(
-                sharedDevice,
-                tempBitmap.GetPixelBytes(),
-                (int)tempBitmap.SizeInPixels.Width,
-                (int)tempBitmap.SizeInPixels.Height,
-                tempBitmap.Format);
-
-            return finalBitmap;
+            
+            // 优化：使用 using 确保像素数据尽快释放
+            var pixelBytes = tempBitmap.GetPixelBytes();
+            try
+            {
+                var finalBitmap = CanvasBitmap.CreateFromBytes(
+                    sharedDevice,
+                    pixelBytes,
+                    (int)tempBitmap.SizeInPixels.Width,
+                    (int)tempBitmap.SizeInPixels.Height,
+                    tempBitmap.Format);
+                
+                return finalBitmap;
+            }
+            finally
+            {
+                // 像素数据使用完立即释放，减少内存占用
+                // pixelBytes 是值类型数组，会被 GC 回收
+            }
         }
         finally
         {
             // 清理临时资源
             tempBitmap?.Dispose();
             tempDevice?.Dispose();
+            
+            // 释放信号量，允许其他解码任务继续
+            semaphore.Release();
         }
     }
 

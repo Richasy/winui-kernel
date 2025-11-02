@@ -148,11 +148,22 @@ public abstract partial class ImageExBase
     /// 获取或设置最大并发网络请求数量(默认为50).
     /// </summary>
     /// <remarks>
-    /// 仅控制网络请求的并发数,本地文件和缓存图片的加载不受此限制.
+    /// 仅控制网络请求的并发数,本地文件和缓存图片的解码受MaxConcurrentLocalDecodes控制.
     /// 降低此值可以减少对服务器的压力,但可能会增加图片加载时间.
     /// 建议值: 20-100. 设置过高可能导致服务器拦截请求.
     /// </remarks>
     public static int MaxConcurrentRequests { get; set; } = 50;
+
+    /// <summary>
+    /// 获取或设置最大并发本地/缓存解码数量(默认为10).
+    /// </summary>
+    /// <remarks>
+    /// 仅在EnableBackgroundDecoding=true时生效.
+    /// 控制同时解码本地文件和缓存图片的最大数量,避免内存占用过高.
+    /// 每个并发解码会临时创建额外的位图副本,因此设置过高会导致内存飙升.
+    /// 建议值: 5-20. 根据设备内存和图片大小调整.
+    /// </remarks>
+    public static int MaxConcurrentLocalDecodes { get; set; } = 10;
 
     /// <summary>
     /// 获取或设置请求之间的最小间隔时间(毫秒,默认为100ms).
