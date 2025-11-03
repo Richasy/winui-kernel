@@ -16,11 +16,13 @@ namespace Richasy.WinUIKernel.Share.Base;
 public abstract partial class ImageExBase : LayoutControlBase, IDisposable
 {
     private static readonly System.Net.Http.HttpClient _httpClient = CreateHttpClientIgnoringCertificateErrors();
+    private static readonly ConditionalWeakTable<ImageExBase, object?> _allInstances = new();
     private Uri? _lastUri;
     private static readonly ConditionalWeakTable<CanvasDevice, StrongBox<int>> LostDevicesMap = [];
     private DateTime _lastDeviceLostTime = DateTime.MinValue;
     private int _compositionTargetSequenceNumber = CompositionTargetMonitor.UninitializedValue;
     private CancellationTokenSource? _cancellationTokenSource = new();
+    private bool _wasCancelledGlobally;
 
     // private int _retryCount;
     private ImageBrush? _backgroundBrush;
@@ -157,6 +159,7 @@ public abstract partial class ImageExBase : LayoutControlBase, IDisposable
     /// <inheritdoc/>
     protected override async void OnControlLoaded()
     {
+        _allInstances.AddOrUpdate(this, null);
         CompositionTarget.SurfaceContentsLost += OnCompositionTargetSurfaceContentsLost;
         ActualThemeChanged += OnActualThemeChangedAsync;
         if (_backgroundBrush?.ImageSource is null)
@@ -168,6 +171,7 @@ public abstract partial class ImageExBase : LayoutControlBase, IDisposable
     /// <inheritdoc/>
     protected override void OnControlUnloaded()
     {
+        _allInstances.Remove(this);
         CompositionTarget.SurfaceContentsLost -= OnCompositionTargetSurfaceContentsLost;
         ActualThemeChanged -= OnActualThemeChangedAsync;
         CanvasImageSource = default;
@@ -192,11 +196,22 @@ public abstract partial class ImageExBase : LayoutControlBase, IDisposable
             ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
             AllowAutoRedirect = true,
             MaxAutomaticRedirections = 3,
+            // 🚀 高并发优化：增加连接池大小
+            MaxConnectionsPerServer = 10, // 默认是 2，增加到 10 以支持更多并发连接
+            // 🚀 启用 HTTP/2 支持（如果服务器支持）
+            // HTTP/2 支持多路复用，可以在单个连接上并发多个请求
+            // AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate, // 如需压缩
         };
 
         return new System.Net.Http.HttpClient(clientHandler)
         {
             Timeout = TimeSpan.FromSeconds(30), // 设置超时时间
+            // 🚀 设置默认请求头，避免每次请求都设置
+            DefaultRequestHeaders =
+            {
+                { "User-Agent", "WinUIKernel/1.0" },
+                { "Accept", "image/*" },
+            }
         };
     }
 
@@ -211,6 +226,113 @@ public abstract partial class ImageExBase : LayoutControlBase, IDisposable
     {
         _cancellationTokenSource.Cancel();
         _cancellationTokenSource = new();
+    }
+
+    /// <summary>
+    /// 全局取消所有 ImageExBase 实例的图片加载请求.
+    /// </summary>
+    /// <remarks>
+    /// 适用于页面切换等场景，批量取消所有正在进行的图片加载，释放连接池资源.
+    /// 被取消的图片可以通过 <see cref="RestoreCancelledImages"/> 方法恢复加载.
+    /// </remarks>
+    public static void CancelAllLoading() => CancelAllLoading(null);
+
+    /// <summary>
+    /// 取消满足条件的 ImageExBase 实例的图片加载请求.
+    /// </summary>
+    /// <param name="predicate">筛选条件，为 null 时取消所有实例.</param>
+    /// <remarks>
+    /// 适用于需要选择性取消的场景，例如只取消某个容器内的图片.
+    /// </remarks>
+    public static void CancelAllLoading(Func<ImageExBase, bool>? predicate)
+    {
+#if DEBUG
+        var count = 0;
+        var markedCount = 0;
+#endif
+        foreach (var kvp in _allInstances)
+        {
+            var instance = kvp.Key;
+            
+            // 应用筛选条件
+            if (predicate is not null && !predicate(instance))
+            {
+                continue;
+            }
+
+            // 标记所有有Source但图片未加载完成的实例
+            // 这样即使图片还没开始加载，也能在恢复时重新加载
+            if (instance.Source is not null && instance._backgroundBrush?.ImageSource is null)
+            {
+                instance._wasCancelledGlobally = true;
+#if DEBUG
+                markedCount++;
+#endif
+            }
+
+            instance.ResetCancellationTokenSource();
+            instance.IsImageLoading = false;
+#if DEBUG
+            count++;
+#endif
+        }
+
+#if DEBUG
+        System.Diagnostics.Debug.WriteLine($"[ImageEx] 全局取消了 {count} 个实例的图片加载，其中 {markedCount} 个被标记为待恢复");
+#endif
+    }
+
+    /// <summary>
+    /// 恢复所有因全局取消而中断的图片加载.
+    /// </summary>
+    /// <remarks>
+    /// 适用于页面返回等场景，恢复之前被 <see cref="CancelAllLoading()"/> 中断的图片加载.
+    /// 只会恢复可见（IsLoaded = true）且有 Source 的实例.
+    /// </remarks>
+    public static async void RestoreCancelledImages()
+    {
+#if DEBUG
+        var count = 0;
+        var totalCancelled = 0;
+        var notLoaded = 0;
+        var noSource = 0;
+#endif
+        foreach (var kvp in _allInstances)
+        {
+            var instance = kvp.Key;
+#if DEBUG
+            if (instance._wasCancelledGlobally)
+            {
+                totalCancelled++;
+                if (!instance.IsLoaded)
+                {
+                    notLoaded++;
+                }
+
+                if (instance.Source is null)
+                {
+                    noSource++;
+                }
+            }
+#endif
+            // 只恢复被全局取消的、当前已加载的、有Source的实例
+            if (instance._wasCancelledGlobally && instance.IsLoaded && instance.Source is not null)
+            {
+                instance._wasCancelledGlobally = false;
+#if DEBUG
+                count++;
+#endif
+                await instance.RedrawAsync();
+            }
+        }
+
+#if DEBUG
+        System.Diagnostics.Debug.WriteLine($"[ImageEx] 恢复了 {count} 个实例的图片加载");
+        if (totalCancelled > count)
+        {
+            System.Diagnostics.Debug.WriteLine($"[ImageEx] 跳过 {totalCancelled - count} 个实例：未加载={notLoaded}, 无Source={noSource}");
+        }
+#endif
     }
 
     /// <inheritdoc/>

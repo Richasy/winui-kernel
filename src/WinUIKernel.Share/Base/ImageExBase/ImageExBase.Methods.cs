@@ -126,6 +126,74 @@ public abstract partial class ImageExBase
     }
 
     /// <summary>
+    /// 检查连接池是否处于高负载状态.
+    /// </summary>
+    /// <returns>
+    /// 返回一个元组，包含：
+    /// - IsUnderPressure: 连接池是否处于压力状态（使用率 > 80%）
+    /// - UsagePercentage: 当前使用率（0-100）
+    /// - Message: 描述信息
+    /// </returns>
+    public static (bool IsUnderPressure, double UsagePercentage, string Message) CheckConnectionPoolPressure()
+    {
+        var stats = GetRequestStats();
+        var maxRequests = MaxConcurrentRequests;
+        var activeRequests = stats.ActiveRequests;
+        
+        if (maxRequests <= 0)
+        {
+            return (false, 0, "连接池未初始化");
+        }
+
+        var usagePercentage = (double)activeRequests / maxRequests * 100;
+        var isUnderPressure = usagePercentage > 80;
+
+        var message = usagePercentage switch
+        {
+            >= 95 => $"⚠️ 连接池几乎饱和！({activeRequests}/{maxRequests}) - 新请求将严重阻塞",
+            >= 80 => $"⚠️ 连接池高负载 ({activeRequests}/{maxRequests}) - 可能出现延迟",
+            >= 50 => $"ℹ️ 连接池中等负载 ({activeRequests}/{maxRequests})",
+            _ => $"✅ 连接池正常 ({activeRequests}/{maxRequests})"
+        };
+
+        return (isUnderPressure, usagePercentage, message);
+    }
+
+    /// <summary>
+    /// 打印详细的连接池诊断信息（仅 Debug 模式）.
+    /// </summary>
+    public static void PrintConnectionPoolDiagnostics()
+    {
+#if DEBUG
+        var stats = GetRequestStats();
+        var pressure = CheckConnectionPoolPressure();
+
+        System.Diagnostics.Debug.WriteLine("========== ImageEx 连接池诊断 ==========");
+        System.Diagnostics.Debug.WriteLine($"连接池状态: {pressure.Message}");
+        System.Diagnostics.Debug.WriteLine($"使用率: {pressure.UsagePercentage:F1}%");
+        System.Diagnostics.Debug.WriteLine($"活动请求: {stats.ActiveRequests}/{MaxConcurrentRequests}");
+        System.Diagnostics.Debug.WriteLine($"排队请求: {stats.QueuedRequests}");
+        System.Diagnostics.Debug.WriteLine($"去重缓存: {stats.PendingUrls} 个 URL");
+        System.Diagnostics.Debug.WriteLine($"活动解码: {stats.ActiveLocalDecodes}/{MaxConcurrentLocalDecodes}");
+        System.Diagnostics.Debug.WriteLine("--- 累计统计 ---");
+        System.Diagnostics.Debug.WriteLine($"总启动: {stats.TotalStarted}");
+        System.Diagnostics.Debug.WriteLine($"总完成: {stats.TotalCompleted}");
+        System.Diagnostics.Debug.WriteLine($"总失败: {stats.TotalFailed}");
+        System.Diagnostics.Debug.WriteLine($"总取消: {stats.TotalCancelled}");
+        System.Diagnostics.Debug.WriteLine($"缓存命中: {stats.FromCache}");
+        System.Diagnostics.Debug.WriteLine($"请求去重: {stats.Deduplicated}");
+        System.Diagnostics.Debug.WriteLine($"本地解码: {stats.LocalDecodes}");
+        
+        if (pressure.IsUnderPressure)
+        {
+            System.Diagnostics.Debug.WriteLine("⚠️ 建议：考虑调用 CancelAllLoading() 释放资源");
+        }
+        
+        System.Diagnostics.Debug.WriteLine("==========================================");
+#endif
+    }
+
+    /// <summary>
     /// 清空所有正在进行的网络请求和信号量.
     /// </summary>
     /// <remarks>
@@ -146,12 +214,6 @@ public abstract partial class ImageExBase
         // 1. 清空去重字典中的所有待处理请求
         lock (_pendingRequestsLock)
         {
-            // 尝试取消所有待处理的任务
-            foreach (var kvp in _pendingRequests)
-            {
-                // Task 已经在执行中，我们只是从字典中移除引用
-                // 实际的取消由各个控件的 CancellationTokenSource 控制
-            }
             _pendingRequests.Clear();
         }
 
@@ -333,6 +395,7 @@ public abstract partial class ImageExBase
 
                             DrawImage(bitmap);
                             _backgroundBrush.ImageSource = CanvasImageSource;
+                            _wasCancelledGlobally = false; // 清除全局取消标记
                             ImageLoaded?.Invoke(this, EventArgs.Empty);
                         }
                         catch (Exception ex)
@@ -365,6 +428,7 @@ public abstract partial class ImageExBase
 
                     DrawImage(bitmap);
                     _backgroundBrush.ImageSource = CanvasImageSource;
+                    _wasCancelledGlobally = false; // 清除全局取消标记
                     ImageLoaded?.Invoke(this, EventArgs.Empty);
 
                     // 立即释放 bitmap
@@ -381,6 +445,10 @@ public abstract partial class ImageExBase
         {
             // Ignore the cancellation exception, as it is expected when the control is unloaded
             // or when a new request is made before the previous one has completed.
+#if DEBUG
+            var canceledUrl = currentUri?.ToString() ?? _lastUri?.ToString() ?? "unknown";
+            Debug.WriteLine($"[ImageEx] 图片加载已取消: {canceledUrl.Substring(Math.Max(0, canceledUrl.Length - 50))}");
+#endif
             bitmap?.Dispose();
         }
         catch (Exception ex)
@@ -555,6 +623,9 @@ public abstract partial class ImageExBase
         {
             // 单独统计取消的请求
             Interlocked.Increment(ref _totalRequestsCancelled);
+#if DEBUG
+            Debug.WriteLine($"[ImageEx] HTTP 请求已取消: {url.Substring(Math.Max(0, url.Length - 50))}");
+#endif
             tcs.TrySetCanceled(cancellationToken);
         }
         catch (Exception ex)
