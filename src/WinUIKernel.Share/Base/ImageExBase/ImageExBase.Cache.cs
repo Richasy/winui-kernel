@@ -9,11 +9,6 @@ public partial class ImageExBase
 {
     private const string CacheFolderName = "ImageExCache";
 
-    // 🚀 内存缓存：避免每次都检查文件系统
-    private static readonly Dictionary<string, (string? FilePath, DateTime CheckTime)> _memoryCacheIndex = new();
-    private static readonly object _memoryCacheLock = new();
-    private static readonly TimeSpan _memoryCacheValidity = TimeSpan.FromMinutes(5); // 内存缓存有效期
-
     /// <summary>
     /// 获取所有缓存文件的大小.
     /// </summary>
@@ -43,12 +38,6 @@ public partial class ImageExBase
         {
             await cacheFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
         }
-
-        // 🚀 清除内存缓存
-        lock (_memoryCacheLock)
-        {
-            _memoryCacheIndex.Clear();
-        }
     }
 
     /// <summary>
@@ -62,25 +51,6 @@ public partial class ImageExBase
         if (string.IsNullOrEmpty(key))
         {
             return null;
-        }
-
-        // 🚀 优化：先检查内存缓存
-        var cacheKey = GetCacheFileName(key);
-        lock (_memoryCacheLock)
-        {
-            if (_memoryCacheIndex.TryGetValue(cacheKey, out var cached))
-            {
-                // 如果内存缓存有效且未过期
-                if (DateTime.UtcNow - cached.CheckTime < _memoryCacheValidity)
-                {
-                    return cached.FilePath;
-                }
-                else
-                {
-                    // 过期则移除
-                    _memoryCacheIndex.Remove(cacheKey);
-                }
-            }
         }
 
         var cacheFolder = await GetCacheFolderAsync(cacheSubFolder);
@@ -111,12 +81,6 @@ public partial class ImageExBase
             }
         }
 
-        // 🚀 更新内存缓存
-        lock (_memoryCacheLock)
-        {
-            _memoryCacheIndex[cacheKey] = (result, DateTime.UtcNow);
-        }
-
         return result;
     }
 
@@ -141,12 +105,6 @@ public partial class ImageExBase
         
         // Write the data to the file
         await File.WriteAllBytesAsync(cacheFilePath, data, cancellationToken);
-
-        // 🚀 更新内存缓存
-        lock (_memoryCacheLock)
-        {
-            _memoryCacheIndex[cacheFileName] = (cacheFilePath, DateTime.UtcNow);
-        }
     }
 
     private static string GetCacheFileName(string key)
