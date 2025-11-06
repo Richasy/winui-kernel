@@ -11,7 +11,6 @@ using Richasy.AgentKernel.Connectors.XAI.Models;
 using Richasy.AgentKernel.Connectors.ZhiPu.Models;
 using Richasy.AgentKernel.Models;
 using Richasy.WinUIKernel.Share.Toolkits;
-using Windows.Storage;
 
 namespace AISample;
 
@@ -39,7 +38,7 @@ public sealed class DrawConfigManager : DrawConfigManagerBase
     /// <inheritdoc/>
     protected override async Task<DrawClientConfiguration> OnInitializeAsync()
     {
-        if (File.Exists(Path.Combine(ApplicationData.Current.LocalFolder.Path, "drawConfig.json")))
+        if (File.Exists(Path.Combine(Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalFolder.Path, "drawConfig.json")))
         {
             return await GlobalDependencies.Kernel.GetRequiredService<IFileToolkit>()
             .ReadLocalDataAsync("drawConfig.json", JsonGenContext.Default.DrawClientConfiguration);

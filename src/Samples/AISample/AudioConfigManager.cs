@@ -8,7 +8,6 @@ using Richasy.AgentKernel.Connectors.Tencent.Models;
 using Richasy.AgentKernel.Connectors.Volcano.Models;
 using Richasy.AgentKernel.Models;
 using Richasy.WinUIKernel.Share.Toolkits;
-using Windows.Storage;
 
 namespace AISample;
 
@@ -34,7 +33,7 @@ public sealed class AudioConfigManager : AudioConfigManagerBase
     /// <inheritdoc/>
     protected override async Task<AudioClientConfiguration> OnInitializeAsync()
     {
-        if (File.Exists(Path.Combine(ApplicationData.Current.LocalFolder.Path, "audioConfig.json")))
+        if (File.Exists(Path.Combine(Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalFolder.Path, "audioConfig.json")))
         {
             return await GlobalDependencies.Kernel.GetRequiredService<IFileToolkit>()
             .ReadLocalDataAsync("audioConfig.json", JsonGenContext.Default.AudioClientConfiguration);

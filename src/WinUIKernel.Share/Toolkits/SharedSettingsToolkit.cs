@@ -61,6 +61,6 @@ public class SharedSettingsToolkit : ISettingsToolkit
     /// Get the setting container.
     /// </summary>
     /// <returns><see cref="ApplicationDataContainer"/>.</returns>
-    protected virtual ApplicationDataContainer GetSettingContainer()
-        => ApplicationData.Current.LocalSettings;
+    protected virtual Microsoft.Windows.Storage.ApplicationDataContainer GetSettingContainer()
+        => Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalSettings;
 }

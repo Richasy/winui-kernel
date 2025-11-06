@@ -26,7 +26,6 @@ using Richasy.AgentKernel.Connectors.ZhiPu.Models;
 using Richasy.AgentKernel.Models;
 using Richasy.WinUIKernel.Share.Toolkits;
 using System.Diagnostics.CodeAnalysis;
-using Windows.Storage;
 
 namespace AISample;
 
@@ -69,7 +68,7 @@ public sealed class ChatConfigManager : ChatConfigManagerBase
     /// <inheritdoc/>
     protected override async Task<ChatClientConfiguration> OnInitializeAsync()
     {
-        if (File.Exists(Path.Combine(ApplicationData.Current.LocalFolder.Path, "chatConfig.json")))
+        if (File.Exists(Path.Combine(Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalFolder.Path, "chatConfig.json")))
         {
             return await GlobalDependencies.Kernel.GetRequiredService<IFileToolkit>()
             .ReadLocalDataAsync("chatConfig.json", JsonGenContext.Default.ChatClientConfiguration);

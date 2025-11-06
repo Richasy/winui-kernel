@@ -105,7 +105,7 @@ public class SharedFileToolkit : IFileToolkit
     /// <inheritdoc/>
     public async Task WriteLocalDataAsync<T>(string fileName, T data, JsonTypeInfo<T> typeInfo, string folderName = "")
     {
-        var folder = ApplicationData.Current.LocalFolder;
+        var folder = Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalFolder;
 
         if (!string.IsNullOrEmpty(folderName))
         {
@@ -120,7 +120,7 @@ public class SharedFileToolkit : IFileToolkit
     /// <inheritdoc/>
     public async Task DeleteLocalDataAsync(string fileName, string folderName = "")
     {
-        var folder = ApplicationData.Current.LocalFolder;
+        var folder = Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalFolder;
 
         if (!string.IsNullOrEmpty(folderName))
         {

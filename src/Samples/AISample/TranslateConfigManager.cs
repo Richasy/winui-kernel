@@ -10,7 +10,6 @@ using Richasy.AgentKernel.Connectors.Volcano.Models;
 using Richasy.AgentKernel.Connectors.Youdao.Models;
 using Richasy.AgentKernel.Models;
 using Richasy.WinUIKernel.Share.Toolkits;
-using Windows.Storage;
 
 namespace AISample;
 
@@ -37,7 +36,7 @@ public sealed class TranslateConfigManager : TranslateConfigManagerBase
     /// <inheritdoc/>
     protected override async Task<TranslateClientConfiguration> OnInitializeAsync()
     {
-        if (File.Exists(Path.Combine(ApplicationData.Current.LocalFolder.Path, "translateConfig.json")))
+        if (File.Exists(Path.Combine(Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalFolder.Path, "translateConfig.json")))
         {
             return await GlobalDependencies.Kernel.GetRequiredService<IFileToolkit>()
             .ReadLocalDataAsync("translateConfig.json", JsonGenContext.Default.TranslateClientConfiguration);
