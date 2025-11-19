@@ -198,19 +198,23 @@ public abstract partial class ImageExBase
 
         _lastUri = uri;
         _backgroundBrush.ImageSource = default;
-        await LoadImageInternalAsync();
+        var (requestId, cancellationToken) = BeginNewRequest();
+        await LoadImageInternalAsync(requestId, cancellationToken);
     }
 
-    private async Task LoadImageInternalAsync()
+    private async Task LoadImageInternalAsync(long requestId, CancellationToken cancellationToken)
     {
         if (_lastUri == null)
         {
             _lastUri = HolderImage;
         }
 
-        if (!IsLoaded || _lastUri is null || _cancellationTokenSource is not { IsCancellationRequested: false } || !TryInitialize() || _cancellationTokenSource is not { IsCancellationRequested: false })
+        if (!IsCurrentRequest(requestId) || !IsLoaded || _lastUri is null || cancellationToken.IsCancellationRequested || !TryInitialize())
         {
-            IsImageLoading = false;
+            if (IsCurrentRequest(requestId))
+            {
+                IsImageLoading = false;
+            }
             return;
         }
 
@@ -226,19 +230,19 @@ public abstract partial class ImageExBase
         CanvasBitmap? bitmap = default;
         try
         {
-            _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             // 根据配置决定是否在后台线程执行图片获取和解码
             if (EnableBackgroundDecoding)
             {
                 // 在后台线程执行图片获取和解码,避免阻塞 UI 线程
                 // 将捕获的依赖属性值传递给后台任务
-                bitmap = await Task.Run(async () => await FetchImageAsync(currentUri, enableDiskCache, headers, cacheSubFolder), _cancellationTokenSource.Token);
+                bitmap = await Task.Run(async () => await FetchImageAsync(currentUri, enableDiskCache, headers, cacheSubFolder, requestId, cancellationToken), cancellationToken);
             }
             else
             {
                 // 在 UI 线程执行(原有行为)
-                bitmap = await FetchImageAsync(currentUri, enableDiskCache, headers, cacheSubFolder);
+                bitmap = await FetchImageAsync(currentUri, enableDiskCache, headers, cacheSubFolder, requestId, cancellationToken);
             }
         }
         catch (Exception ex)
@@ -249,7 +253,7 @@ public abstract partial class ImageExBase
             WinUIKernelShareExtensions.Logger.LogError(ex, $"Failed to load image from {_lastUri}");
 #pragma warning restore CA2254 // 模板应为静态表达式
 #pragma warning restore CA1848 // 使用 LoggerMessage 委托
-            if (HolderImage is not null && _cancellationTokenSource is { IsCancellationRequested: false })
+            if (HolderImage is not null && !cancellationToken.IsCancellationRequested && IsCurrentRequest(requestId))
             {
                 await TryLoadImageAsync(HolderImage);
             }
@@ -259,7 +263,10 @@ public abstract partial class ImageExBase
 
         if (bitmap is null)
         {
-            IsImageLoading = false;
+            if (IsCurrentRequest(requestId))
+            {
+                IsImageLoading = false;
+            }
             return;
         }
 
@@ -267,7 +274,7 @@ public abstract partial class ImageExBase
         {
             if (CanvasImageSource is not null)
             {
-                _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 if (EnableBackgroundDecoding)
                 {
@@ -280,7 +287,7 @@ public abstract partial class ImageExBase
                             // ⚠️ 关键修复：在绘制前检查URI是否仍然匹配
                             // 在虚拟化列表中，控件可能已被复用显示其他图片
                             // 如果_lastUri已经改变，说明这是一个过期的请求，应该丢弃
-                            if (_lastUri != currentUri)
+                            if (_lastUri != currentUri || !IsCurrentRequest(requestId) || cancellationToken.IsCancellationRequested)
                             {
                                 Debug.WriteLine($"[ImageEx] 丢弃过期图片: 期望 {currentUri}, 当前 {_lastUri}");
                                 return;
@@ -312,7 +319,7 @@ public abstract partial class ImageExBase
                 {
                     // 在 UI 线程执行绘制(原有行为)
                     // 同样需要检查URI匹配
-                    if (_lastUri != currentUri)
+                    if (_lastUri != currentUri || !IsCurrentRequest(requestId) || cancellationToken.IsCancellationRequested)
                     {
                         Debug.WriteLine($"[ImageEx] 丢弃过期图片: 期望 {currentUri}, 当前 {_lastUri}");
                         bitmap.Dispose();
@@ -353,17 +360,23 @@ public abstract partial class ImageExBase
 #pragma warning restore CA2254 // 模板应为静态表达式
 #pragma warning restore CA1848 // 使用 LoggerMessage 委托
 
-            if (HolderImage is not null)
+            if (HolderImage is not null && IsCurrentRequest(requestId))
             {
                 await TryLoadImageAsync(HolderImage);
             }
 
-            ImageFailed?.Invoke(this, EventArgs.Empty);
+            if (IsCurrentRequest(requestId))
+            {
+                ImageFailed?.Invoke(this, EventArgs.Empty);
+            }
             bitmap?.Dispose();
         }
         finally
         {
-            IsImageLoading = false;
+            if (IsCurrentRequest(requestId))
+            {
+                IsImageLoading = false;
+            }
             // 不在这里 Dispose bitmap，因为它可能在异步回调中使用
         }
     }
@@ -377,7 +390,6 @@ public abstract partial class ImageExBase
 
         try
         {
-            ResetCancellationTokenSource();
             var sharedDevice = CanvasDevice.GetSharedDevice();
             sharedDevice.DeviceLost -= OnSharedDeviceLost;
             sharedDevice.DeviceLost += OnSharedDeviceLost;
@@ -509,10 +521,26 @@ public abstract partial class ImageExBase
         }
     }
 
-    private async Task<CanvasBitmap?> FetchImageAsync(Uri uri, bool enableDiskCache, Dictionary<string, string> headers, string cacheSubFolder)
+    private async Task<CanvasBitmap?> FetchImageAsync(
+        Uri uri,
+        bool enableDiskCache,
+        Dictionary<string, string> headers,
+        string cacheSubFolder,
+        long requestId,
+        CancellationToken cancellationToken)
     {
+        if (uri is null)
+        {
+            return null;
+        }
+
         var requestUri = uri;
         CanvasBitmap? canvasBitmap = default;
+
+        if (IsRequestObsolete())
+        {
+            return null;
+        }
 
         // 区分本地链接和网络链接.
         if (uri!.IsFile)
@@ -526,11 +554,16 @@ public abstract partial class ImageExBase
             {
                 Interlocked.Increment(ref _totalRequestsFromCache);
                 LogRequestStats($"缓存命中: {uri.ToString().Substring(Math.Max(0, uri.ToString().Length - 50))}");
+                if (IsRequestObsolete())
+                {
+                    return null;
+                }
+
                 var file = await StorageFile.GetFileFromPathAsync(cacheFile);
                 using var stream = await file.OpenReadAsync();
 
                 // 使用独立设备解码以避免竞争共享设备
-                canvasBitmap = await LoadBitmapAsync(stream);
+                canvasBitmap = await LoadBitmapAsync(stream, cancellationToken);
             }
             else
             {
@@ -538,7 +571,7 @@ public abstract partial class ImageExBase
                 var url = uri.ToString();
                 var content = await GetOrCreateRequestAsync(url, async () =>
                 {
-                    _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                    cancellationToken.ThrowIfCancellationRequested();
 
                     CheckImageHeaders(uri, headers);
                     if (uri.IsFile)
@@ -547,25 +580,38 @@ public abstract partial class ImageExBase
                         return null;
                     }
 
-                    var response = await GetHttpClient().GetAsync(uri, _cancellationTokenSource.Token).ConfigureAwait(false);
+                    var response = await GetHttpClient().GetAsync(uri, cancellationToken).ConfigureAwait(false);
                     if (response.IsSuccessStatusCode)
                     {
-                        var data = await response.Content.ReadAsByteArrayAsync(_cancellationTokenSource.Token);
+                        var data = await response.Content.ReadAsByteArrayAsync(cancellationToken);
                         if (data.Length > 0)
                         {
                             // 🚀 异步写入缓存，不阻塞主流程（Fire-and-Forget）
-                            _ = Task.Run(async () =>
+                            if (!cancellationToken.IsCancellationRequested && IsCurrentRequest(requestId))
                             {
-                                try
+                                _ = Task.Run(async () =>
                                 {
-                                    await WriteCacheAsync(uri.ToString(), data, cacheSubFolder, CancellationToken.None);
-                                }
-                                catch (Exception ex)
-                                {
-                                    // 缓存写入失败不影响图片显示，仅记录日志
-                                    Debug.WriteLine($"[ImageEx] 缓存写入失败: {ex.Message}");
-                                }
-                            });
+                                    if (cancellationToken.IsCancellationRequested || !IsCurrentRequest(requestId))
+                                    {
+                                        return;
+                                    }
+
+                                    try
+                                    {
+                                        await WriteCacheAsync(uri.ToString(), data, cacheSubFolder, cancellationToken);
+                                    }
+                                    catch (OperationCanceledException)
+                                    {
+                                        // Ignore cancellation from cache writing
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        // 缓存写入失败不影响图片显示，仅记录日志
+                                        Debug.WriteLine($"[ImageEx] 缓存写入失败: {ex.Message}");
+                                    }
+                                }, CancellationToken.None);
+                            }
+
                             return data;
                         }
                         else
@@ -577,15 +623,15 @@ public abstract partial class ImageExBase
                     {
                         throw new HttpRequestException($"Failed to fetch image from {uri}. Status code: {response.StatusCode}");
                     }
-                }, _cancellationTokenSource.Token);
+                }, cancellationToken);
 
-                if (content != null && content.Length > 0)
+                if (content != null && content.Length > 0 && !IsRequestObsolete())
                 {
                     await using var memoryStream = new MemoryStream(content);
                     using var randomStream = memoryStream.AsRandomAccessStream();
 
                     // 使用独立设备解码以避免竞争共享设备
-                    canvasBitmap = await LoadBitmapAsync(randomStream);
+                    canvasBitmap = await LoadBitmapAsync(randomStream, cancellationToken);
                 }
             }
         }
@@ -595,36 +641,31 @@ public abstract partial class ImageExBase
             var url = uri.ToString();
             var content = await GetOrCreateRequestAsync(url, async () =>
             {
-                _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 CheckImageHeaders(uri, headers);
                 var initialCapacity = 32 * 1024;
                 using var bufferWriter = new ArrayPoolBufferWriter<byte>(initialCapacity);
-                using var imageStream = await GetHttpClient().GetStreamAsync(uri, _cancellationTokenSource.Token).ConfigureAwait(false);
+                using var imageStream = await GetHttpClient().GetStreamAsync(uri, cancellationToken).ConfigureAwait(false);
                 await using var streamForRead = imageStream.AsInputStream().AsStreamForRead();
                 await using var streamForWrite = IBufferWriterExtensions.AsStream(bufferWriter);
 
-                await streamForRead.CopyToAsync(streamForWrite, _cancellationTokenSource.Token);
+                await streamForRead.CopyToAsync(streamForWrite, cancellationToken);
 
                 return bufferWriter.WrittenMemory.ToArray();
-            }, _cancellationTokenSource.Token);
+            }, cancellationToken);
 
-            if (uri != requestUri)
-            {
-                return default;
-            }
-
-            if (content != null && content.Length > 0)
+            if (content != null && content.Length > 0 && !IsRequestObsolete())
             {
                 await using var memoryStream = new MemoryStream(content);
                 using var randomStream = memoryStream.AsRandomAccessStream();
 
                 // 使用独立设备解码以避免竞争共享设备
-                canvasBitmap = await LoadBitmapAsync(randomStream);
+                canvasBitmap = await LoadBitmapAsync(randomStream, cancellationToken);
             }
         }
 
-        if (uri != requestUri)
+        if (uri != requestUri || IsRequestObsolete())
         {
             canvasBitmap?.Dispose();
             canvasBitmap = default;
@@ -636,17 +677,25 @@ public abstract partial class ImageExBase
         {
             try
             {
+                if (IsRequestObsolete())
+                {
+                    return;
+                }
+
                 var file = await StorageFile.GetFileFromPathAsync(uri.LocalPath);
                 using var stream = await file.OpenReadAsync();
 
                 // 使用独立设备解码以避免竞争共享设备
-                canvasBitmap = await LoadBitmapAsync(stream);
+                canvasBitmap = await LoadBitmapAsync(stream, cancellationToken);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
+
+        bool IsRequestObsolete()
+            => cancellationToken.IsCancellationRequested || !IsCurrentRequest(requestId);
     }
 
     /// <summary>
@@ -656,7 +705,7 @@ public abstract partial class ImageExBase
     /// 在后台解码模式下，每个图片使用独立的临时设备进行解码，
     /// 解码完成后将位图转移到共享设备，这样可以真正实现并行解码.
     /// </remarks>
-    private async Task<CanvasBitmap?> LoadBitmapAsync(Windows.Storage.Streams.IRandomAccessStream stream)
+    private static async Task<CanvasBitmap?> LoadBitmapAsync(Windows.Storage.Streams.IRandomAccessStream stream, CancellationToken cancellationToken)
     {
         if (!EnableBackgroundDecoding)
         {
@@ -679,7 +728,7 @@ public abstract partial class ImageExBase
                 var device = new CanvasDevice();
                 var bitmap = await CanvasBitmap.LoadAsync(device, stream).AsTask();
                 return (device, bitmap);
-            }, _cancellationTokenSource.Token);
+            }, cancellationToken);
 
             // 将解码后的位图数据复制到共享设备
             // 这个操作很快，不会造成明显阻塞

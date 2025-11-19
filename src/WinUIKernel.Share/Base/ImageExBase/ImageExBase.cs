@@ -22,6 +22,7 @@ public abstract partial class ImageExBase : LayoutControlBase, IDisposable
     private DateTime _lastDeviceLostTime = DateTime.MinValue;
     private int _compositionTargetSequenceNumber = CompositionTargetMonitor.UninitializedValue;
     private CancellationTokenSource? _cancellationTokenSource = new();
+    private long _currentRequestId;
     private bool _wasCancelledGlobally;
 
     // private int _retryCount;
@@ -224,9 +225,19 @@ public abstract partial class ImageExBase : LayoutControlBase, IDisposable
 
     private void ResetCancellationTokenSource()
     {
-        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource?.Cancel();
         _cancellationTokenSource = new();
+        Interlocked.Increment(ref _currentRequestId);
     }
+
+    private (long RequestId, CancellationToken Token) BeginNewRequest()
+    {
+        ResetCancellationTokenSource();
+        return (_currentRequestId, _cancellationTokenSource!.Token);
+    }
+
+    private bool IsCurrentRequest(long requestId)
+        => Interlocked.Read(ref _currentRequestId) == requestId;
 
     /// <summary>
     /// 全局取消所有 ImageExBase 实例的图片加载请求.
