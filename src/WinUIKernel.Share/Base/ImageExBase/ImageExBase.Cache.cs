@@ -21,10 +21,11 @@ public partial class ImageExBase
             return 0L;
         }
 
-        var totalSize = Directory.GetFiles(cacheFolder.Path, "*.*", SearchOption.TopDirectoryOnly)
-            .Sum(file => new FileInfo(file).Length);
-
-        return totalSize;
+        return await Task.Run(() =>
+        {
+            return Directory.GetFiles(cacheFolder.Path, "*.*", SearchOption.TopDirectoryOnly)
+                .Sum(file => new FileInfo(file).Length);
+        });
     }
 
     /// <summary>
